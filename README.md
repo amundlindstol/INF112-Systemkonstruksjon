@@ -5,9 +5,15 @@
  Joakim Moss Grutle (jgr036@uib.no)
 # Members:
 Agnete Gridseth Røstad	(rux004)
+
 Alise Haukenes	(pic006)
+
 Helge Mikael Landro	(hla067)
+
 Håkon Ettestøl Osland	(hos008)
+
 Eivind Dagsland Halderaker (saj007)
+
 Simon Telle Riple	(sri029)
+
 Sverre Magnus Engø	(sen006)
