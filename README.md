@@ -2,6 +2,7 @@
 # Time: Mandag 14-16
 # Coaches:
  Øyvind Skeie Liland (oli050@uib.no)
+ 
  Joakim Moss Grutle (jgr036@uib.no)
 # Members:
 Agnete Gridseth Røstad	(rux004)
