@@ -1,0 +1,37 @@
+﻿Use Case UC1: User plays against another player
+
+Scope: Chess application
+
+Level: user goal
+
+Primary Actor: Player/user (?) 
+
+Stakeholders and Interests: 
+- Player1 and Player2: Wants easy to understand and use, responsive game. Wants to only be able to do valid chess moves. Wants fair ranking system. Wants to be able to play against a AI with chosen difficulty.
+ - Developers: Wants the users to be happy
+
+Preconditions: Both players are registered 
+
+Success Guarantee / Postconditions: Players are able to play an entire game of chess against each other. A winner is found and their rank (?) updated. 
+
+Main Success Scenario:
+1. Player1 starts application
+2. Player1 logs in
+3. Player1 chooses to play against a human player.
+4. Player2 logs in
+5. The player with lowest score starts as white
+6. Player1 and Player2 plays a game of chess
+7. Game has ended. 
+8. Ranking is updated
+9. Player1 is taken back to step 3
+
+Extensions:
+
+
+
+
+Special requirements: 
+
+Frequency of Occurrence:
+
+Open issues: 
