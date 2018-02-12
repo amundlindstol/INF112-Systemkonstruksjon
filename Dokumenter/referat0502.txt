@@ -1,0 +1,55 @@
+Oppmøte:
+ - Simon
+ - Eivind
+ - Alise
+ - Agnete
+ - Helge
+ - Håkon
+
+
+Team plan
+
+Leder - Eivind
+Git repo - Helge
+Verktøy - Håkon
+
+
+Front-end:
+ - Helge
+ - Simon
+
+Back-end:
+ - Eivind
+ - Agnete
+
+Uvisst:
+ - Alise
+ - Håkon
+ - Sverre
+
+Møte hovedsakelig mandag fra gruppetime og utover.
+
+
+Risikoer:
+ - Ugjevn arbeidsfordeling
+ - Sykdom, avmelding av fag
+ - Dårlig tidsberegning
+ - Dårlig prosjektstruktur. Rot.
+ - Personlige konflikter
+ - 
+
+Foreslåtte begrensningsaksjoner:
+ - Helst mer enn bare en person som kan ...
+ - Tydelig fordeling av ansvar i forhold til tid. Hva som skal være ferdig til hvilken tid.
+ - Skrive lesbar kode.
+ - Være åpen for konstruktiv kritikk. Ikke ta kritikken personlig. 
+ - Ta problemer opp med personen det gjelder.
+
+Repo-struktur - En branch. Kun merging med master når koden fungerer.
+
+
+Til neste gang:
+ - Lese hele oppgaven
+ - Sette seg inn i sjakk og reglene/rating.
+ - Sette seg inn i prosesser (deloppgave 3?)
+ - Se på forelesningsnotat / teori
