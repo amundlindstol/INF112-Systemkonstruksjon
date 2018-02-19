@@ -1,0 +1,13 @@
+Referat
+
+Oppmøte 
+	- Eivind Halderaker
+	- Simon Riple
+	- Magnus Jensen
+	- Alise Haukenes
+	- Håkon Osland (referatør)
+	- Agnete Røstad
+
+
+- Gruppen blir enig om å bruke Scrum som prosess og å bruke GITLab issue tracking for å holde styr på oppgavene.
+- Gruppen blir enig om å jobbe videre med dokumentene som skal levers inn til oblig 2.
