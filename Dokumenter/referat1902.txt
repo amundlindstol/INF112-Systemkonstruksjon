@@ -7,6 +7,7 @@ Oppmøte
 	- Alise Haukenes
 	- Håkon Osland (referatør)
 	- Agnete Røstad
+    - Helge Landro
 
 
 - Gruppen blir enig om å bruke Scrum som prosess og å bruke GITLab issue tracking for å holde styr på oppgavene.
