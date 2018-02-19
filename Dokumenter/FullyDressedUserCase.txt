@@ -1,37 +1,69 @@
-﻿Use Case UC1: User plays against another player
+﻿Use Case UC1: Game against a player
 
 Scope: Chess application
 
 Level: user goal
 
-Primary Actor: Player/user (?) 
+Primary Actor: Player1
 
 Stakeholders and Interests: 
 - Player1 and Player2: Wants easy to understand and use, responsive game. Wants to only be able to do valid chess moves. Wants fair ranking system. Wants to be able to play against a AI with chosen difficulty.
- - Developers: Wants the users to be happy
+ - Developers: Wants the users to not crash the application.
 
-Preconditions: Both players are registered 
+Preconditions: Both players are registered
 
-Success Guarantee / Postconditions: Players are able to play an entire game of chess against each other. A winner is found and their rank (?) updated. 
+Success Guarantee / Postconditions: Players are able to start a game of chess against each other. 
 
 Main Success Scenario:
-1. Player1 starts application
-2. Player1 logs in
+1. Player1 starts application.
+2. Player1 logs in.
+3. Player1 enters the start screen.
 3. Player1 chooses to play against a human player.
-4. Player2 logs in
-5. The player with lowest score starts as white
-6. Player1 and Player2 plays a game of chess
-7. Game has ended. 
-8. Ranking is updated
-9. Player1 is taken back to step 3
+4. Player2 logs in.
+5. Randomly Player1 and Player2 are given either white or black pieces.
+6. Player1 and Player2 starts a game of chess
 
 Extensions:
+2a. Player1 does not have a user.
+    1. Player1 selects the register button.
+    2. Player1 enters details.
+    3. Player1 logs in.
+3a. Player1 chooses to play against a CPU.
+    1. Player1 chooses between difficulties easy, medium or hard.
+    2. Randomly Player1 and the CPU are given either white or black pieces.
+    3. Player1 and the CPU starts a game of chess.
+4a.  Player2 does not have a user.
+    1. Player2 selects the register button.
+    2. Player2 enters details.
+    3. Player2 logs in.
+ 
 
 
+Use case UC2: User wants to show his/her ranking.
 
+Scope: Chess application.
 
-Special requirements: 
+Level: user goal.
 
-Frequency of Occurrence:
+Primary Actor: Player.
 
-Open issues: 
+Stakeholders and Interests: 
+ - Player want easy to use menus, wants to understand the statistics and it contains at least some of the statistics the user wants. 
+ - Developers: Wants the users to not crash the application.
+
+Preconditions: The player is registered
+
+Success Guarantee / Postconditions: Players are able to check his/her score.
+
+Main Success Scenario:
+1. Player starts application.
+2. Player logs in.
+3. Player enters the start screen.
+4. Player clicks "Show Statistics".
+5. Player clicks "Show Ranking".
+
+Extensions:
+2a. Player does not have a user.
+    1. Player selects the register button.
+    2. Player enters details.
+    3. Player logs in.
