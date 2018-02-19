@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\title{User manual}
+\usepackage[a4paper, total={5in, 9in}]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\begin{document}
+
+\date{}
+\maketitle
+
+\pagenumbering{arabic}
+
+\section{Description}
+Are you ready to play some chess and become a better player? Challenge your friends for a fun game or improve your skills by playing against the computer on different levels. Each game you play will be rated, so you can easily keep track of your progress. You can even keep track of your friends' progress! 
+
+This application is mainly for young players at the age 6 to 15 years, who wish to learn and become a better chess player.
+
+\section{Functions}
+\begin{itemize}
+\item Play against another user
+\item Play against the computer
+	\begin{itemize}
+	\item Novice
+    \item Intermediate
+    \item Advanced
+	\end{itemize}
+\item Rating system
+	\begin{itemize}
+	\item Each player has its own rating
+    \item Ratings are calculated from the result of each game played by the user
+	\end{itemize}
+\item Log in system
+	\begin{itemize}
+	\item Unique user
+    \item System for making new user
+	\end{itemize}
+\end{itemize}
+
+\section{Rules}
+\begin{description}[align=right]
+\item [Rook] \hspace{6mm} Moves vertically and horizontally.
+\item [Knight] \hspace{6mm} Moves two forward and one to either side.
+\item [Bishop]  \hspace{6mm} Moves diagonally.
+\item [Queen] \hspace{6mm} Moves in every direction as far as desired. 
+\item [King] \hspace{6mm} Can move one square at a time, in any direction, but has to avoid squares where it can be taken by the opponents pieces.
+\item [Pawn] \hspace{6mm} can only move directly forward one square at a time, unless it is still one the square on which it began. If it is the pawn’s first moves, it can move one or two squares directly forward. Pawns can capture a piece by moving one square forward diagonally.
+\item [En passant:] \hspace{6mm} If you have a pawn at row 5 (white) or 4 (black) and the opponent moves a pawn two squares forward, so that it’s located next to your pawn, you can take it in the same way as if he had just moved one square forward.
+\item [Pawn promotion:] \hspace{6mm} If you get one pawn across the board, to the 8th (white) or 1st (black) row, it promotes to either a queen, rock, knight or bishop.
+\item [Castling:] \hspace{6mm} If neither the rock nor the King has already moved and there are no other pieces between them, it is possible to castle either short or long. Short castling is moving the King two squares to the right and the rock to the other side of the King. Long castling is moving the King three squares to the left and the rock to the other side of the King.
+\item [Win/loose:] \hspace{6mm} If one of the players puts the other one in check mate, the game is finished and the victorious is the one who checkmated. Checkmate happens when the king is attacked by the opponent's piece and has no way to escape. At that point, the game is over. Either player may resign at any time and their opponents win the game.
+\item [Draw:] \hspace{6mm} Draw can happen in different ways. The two players can agree upon a draw if the game is at a point where there's not much to do and the position for white and black is equal. Another way to achieve a draw is by stalemate. This happens if the player to make a move has no legal moves and is not in check. If there is no possibility for checkmate for either side, it's also a automatic draw. Draw can also happen by repetition of moves. If the same position occurs three times in a row, it is an automatic draw. The last way for a draw to happen is if the players make 50 moves and the position has not changed. That is for instance if no pawns have moved or no pieces have been exchanged.
+\end{description}
+
+\section{Illustrations}
+\begin{figure} [h!]
+	\begin{subfigure}[b]{0.5\textwidth}
+		\includegraphics[width=\linewidth, height=7cm]{printablechesspieces}
+        \caption{Chess pieces}
+        \label{fig:printablechesspieces}
+	\end{subfigure}
+    \begin{subfigure}[b]{0.5\textwidth}
+		\includegraphics[width=\linewidth]{chess}
+        \caption{Chess board}
+        \label{fig:chess}
+	\end{subfigure}
+
+\end{figure}
+
+\end{document}
