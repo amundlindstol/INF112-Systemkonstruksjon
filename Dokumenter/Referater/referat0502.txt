@@ -25,7 +25,7 @@ Back-end:
 Uvisst:
  - Alise
  - Håkon
- - Sverre
+ - Magnus
 
 Møte hovedsakelig mandag fra gruppetime og utover.
 
