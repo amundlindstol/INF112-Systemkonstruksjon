@@ -1,0 +1,19 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+
+%opening
+\title{Team Plan}
+\author{}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Roles}
+\textbf{Leder:} Eivind \\
+\textbf{Git-ansvarlig:} HelgeMikael \\
+\textbf{Verktøyansvarlig:} Håkon \\
+
+
+\end{document}
