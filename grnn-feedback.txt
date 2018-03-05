@@ -20,6 +20,8 @@ Process and planning
 - The part about why you go for an agile development method is very good. You clearly describe the process you will be using and how you will delegate tasks.
 - Organization is described well
 Retrospective: Very good
+Presentation:  pretty good.
+- elaborate slides and nice presentation.
 
 Overall good job! I think the documentation is good and will help you during the implementation. 
 
