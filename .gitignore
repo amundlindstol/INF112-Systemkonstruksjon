@@ -3,7 +3,6 @@
 *.class
 *.war
 *.ear
-*.
 hs_err_pid*
 
 ## Robovm

@@ -65,9 +65,12 @@ project(":html") {
 project(":core") {
     apply plugin: "java"
 
+    sourceSets.test.java.srcDirs = ["/test"]
+
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile "junit:junit:4.12"
         
     }
 }
