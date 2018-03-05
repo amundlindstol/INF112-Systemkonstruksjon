@@ -1,0 +1,33 @@
+Feedback INF112 spring 2018 - Oblig.2
+
+Group: Grnn
+
+Overall feedback
+The minutes
+- Two of these are very short so I have to deduct a point (They could have contained more detailed information about what you were doing and what was discussed)
+Team plan: Content is good 
+- Missing risk analysis(Some information in the minutes from 05.02): deducting points
+	- Add these to the team plan during the next assignment
+- Missing information about the git-repository structure (Some information in the process and project plan): deducting points 
+	- Add these to the team plan during the next assignment
+- Nice house rules
+Product specification: Nice!
+- flow like diagrams give alot of information about the flow of the application which is great, nice inclusion.  
+User Manual: Good job!
+- Missing illustrations of a game of chess (deducting points) but nice board and pieces. 
+Product Specification: Very nice! 
+Process and planning
+- The part about why you go for an agile development method is very good. You clearly describe the process you will be using and how you will delegate tasks.
+- Organization is described well
+Retrospective: Very good
+Presentation:  pretty good.
+- elaborate slides and nice presentation.
+
+Overall good job! I think the documentation is good and will help you during the implementation. 
+
+Why choose a pink theme for the slides when you are team-Grnn! :'c
+
+Score: 88.5 (of 100)
+Evaluation: PASS
+
+Graded by ÿyvind Skeie Liland and Dan Zhang, Bergen 02.03.2018
