@@ -1,5 +1,5 @@
 # Arbeidslag: inf112-v2018/gruppe-1
-# Time: Mandag 14-16
+# Time: Mandag 14-17
 # Coaches:
  Øyvind Skeie Liland (oli050@uib.no)
  
@@ -16,3 +16,5 @@ Håkon Ettestøl Osland	(hos008)
 Eivind Dagsland Halderaker (saj007)
 
 Simon Telle Riple	(sri029)
+
+Magnus Flatheim Jensen  
