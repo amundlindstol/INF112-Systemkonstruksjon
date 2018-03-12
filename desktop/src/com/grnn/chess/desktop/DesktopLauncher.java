@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		config.width = 1000;
 		config.height = 700;
 		config.title = "Chess for kids";
+		config.resizable = false;
 		new LwjglApplication(new ChessForKids(), config);
 	}
 }
