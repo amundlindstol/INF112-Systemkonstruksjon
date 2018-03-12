@@ -1,0 +1,37 @@
+-- I Terminal:
+
+
+- Navigér til mappen hvor du har lagret prosjektet ditt
+
+- For å jobbe i DEV-branchen, skriv:
+  git checkout DEV
+
+- For å sjekke status, skriv:
+  git status
+
+- For å hente ned siste endringer, skriv:
+  git pull
+
+- Dersom du har gjort endringer lokalt, skriv:
+  git status
+
+  Da vil endringene dine vises.
+  For å legge til dine endringer, skriv:
+
+  git add .
+
+  Nå kan du kjøre en commit. (Ta en git pull for sikkerhets skyld). Skriv:
+  git commit -m "[Din commit-melding]"
+  
+  Så kan du pushe. Skriv:
+  git push
+
+- Dersom du skal skifte branch til Master, skriv:
+  git checkout master
+
+  Dette skal strengt tatt ikke være nødvendig. Jobb alltid i DEV. Så merger vi den til Master en gang i uken.
+
+
+-- I IntelliJ:
+
+- Bruk heller Terminal :)
