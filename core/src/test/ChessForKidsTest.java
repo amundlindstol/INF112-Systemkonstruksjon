@@ -14,18 +14,10 @@ import static org.junit.Assert.*;
 /**
  * Created by hakon on 05.03.2018.
  */
-@RunWith(Arquillian.class)
 public class ChessForKidsTest {
-	@Deployment
-	public static JavaArchive createDeployment() {
-		return ShrinkWrap.create(JavaArchive.class)
-				.addClass(com.grnn.chess.ChessForKids.class)
-				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-	}
-
 	@Test
-	public static void onePlusOneEqualsTwoTest() {
-		assertThat(1 + 1, is(2));
+	public void onePlusOneEqualsTwoTest() {
+		assertThat(2 + 2 - 1, is(3));
 	}
 
 }

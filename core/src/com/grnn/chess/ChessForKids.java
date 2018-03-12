@@ -13,6 +13,7 @@ public class ChessForKids extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		img = new Texture(Gdx.files.internal("badlogic.jpg"));
 	}
 
 	@Override
@@ -20,6 +21,7 @@ public class ChessForKids extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
+		batch.draw(img, 200, 200);
 		batch.end();
 	}
 	
