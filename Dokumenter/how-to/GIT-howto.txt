@@ -30,3 +30,8 @@
   git checkout master
 
   Dette skal strengt tatt ikke være nødvendig. Jobb alltid i DEV. Så merger vi den til Master en gang i uken.
+
+
+-- I IntelliJ:
+
+- Bruk heller Terminal :)
