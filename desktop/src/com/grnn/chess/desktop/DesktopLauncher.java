@@ -9,6 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1000;
 		config.height = 700;
+		config.title = "Chess for kids";
 		new LwjglApplication(new ChessForKids(), config);
 	}
 }
