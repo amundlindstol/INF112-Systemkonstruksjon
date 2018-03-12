@@ -1,4 +1,4 @@
 package com.grnn.chess.objects;
 
-public class ChessPieceQueen {
+public class ChessPieceQueen extends AbstractChessPiece{
 }
