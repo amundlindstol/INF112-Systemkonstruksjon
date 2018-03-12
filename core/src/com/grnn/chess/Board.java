@@ -8,10 +8,14 @@ import java.util.ArrayList;
 public class Board {
 
     // Variables
-    private char[][] grid = new char[8][8];
+
+    //private char[][] grid = new char[8][8];
     private ArrayList<AbstractChessPiece> removedPieces;
 
 
+    /**
+     * Method to remove a piece from the board
+     */
     public AbstractChessPiece removePiece(){
         return null;
     }
