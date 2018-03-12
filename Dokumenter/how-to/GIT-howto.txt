@@ -3,7 +3,7 @@
 
 - Navigér til mappen hvor du har lagret prosjektet ditt
 
-- For å jobbe i DEV-branch, skriv:
+- For å jobbe i DEV-branchen, skriv:
   git checkout DEV
 
 - For å sjekke status, skriv:
@@ -25,3 +25,8 @@
   
   Så kan du pushe. Skriv:
   git push
+
+- Dersom du skal skifte branch til Master, skriv:
+  git checkout master
+
+  Dette skal strengt tatt ikke være nødvendig. Jobb alltid i DEV. Så merger vi den til Master en gang i uken.
