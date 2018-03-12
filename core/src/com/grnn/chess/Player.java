@@ -1,3 +1,9 @@
+package com.grnn.chess;
+
+import com.grnn.chess.Game;
+
+import java.util.ArrayList;
+
 public class Player {
 
     public String name;
@@ -8,16 +14,18 @@ public class Player {
 
     public Player(String name){
         this.name = name;
-        gamesPlayed = new ArrayList<Game>;
+        gamesPlayed = new ArrayList<Game>();
         noOfWins = 0;
         noOfLose = 0;
         noOfDraws = 0;
-        updaterating
+
     }
 
-    public int getLevel(){
+    public String getLevel(){
         return level;
     }
+
+    public int getRating() { return rating;}
 
     public String getName(){
         return name;
@@ -28,11 +36,11 @@ public class Player {
         if(gamesPlayed.size() < 30){
             k = 40;
         }else if(rating < 2400){
-            k = 20
+            k = 20;
         }else {
             k = 40;
         }
-        rating = rating +
+        rating = rating+k;
     }
 
 }
