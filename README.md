@@ -17,4 +17,4 @@ Eivind Dagsland Halderaker (saj007)
 
 Simon Telle Riple	(sri029)
 
-Magnus Flatheim Jensen  
+Magnus Flatheim Jensen  (mje019)
