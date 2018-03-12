@@ -5,19 +5,19 @@ public class Game {
     private Board board;
     private Player player1;
     private Player player2;
-    private String name;
+    private int id;
 
 
     private void startGame() {
-
+        return;
     }
 
-    private void endGame(Result res) {
-
+    private void endGame(int res) {
+        return;
     }
 
     private Player announceWinner() {
-
+        return null;
     }
 
 
