@@ -2,6 +2,7 @@ package com.grnn.chess.objects;
 
 public class Queen extends AbstractChessPiece{
 	String letterRepresentation = "q";
+	String image = "core/assets/queen.png";
 	public Queen(boolean isWhite) {
 		super(isWhite);
 	}
@@ -9,4 +10,6 @@ public class Queen extends AbstractChessPiece{
 	public String toString() {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
 	}
+
+	public String getImage(){ return image;}
 }

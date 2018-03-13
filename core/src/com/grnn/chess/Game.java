@@ -2,11 +2,20 @@ package com.grnn.chess;
 
 public class Game {
 
-    private Board board;
+    //private Board board;
     private Player player1;
     private Player player2;
-    private int id;
+    private int gameId;
 
+    static int currid = 1;
+
+    public Game(){
+        player1 = new Player("Spiller1");
+        player2 = new Player("Spiller2");
+        gameId = currid++;
+
+
+    }
 
     private void startGame() {
         return;

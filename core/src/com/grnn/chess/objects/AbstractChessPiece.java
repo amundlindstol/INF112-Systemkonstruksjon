@@ -16,6 +16,7 @@ public abstract class AbstractChessPiece {
     protected ArrayList<Position> validMoves;
     protected ArrayList<Position> captureMoves;
     protected String letterRepresentation = "";
+    protected String image = "";
 
     //private Direction askedToGo;
 
@@ -57,6 +58,8 @@ public abstract class AbstractChessPiece {
     public String toString() {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
 	}
+
+	public String getImage(){ return image; }
 }
 
 

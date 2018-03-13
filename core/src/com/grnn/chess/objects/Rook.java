@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Rook extends AbstractChessPiece {
 	String letterRepresentation = "t";
+
 	public Rook(boolean isWhite) {
 		super(isWhite);
 	}
