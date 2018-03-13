@@ -35,12 +35,13 @@ public class ChessForKidsTest {
 		movePieceTest(startPosition, endPosition);
 	}
 
-	@Test
 	public void movePieceTest(Position startPosition, Position endPosition) {
 
 		AbstractChessPiece piece = board.getPieceAt(startPosition);
 
 		board.movePiece(startPosition, endPosition);
+
+
 		assertThat(board.getPieceAt(endPosition), is(piece));
 	}
 

@@ -34,6 +34,7 @@ public class Board {
 
         setPiece(piece, endPos);
         setPiece(null, startPos);
+        piece.move();
     }
 
     public Board updateBoard(){
@@ -103,11 +104,14 @@ public class Board {
 
     public String toString() {
         String out = "";
-        for(int y = 0; y < size(); y++) {
+        for(int y = size - 1; y >= 0; y--) {
+            out += y + "|";
             for(int x = 0; x < size(); x++) {
                 Position p = new Position(x, y);
                 AbstractChessPiece piece = getPieceAt(p);
-                if(x != 0) out += "|";
+                if(x != 0) {
+                    out += "|";
+                }
                 if(piece != null) {
                     out += piece;
                 } else {
@@ -120,6 +124,7 @@ public class Board {
             }
             out += "\n";
         }
+        out += "  A|B|C|D|E|F|G|H\n";
         return out;
     }
 }

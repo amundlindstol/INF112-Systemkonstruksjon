@@ -10,6 +10,7 @@ import java.util.ArrayList;
  * Abstract class to represent a chess piece
  */
 public abstract class AbstractChessPiece {
+	protected boolean hasMoved = false;
     protected boolean isWhite;
     protected boolean validMove;
     protected ArrayList<Position> validMoves;
@@ -45,6 +46,13 @@ public abstract class AbstractChessPiece {
     public ArrayList<Position> getCaptureMoves() {
         return new ArrayList<Position>();
     }
+
+    /*
+    callback called when piece has been moved, used to set hasMoved
+     */
+    public void move() {
+    	hasMoved = true;
+	}
 
     public String toString() {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
