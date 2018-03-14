@@ -31,34 +31,30 @@ public class Rook extends AbstractChessPiece {
 		do {
 		    if (board.posIsWithinBoard(rookPos.west(i))){
                 validMoves.add(rookPos.west(i));
-                ++i;
 		    }
 		    else break;
-		} while (board.getPieceAt(rookPos.west(i))==null);
-		i = 0;
+		} while (board.getPieceAt(rookPos.west(i++))==null);
+		i = 1;
 
         do { if (board.posIsWithinBoard(rookPos.east(i))){
                 validMoves.add(rookPos.east(i));
-                ++i;
             }
             else break;
-        } while (board.getPieceAt(rookPos.east(i))==null);
-		i = 0;
+        } while (board.getPieceAt(rookPos.east(i++))==null);
+		i = 1;
 
         do { if (board.posIsWithinBoard(rookPos.north(i))){
                 validMoves.add(rookPos.north(i));
-                ++i;
             }
             else break;
-        } while (board.getPieceAt(rookPos.north(i))==null);
-        i = 0;
+        } while (board.getPieceAt(rookPos.north(i++))==null);
+        i = 1;
 
         do { if (board.posIsWithinBoard(rookPos.north(i))){
                 validMoves.add(rookPos.south(i));
-                ++i;
             }
             else break;
-        } while (board.getPieceAt(rookPos.south(i))==null);
+        } while (board.getPieceAt(rookPos.south(i++))==null);
 
 		return (ArrayList<Position>) Arrays.asList(board.getPosition(this));
 	}
