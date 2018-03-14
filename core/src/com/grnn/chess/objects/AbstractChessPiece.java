@@ -36,11 +36,9 @@ public abstract class AbstractChessPiece {
         return board.getPosition(this);
     }
 
-    public boolean equals(AbstractChessPiece otherPiece) {
-        return this.hashCode() == otherPiece.hashCode();
-    }
+    public boolean equals(Object otherPiece) { return this.hashCode() == otherPiece.hashCode(); }
 
-    public ArrayList<Position> getValidMoves() {
+    public ArrayList<Position> getValidMoves(Board board) {
         return new ArrayList<Position>();
     }
 

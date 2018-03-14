@@ -28,7 +28,7 @@ public class ChessForKids extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		batch.draw(bg, 0, 0);
-        batch.draw(new Texture(board.getPieceAt(new Position(3,0)).getImage()),3*(600/9),10);
+        batch.draw(new Texture(board.getPieceAt(new Position(3,0)).getImage()),40,40);
         batch.draw(new Texture(board.getPieceAt(new Position(3,1)).getImage()), 3*(600/9), 2*(600/9));
 		batch.end();
 	}
