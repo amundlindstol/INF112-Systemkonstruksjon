@@ -1,0 +1,16 @@
+Git-Issues
+
+Git-issues will be our task organizer throughout the project, so the importance of everyone at the team feeling comfortable with issues is great.
+
+Issues
+To view the issues, go to the project homepage in gitlab (https://gitlab.uib.no/inf112-v2018/gruppe-1). Then press the "Issues" button in the left-hand menu bar. I suggest viewing the Issues as "Board" to get the most overview. Once you are this far, you will see four columns of issues. "Backlog", "To do", "Doing" and "Closed". In the backlog we will keep our unassigned tasks. These tasks will be discussed and delegated at the meetings before they will be moved to the "To do" columns. In this column ALL issues should be assigned to one person responsible for the execution of the task. The task should now also be clearly specified such that the assigned person knows what this task contains. To view only the tasks that you have been assigned to, use the search/filter bar over the issues. When you start working on a task you should move the task to "Doing". When your task if finished, move it to "Closed" and take a well-deserved coffee-break before you start at the next task :-D
+
+Milestones
+We will use milestones to "wrap" our Issues. A milestone can contain multiple Issues. When you press an Issue, you can see which milestone the Issue is associated with. The goal is to let a Milestone represent a functional-requirement and then make issues for every small task we need to finish to make the milestone work. The Milestones can be found by selecting "Milestones" instead of "Board" in the left-hand menu.
+
+Creating a new issue
+First consider if the task you want to make an issue of, will contain more tasks. If so, make a milestone instead.
+To create a new issue, go to the "List" in the left-hand menu. Then press the "New issue" button in the upper-right corner. Fill in a title and a description for the task. Then consider if the task should be assigned to someone in the team AND if the issue should be assigned to a milestone. Press "Create issue" to finish.
+
+Creating a milestone
+To create a milestone, go to the "Milestone" in the left-hand menu. Then press the "new milestone" button. Fill in the title and description, and press "Create milestone" to finish.
