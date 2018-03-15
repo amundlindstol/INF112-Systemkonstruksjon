@@ -16,3 +16,5 @@ Håkon Ettestøl Osland	(hos008)
 Eivind Dagsland Halderaker (saj007)
 
 Simon Telle Riple	(sri029)
+
+Amund Lindstøl  (fus007)
