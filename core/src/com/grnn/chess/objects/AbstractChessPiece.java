@@ -47,6 +47,10 @@ public abstract class AbstractChessPiece {
         return new ArrayList<Position>();
     }
 
+    public boolean isSameColor(AbstractChessPiece otherPiece){
+        return getColor() == otherPiece.getColor();
+    }
+
     /*
     callback called when piece has been moved, used to set hasMoved
      */
