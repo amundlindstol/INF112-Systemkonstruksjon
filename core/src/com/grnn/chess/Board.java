@@ -103,6 +103,10 @@ public class Board {
         return null;
     }
 
+    public boolean posIsWithinBoard(Position pos){
+        return (pos.getX()>=0 && pos.getX()< size && pos.getY()>=0 && pos.getY()< size );
+    }
+
     public String toString() {
         String out = "";
         for(int y = size - 1; y >= 0; y--) {
