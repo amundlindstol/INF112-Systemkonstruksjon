@@ -3,6 +3,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * @author Amund 15.03.18
+ */
 public abstract class State {
     protected OrthographicCamera cam;
     protected Vector3 mouse;

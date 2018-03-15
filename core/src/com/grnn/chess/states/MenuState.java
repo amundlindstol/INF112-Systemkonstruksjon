@@ -5,17 +5,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
-
+/**
+ * @author Amund 15.03.18
+ */
 public class MenuState extends State {
     private Texture background;
     private Texture playBtn;
     private int Xplay, Yplay;
-//    private Button playBtn, playVsAI, settings;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
         background = new Texture("badlogic.jpg");
-        playBtn = new Texture("badlogic.jpg");
+        playBtn = new Texture("button.png");
         Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
         Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
     }
