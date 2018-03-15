@@ -6,6 +6,7 @@ import java.util.ArrayList;
 /**
  * Class to represent a board
  */
+
 public class Board {
 
     // Variables
