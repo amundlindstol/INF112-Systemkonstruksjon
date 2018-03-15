@@ -59,7 +59,6 @@ public class Bishop extends AbstractChessPiece {
 	}
 
 	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
-        Position kingPos = board.getPosition(king);
         Position posToCheck = pos.north(1).west((1));
         while (board.posIsWithinBoard(posToCheck)){
             if (board.getPieceAt(posToCheck)!=null){

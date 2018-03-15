@@ -66,6 +66,47 @@ public class Rook extends AbstractChessPiece {
 		return (ArrayList<Position>) Arrays.asList(board.getPosition(this));
 	}
 
+    public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
+        Position posToCheck = pos.north(1);
+        while (board.posIsWithinBoard(posToCheck)){
+            if (board.getPieceAt(posToCheck)!=null){
+                if (board.getPieceAt(posToCheck).equals(king))
+                    return true;
+                break;
+            }
+            posToCheck = posToCheck.north(1);
+        }
+        posToCheck = pos.south(1);
+        while (board.posIsWithinBoard(posToCheck)){
+            if (board.getPieceAt(posToCheck)!=null){
+                if (board.getPieceAt(posToCheck).equals(king))
+                    return true;
+                break;
+            }
+            posToCheck = posToCheck.south(1);
+        }
+        posToCheck = pos.west(1);
+        while (board.posIsWithinBoard(posToCheck)){
+            if (board.getPieceAt(posToCheck)!=null){
+                if (board.getPieceAt(posToCheck).equals(king))
+                    return true;
+                break;
+            }
+            posToCheck = posToCheck.west(1);
+        }
+        posToCheck = pos.east(1);
+        while (board.posIsWithinBoard(posToCheck)){
+            if (board.getPieceAt(posToCheck)!=null){
+                if (board.getPieceAt(posToCheck).equals(king))
+                    return true;
+                break;
+            }
+            posToCheck = posToCheck.east(1);
+        }
+
+        return false;
+	}
+
 	public int getValue() {
 		return value;
 	}
