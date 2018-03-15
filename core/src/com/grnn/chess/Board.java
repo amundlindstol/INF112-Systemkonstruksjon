@@ -6,6 +6,7 @@ import java.util.ArrayList;
 /**
  * Class to represent a board
  */
+
 public class Board {
 
     // Variables
@@ -100,6 +101,10 @@ public class Board {
             }
         }
         return null;
+    }
+
+    public boolean posIsWithinBoard(Position pos){
+        return (pos.getX()>=0 && pos.getX()< size && pos.getY()>=0 && pos.getY()< size );
     }
 
     public String toString() {
