@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Pawn extends AbstractChessPiece {
 	private final int value = 1;
 	String letterRepresentation = "p";
-	String image = "core/assets/badlogic.jpg";
+	String image = "badlogic.jpg";
 
 	public Pawn(boolean isWhite) {
 		super(isWhite);
@@ -66,6 +66,13 @@ public class Pawn extends AbstractChessPiece {
 	}
 
 	public String getImage() { return image;}
+
+	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
+		if (isWhite) {
+			if (board.posIsWithinBoard(pos.north(1).east(1)))
+				if (king.getPosition(board) = pos.north(1).east(1))
+		}
+	}
 
 	public int getValue() {
 		// Position pos = getPosition() 	How to get

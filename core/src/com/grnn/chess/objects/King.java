@@ -10,6 +10,7 @@ import java.util.Arrays;
 public class King extends AbstractChessPiece {
 	private final int value = Integer.MAX_VALUE;
 	String letterRepresentation = "k";
+	public boolean isInCheck;
 	public King(boolean w) {
 		super(w);
 	}

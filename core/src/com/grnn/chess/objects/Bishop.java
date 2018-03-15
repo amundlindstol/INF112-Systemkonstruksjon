@@ -3,6 +3,7 @@ package com.grnn.chess.objects;
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -56,6 +57,50 @@ public class Bishop extends AbstractChessPiece {
 
 		return validMoves;//(ArrayList<Position>) Arrays.asList(board.getPosition(this));
 	}
+
+	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
+        Position posToCheck = pos.north(1).west((1));
+        while (board.posIsWithinBoard(posToCheck)){
+            if (board.getPieceAt(posToCheck)!=null){
+                if (board.getPieceAt(posToCheck).equals(king))
+                    return true;
+                break;
+            }
+            posToCheck = posToCheck.north(1).west(1);
+        }
+
+        posToCheck = pos.north(1).east(1);
+        while (board.posIsWithinBoard(posToCheck)){
+            if (board.getPieceAt(posToCheck)!=null){
+                if (board.getPieceAt(posToCheck).equals(king))
+                    return true;
+                break;
+            }
+            posToCheck = posToCheck.north(1).east(1);
+        }
+
+        posToCheck = pos.south(1).west(1);
+        while (board.posIsWithinBoard(posToCheck)){
+            if (board.getPieceAt(posToCheck)!=null){
+                if (board.getPieceAt(posToCheck).equals(king))
+                    return true;
+                break;
+            }
+            posToCheck = posToCheck.south(1).west(1);
+        }
+
+        posToCheck = pos.south(1).east(1);
+        while (board.posIsWithinBoard(posToCheck)){
+            if (board.getPieceAt(posToCheck)!=null){
+                if (board.getPieceAt(posToCheck).equals(king))
+                    return true;
+                break;
+            }
+            posToCheck = posToCheck.south(1).east(1);
+        }
+
+        return false;
+    }
 
 	//TODO: actually implement this
 	public ArrayList<Position> getCaptureMoves(Board board) {
