@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 public class King extends AbstractChessPiece {
 	String letterRepresentation = "k";
+	public boolean isInCheck;
 	public King(boolean w) {
 		super(w);
 	}
