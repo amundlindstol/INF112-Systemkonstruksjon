@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Rook extends AbstractChessPiece {
+	private final int value = 5;
 	String letterRepresentation = "t";
 
 	public Rook(boolean isWhite) {
@@ -29,28 +30,28 @@ public class Rook extends AbstractChessPiece {
 		int i=1;
 
 		do {
-		    if (board.posIsWithinBoard(rookPos.west(i)) && !isSameColor(board.getPieceAt(rookPos.west(i++)))){
+		    if (board.posIsWithinBoard(rookPos.west(i)) && !isSameColor(board.getPieceAt(rookPos.west(i)))){
                 validMoves.add(rookPos.west(i));
 		    }
 		    else break;
 		} while (board.getPieceAt(rookPos.west(i++))==null);
 		i = 1;
 
-        do { if (board.posIsWithinBoard(rookPos.east(i)) && !isSameColor(board.getPieceAt(rookPos.east(i++)))){
+        do { if (board.posIsWithinBoard(rookPos.east(i)) && !isSameColor(board.getPieceAt(rookPos.east(i)))){
                 validMoves.add(rookPos.east(i));
             }
             else break;
         } while (board.getPieceAt(rookPos.east(i++))==null);
 		i = 1;
 
-        do { if (board.posIsWithinBoard(rookPos.north(i)) && !isSameColor(board.getPieceAt(rookPos.north(i++)))){
+        do { if (board.posIsWithinBoard(rookPos.north(i)) && !isSameColor(board.getPieceAt(rookPos.north(i)))){
                 validMoves.add(rookPos.north(i));
             }
             else break;
         } while (board.getPieceAt(rookPos.north(i++))==null);
         i = 1;
 
-        do { if (board.posIsWithinBoard(rookPos.south(i)) && !isSameColor(board.getPieceAt(rookPos.south(i++)))){
+        do { if (board.posIsWithinBoard(rookPos.south(i)) && !isSameColor(board.getPieceAt(rookPos.south(i)))){
                 validMoves.add(rookPos.south(i));
             }
             else break;
@@ -63,5 +64,9 @@ public class Rook extends AbstractChessPiece {
 	//TODO: actually implement this
 	public ArrayList<Position> getCaptureMoves(Board board) {
 		return (ArrayList<Position>) Arrays.asList(board.getPosition(this));
+	}
+
+	public int getValue() {
+		return value;
 	}
 }
