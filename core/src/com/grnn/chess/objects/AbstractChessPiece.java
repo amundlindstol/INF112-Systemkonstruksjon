@@ -17,6 +17,7 @@ public abstract class AbstractChessPiece {
     protected ArrayList<Position> captureMoves;
     protected String letterRepresentation = "";
     protected String image = "";
+    protected final int value = 0; // Should value be set in the abstract class?
 
     //private Direction askedToGo;
 

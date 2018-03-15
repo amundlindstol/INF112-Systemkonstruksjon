@@ -2,12 +2,12 @@ package com.grnn.chess.objects;
 
 import com.grnn.chess.Position;
 import com.grnn.chess.Board;
-import javafx.geometry.Pos;
 
 
 import java.util.ArrayList;
 
 public class Pawn extends AbstractChessPiece {
+	private final int value = 1;
 	String letterRepresentation = "p";
 	String image = "core/assets/badlogic.jpg";
 
@@ -67,4 +67,8 @@ public class Pawn extends AbstractChessPiece {
 
 	public String getImage() { return image;}
 
+	public int getValue() {
+		// Position pos = getPosition() 	How to get
+		return value;
+	}
 }

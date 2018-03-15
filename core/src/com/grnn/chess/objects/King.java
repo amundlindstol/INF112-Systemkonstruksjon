@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class King extends AbstractChessPiece {
+	private final int value = Integer.MAX_VALUE;
 	String letterRepresentation = "k";
 	public King(boolean w) {
 		super(w);
@@ -25,5 +26,9 @@ public class King extends AbstractChessPiece {
 	//TODO: actually implement this
 	public ArrayList<Position> getCaptureMoves(Board board) {
 		return (ArrayList<Position>) Arrays.asList(board.getPosition(this));
+	}
+
+	public int getValue() {
+		return value;
 	}
 }
