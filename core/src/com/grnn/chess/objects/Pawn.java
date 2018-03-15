@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Pawn extends AbstractChessPiece {
 	private final int value = 1;
 	String letterRepresentation = "p";
-	String image = "core/assets/badlogic.jpg";
+	String image = "badlogic.jpg";
 
 	public Pawn(boolean isWhite) {
 		super(isWhite);
