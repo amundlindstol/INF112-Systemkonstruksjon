@@ -14,7 +14,6 @@ public class Game {
         player2 = new Player("Spiller2");
         gameId = currid++;
 
-
     }
 
     private void startGame() {

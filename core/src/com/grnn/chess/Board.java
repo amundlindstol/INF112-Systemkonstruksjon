@@ -15,7 +15,6 @@ public class Board {
 
     public Board() {
         for(int i = 0; i < size; i++) {
-
             grid.add(new ArrayList<AbstractChessPiece>(size));
             for (int j = 0; j < size; j++)
                 grid.get(i).add(null);
