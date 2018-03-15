@@ -56,7 +56,7 @@ public class Rook extends AbstractChessPiece {
             else break;
         } while (board.getPieceAt(rookPos.south(i++))==null);
 
-		return (ArrayList<Position>) Arrays.asList(board.getPosition(this));
+		return validMoves;//(ArrayList<Position>) Arrays.asList(board.getPosition(this));
 	}
 
 
