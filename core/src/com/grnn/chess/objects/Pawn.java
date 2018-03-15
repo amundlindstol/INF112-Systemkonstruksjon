@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Pawn extends AbstractChessPiece {
 	String letterRepresentation = "p";
-	String image = "core/assets/badlogic.jpg";
+	String image = "badlogic.jpg";
 
 	public Pawn(boolean isWhite) {
 		super(isWhite);
