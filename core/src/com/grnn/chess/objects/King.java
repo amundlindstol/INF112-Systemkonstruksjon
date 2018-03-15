@@ -29,6 +29,35 @@ public class King extends AbstractChessPiece {
 		return (ArrayList<Position>) Arrays.asList(board.getPosition(this));
 	}
 
+	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
+		Position posToCheck = pos.north(1);
+		if (board.posIsWithinBoard(posToCheck)) {
+			if (king.getPosition(board).equals(posToCheck))
+				return true;
+		}
+		posToCheck = pos.south(1);
+		if (board.posIsWithinBoard(posToCheck)){
+			if (king.getPosition(board).equals(posToCheck))
+				return true;
+		}
+		posToCheck = pos.west(1);
+		if (board.posIsWithinBoard(posToCheck)) {
+			if (king.getPosition(board).equals(posToCheck))
+				return true;
+		}
+		posToCheck = pos.east(1);
+		if (board.posIsWithinBoard(posToCheck)){
+			if (king.getPosition(board).equals(posToCheck))
+				return true;
+		}
+		return false;
+	}
+
+	public boolean willThisKingBePutInCheckByMoveTo(Board board, Position pos){
+
+		return false;
+	}
+
 	public int getValue() {
 		return value;
 	}
