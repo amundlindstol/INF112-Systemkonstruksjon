@@ -70,8 +70,21 @@ public class Pawn extends AbstractChessPiece {
 	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
 		if (isWhite) {
 			if (board.posIsWithinBoard(pos.north(1).east(1)))
-				if (king.getPosition(board) = pos.north(1).east(1))
+				if (king.getPosition(board).equals(pos.north(1).east(1)))
+					return true;
+			if (board.posIsWithinBoard(pos.north(1).west(1)))
+				if (king.getPosition(board).equals(pos.north(1).west(1)))
+					return true;
 		}
+		else {
+			if (board.posIsWithinBoard(pos.south(1).east(1)))
+				if (king.getPosition(board).equals(pos.south(1).east(1)))
+					return true;
+			if (board.posIsWithinBoard(pos.south(1).west(1)))
+				if (king.getPosition(board).equals(pos.south(1).west(1)))
+					return true;
+		}
+		return false;
 	}
 
 	public int getValue() {
