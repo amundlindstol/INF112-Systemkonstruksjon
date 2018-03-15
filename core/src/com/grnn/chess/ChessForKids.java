@@ -25,7 +25,7 @@ public class ChessForKids extends ApplicationAdapter {
 		board = new Board();
 		board.addPieces();
 
-		gsm.push(new MenuState(gsm));
+		gsm.push(new MenuState(gsm)); //Change to PlayState to avoid menu (for testing)
 
 	}
 

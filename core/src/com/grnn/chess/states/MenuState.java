@@ -3,25 +3,35 @@ package com.grnn.chess.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
-/**
- * Created by Brent on 6/26/2015.
- */
-public class MenuState extends State{
+
+public class MenuState extends State {
     private Texture background;
     private Texture playBtn;
+    private int Xplay, Yplay;
 //    private Button playBtn, playVsAI, settings;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
         background = new Texture("badlogic.jpg");
         playBtn = new Texture("badlogic.jpg");
+        Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
+        Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
     }
 
     @Override
     public void handleInput() {
-        if(Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm));
+        justTryingToHandleSomeStuff(playBtn, new PlayState(gsm), Xplay, Yplay);
+    }
+
+    private void justTryingToHandleSomeStuff(Texture texture, State state, int texturePosX, int texturePosY) {
+        //translate mouse (0,0) to lower left
+        int x = Math.abs(Gdx.input.getX());
+        int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
+
+        if (x > texturePosX && y > texturePosY && x < texture.getWidth()+texturePosX && y < texture.getHeight()+texturePosY && Gdx.input.justTouched()) {
+            gsm.set(state);
         }
     }
 
@@ -36,7 +46,9 @@ public class MenuState extends State{
         sb.begin();
 
         sb.draw(background, 0,0);
-        sb.draw(playBtn, 0, 0);
+        sb.draw(playBtn, Xplay, Yplay);
+
+//        sb.draw(play, 50, 50);
 //        sb.draw(playBtn, cam.position.x - playBtn.getWidth() / 2, cam.position.y);
         sb.end();
     }
