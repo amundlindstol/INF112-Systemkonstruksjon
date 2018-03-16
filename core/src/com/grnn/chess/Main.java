@@ -17,17 +17,23 @@ public class Main {
         System.out.println("Player two, give me your name: ");
         String player2 = input.nextLine();
 
-        boolean playerOne = true;
+        boolean isWhite = true;
         while (true) {
             System.out.println(board);
-            if (playerOne) {
+            if (isWhite) {
                 System.out.println(player1 + " its your move, what piece do you want to move? (x,y)");
-                board = chooseMove(input, board);
-                playerOne = false;
+                if(chooseMove(input, board, isWhite)){
+                    isWhite = false;
+                }else {
+                    System.out.println("Not valid "+player1+", try again");                }
             }else{
                 System.out.println(player2 + " its your move, what piece do you want to move? (x,y)");
-                board = chooseMove(input,board);
-                playerOne = true;
+                if(chooseMove(input, board, isWhite)){
+                    isWhite = true;
+                }else {
+                    System.out.println("Not valid "+player2+", try again");
+
+                }
             }
         }
 
@@ -43,14 +49,19 @@ public class Main {
         }
     }
 
-    public static Board chooseMove(Scanner input, Board board){
+    public static boolean chooseMove(Scanner input, Board board, Boolean turn){
         int x = input.nextInt();
         int y = input.nextInt();
         Position potential = new Position(x, y);
+        AbstractChessPiece piece = board.getPieceAt(potential);
+        if(piece == null) return false;
+        if(piece.getColor()!=turn) return false;
+
         ArrayList<Position> vMoves = board.getPieceAt(potential).getValidMoves(board);
+        if(vMoves.size()==0) return false;
         print(vMoves);
         int mNumber = input.nextInt();
         board.movePiece(potential, vMoves.get(mNumber));
-        return board;
+        return true;
     }
 }

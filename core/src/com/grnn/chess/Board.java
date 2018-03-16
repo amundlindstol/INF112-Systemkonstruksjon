@@ -95,7 +95,6 @@ public class Board {
         for(int y = 0; y < size(); y++) {
             for(int x = 0; x < size(); x++) {
                 Position p = new Position(x, y);
-
                 if(getPieceAt(p) != null && getPieceAt(p).equals(piece))
                     return p;
             }
@@ -105,6 +104,10 @@ public class Board {
 
     public boolean posIsWithinBoard(Position pos){
         return (pos.getX()>=0 && pos.getX()< size && pos.getY()>=0 && pos.getY()< size );
+    }
+
+    public boolean equals(Board other){
+        return grid.equals(other.grid);
     }
 
     public String toString() {
