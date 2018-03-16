@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 
+/**
+ * @author Amund 15.03.18
+ */
 public class PlayState extends State {
     Board board;
     Texture bg;
@@ -31,6 +34,7 @@ public class PlayState extends State {
 
     @Override
     public void dispose() {
+        bg.dispose();
         //TODO dispose stuff
     }
 
