@@ -21,7 +21,6 @@ public class Pawn extends AbstractChessPiece {
 
 		//Get the position of the pawn
 		Position pawnPos = getPosition(board);
-		System.out.println(pawnPos.getX()+","+pawnPos.getY()+" "+this.isWhite);
 
 
 		if(isWhite){

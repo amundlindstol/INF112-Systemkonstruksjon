@@ -95,7 +95,8 @@ public class Board {
         for(int y = 0; y < size(); y++) {
             for(int x = 0; x < size(); x++) {
                 Position p = new Position(x, y);
-                if(getPieceAt(p).equals(piece))
+
+                if(getPieceAt(p) != null && getPieceAt(p).equals(piece))
                     return p;
             }
         }
