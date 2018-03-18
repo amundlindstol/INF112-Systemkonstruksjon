@@ -13,14 +13,16 @@ public class Board {
     private int size = 8;
     private ArrayList<ArrayList<AbstractChessPiece>> grid = new ArrayList<ArrayList<AbstractChessPiece>>(size);
     private ArrayList<AbstractChessPiece> removedPieces;
+    private ArrayList<Move> moveHistory;
 
     public Board() {
+        moveHistory = new ArrayList<Move>();
+
         for(int i = 0; i < size; i++) {
             grid.add(new ArrayList<AbstractChessPiece>(size));
             for (int j = 0; j < size; j++)
                 grid.get(i).add(null);
         }
-
         addPieces();
     }
     public AbstractChessPiece removePiece(){
@@ -35,6 +37,9 @@ public class Board {
         setPiece(piece, endPos);
         setPiece(null, startPos);
         piece.move();
+        moveHistory.add(new Move(endPos, startPos, piece));
+        System.out.println(endPos.getY() +", " + startPos.getY() + ", " +piece);
+        enPassant();
     }
 
     public Board updateBoard(){
@@ -110,6 +115,10 @@ public class Board {
         return grid.equals(other.grid);
     }
 
+    public ArrayList<Move> getMoveHistory(){
+        return moveHistory;
+    }
+
     public String toString() {
         String out = "";
         for(int y = size - 1; y >= 0; y--) {
@@ -134,5 +143,31 @@ public class Board {
         }
         out += "  A|B|C|D|E|F|G|H\n";
         return out;
+    }
+
+    public void enPassant(){
+        if(moveHistory.size()>2) {
+            Move lastMove = moveHistory.get(moveHistory.size()-1);
+            Position lastFromPos = lastMove.getFromPos();
+            Position lastToPos = lastMove.getToPos();
+            AbstractChessPiece lastPiece = lastMove.getPiece();
+
+            Move conditionMove = moveHistory.get(moveHistory.size()-2);
+            Position conditionFromPos = conditionMove.getFromPos();
+            Position conditionToPos = conditionMove.getToPos();
+            AbstractChessPiece conditionPiece = conditionMove.getPiece();
+
+            if(conditionToPos.getX()==lastToPos.getX()+1 || conditionToPos.getX()==lastToPos.getX()-1)
+                if(lastPiece.getColor() && lastFromPos.getY()==4 && lastToPos.getY()==5){
+                    if(!conditionPiece.getColor() && conditionFromPos.getY()==6 && conditionToPos.getY()==4){
+                        setPiece(null,conditionToPos);
+                    }
+                }else{
+                    if(conditionPiece.getColor() && conditionFromPos.getY()==1 && conditionToPos.getY()==3){
+                        setPiece(null, conditionToPos);
+                    }
+
+                }
+        }
     }
 }

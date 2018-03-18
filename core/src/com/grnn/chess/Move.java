@@ -9,9 +9,14 @@ public class Move {
     private AbstractChessPiece piece;
 
     public Move(Position toPos, Position fromPos, AbstractChessPiece piece) {
-        toPos = toPos;
-        fromPos = fromPos;
-        piece = piece;
+        this.toPos = toPos;
+        this.fromPos = fromPos;
+        this.piece = piece;
     }
 
+    public Position getToPos(){ return toPos; }
+
+    public Position getFromPos() { return fromPos; }
+
+    public AbstractChessPiece getPiece() { return piece; }
 }
