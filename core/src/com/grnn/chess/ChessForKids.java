@@ -5,22 +5,36 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.grnn.chess.objects.AbstractChessPiece;
+import com.grnn.chess.states.GameStateManager;
+import com.grnn.chess.states.MenuState;
+import com.grnn.chess.states.PlayState;
 
 public class ChessForKids extends ApplicationAdapter {
+	GameStateManager gsm;
 	SpriteBatch batch;
-	Texture img;
+	Texture bg;
+	Board board;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		gsm = new GameStateManager();
+
+		bg = new Texture("sjakk2.png");
+		board = new Board();
+		board.addPieces();
+
+		gsm.push(new MenuState(gsm)); //Change to PlayState to avoid menu (for testing)
+
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 1, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.end();
+		gsm.update(Gdx.graphics.getDeltaTime());
+		gsm.render(batch);
 	}
 	
 	@Override
