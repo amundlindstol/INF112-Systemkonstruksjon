@@ -5,6 +5,8 @@ import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Abstract class to represent a chess piece
@@ -44,11 +46,23 @@ public abstract class AbstractChessPiece {
         return new ArrayList<Position>();
     }
 
-    public ArrayList<Position> getCaptureMoves() {
-        return new ArrayList<Position>();
+    public ArrayList<Position> getCaptureMoves(Board board) {
+
+        List<Position> captureMoves = Arrays.asList(board.getPosition(this));
+        List<Position> validMoves = getValidMoves(board);
+
+        for(Position position : validMoves) {
+            if (!board.getPieceAt(position).isSameColor(this)) {
+                captureMoves.add(position);
+            }
+        }
+
+        return (ArrayList<Position>) captureMoves;
     }
 
     public boolean isSameColor(AbstractChessPiece otherPiece){
+        if(otherPiece == null)
+            return false;
         return getColor() == otherPiece.getColor();
     }
 
@@ -63,7 +77,15 @@ public abstract class AbstractChessPiece {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
 	}
 
-	public String getImage(){ return image; }
+	public String getImage() {
+        String image = isWhite ? this.image + "W" : this.image + "B";
+
+        if(this instanceof Bishop || this instanceof Rook || this instanceof Knight) {
+            image += "L";
+        }
+
+        return image + ".jpg";
+    }
 }
 
 

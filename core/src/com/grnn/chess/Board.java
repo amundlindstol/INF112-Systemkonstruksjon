@@ -24,7 +24,6 @@ public class Board {
             for (int j = 0; j < size; j++)
                 grid.get(i).add(null);
         }
-        addPieces();
     }
     public AbstractChessPiece removePiece(){
         return null;
@@ -39,7 +38,6 @@ public class Board {
         setPiece(null, startPos);
         piece.move();
         moveHistory.add(new Move(endPos, startPos, piece));
-        System.out.println(endPos.getY() +", " + startPos.getY() + ", " +piece);
         enPassant();
     }
     // TODO: AI is not always black

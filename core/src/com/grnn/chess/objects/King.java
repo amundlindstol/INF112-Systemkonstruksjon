@@ -19,7 +19,6 @@ public class King extends AbstractChessPiece {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
 	}
 
-	//TODO: actually implement this
 	public ArrayList<Position> getValidMoves(Board board) {
         ArrayList<Position> validMoves = new ArrayList<Position>();
         Position kingPos = getPosition(board);
@@ -48,13 +47,7 @@ public class King extends AbstractChessPiece {
         if (board.posIsWithinBoard(kingPos.south(1).east(1)) && !isSameColor(board.getPieceAt(kingPos.south(1).east(1))))
             validMoves.add(kingPos.south(1).east(1));
 
-
         return validMoves;
-	}
-
-	//TODO: actually implement this
-	public ArrayList<Position> getCaptureMoves(Board board) {
-		return (ArrayList<Position>) Arrays.asList(board.getPosition(this));
 	}
 
 	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){

@@ -23,7 +23,6 @@ public class Bishop extends AbstractChessPiece {
 
 		//Get the position of the rook
 		Position bishopPos = getPosition(board);
-		System.out.println(bishopPos.getX()+","+bishopPos.getY()+" "+this.isWhite);
 
 		int i=1;
 

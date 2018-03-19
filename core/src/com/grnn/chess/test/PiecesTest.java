@@ -72,6 +72,8 @@ public class PiecesTest {
 		Bishop r = new Bishop(true);
 		board.setPiece(r, 1, 1);
 
+		System.out.println(r.getValidMoves(board));
+
 		assertTrue(r.getValidMoves(board).contains(new Position(3, 3)));
 		assertTrue(r.getValidMoves(board).contains(new Position(2, 0)));
 	}
@@ -89,8 +91,10 @@ public class PiecesTest {
 	@Test
 	public void kingValidMoveTest() {
 		Board board = new Board();
-		Bishop r = new Bishop(true);
+		King r = new King(true);
 		board.setPiece(r, 4, 0);
+
+		System.out.println(r.getValidMoves(board));
 
 		assertTrue(r.getValidMoves(board).contains(new Position(4, 1)));
 		assertTrue(r.getValidMoves(board).contains(new Position(3, 0)));
@@ -111,8 +115,12 @@ public class PiecesTest {
 	@Test
 	public void kingCanCastleWhenNotMoved() {
 		Board board = new Board();
-		Bishop r = new Bishop(true);
+		King r = new King(true);
+		Rook rook = new Rook(true);
+		Rook rightRook = new Rook(true);
 		board.setPiece(r, 4, 0);
+		board.setPiece(rook, 0, 0);
+		board.setPiece(rightRook, 7, 0);
 
 		assertTrue(r.getValidMoves(board).contains(new Position(6, 0)));
 		assertTrue(r.getValidMoves(board).contains(new Position(1, 0)));

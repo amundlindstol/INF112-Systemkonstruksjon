@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Board board = new Board();
+        board.addPieces();
         Scanner input = new Scanner(System.in);
         System.out.println("welcome to chess3000, get ready to play!");
         System.out.println("Player one, give me your name: ");
