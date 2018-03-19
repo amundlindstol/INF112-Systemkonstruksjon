@@ -15,10 +15,12 @@ public class MenuState extends State {
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
-        background = new Texture("badlogic.jpg");
-        playBtn = new Texture("button.png");
-        Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
-        Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
+        background = new Texture("Menu/Menu.png");
+        playBtn = new Texture("Menu/menu_button.png");
+       //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
+        // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
+        Xplay = 350;
+        Yplay = 330;
     }
 
     @Override

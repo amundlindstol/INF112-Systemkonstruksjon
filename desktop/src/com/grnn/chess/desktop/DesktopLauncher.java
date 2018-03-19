@@ -7,8 +7,8 @@ import com.grnn.chess.ChessForKids;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 600;
-		config.height = 600;
+		config.width = 1000;
+		config.height = 700;
 		config.title = "Chess for kids";
 		config.resizable = false;
 		new LwjglApplication(new ChessForKids(), config);
