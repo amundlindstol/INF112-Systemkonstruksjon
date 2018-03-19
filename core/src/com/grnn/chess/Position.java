@@ -34,8 +34,4 @@ public class Position {
 		return getX() == otherPos.getX() && getY() == otherPos.getY();
 	}
 
-	@Override
-	public String toString() {
-		return "x: " + posX + ", y: " + posY;
-	}
 }
