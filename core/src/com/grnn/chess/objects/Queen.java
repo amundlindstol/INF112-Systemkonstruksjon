@@ -101,7 +101,21 @@ public class Queen extends AbstractChessPiece{
 
 	public String getImage(){ return image;}
 
-	public int getValue() {
+	/*public ArrayList<Position> getValidMovesWest(Board board) {
+		Position pawnPos = getPosition(board);
+
+		int i = 1;
+		do {
+			if (board.posIsWithinBoard(pawnPos.west(i)) && !isSameColor(board.getPieceAt(pawnPos.west(i)))){
+				validMoves.add(pawnPos.west(i));
+			}
+			else break;
+		} while (board.getPieceAt(pawnPos.west(i++))==null);
+
+	} */
+
+
+		public int getValue() {
 		return value;
 	}
 }

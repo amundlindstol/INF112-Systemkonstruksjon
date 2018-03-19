@@ -63,4 +63,9 @@ public class Position implements Comparable<Object>{
 			return true;
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "x: " + posX + ", y: " + posY;
+	}
 }
