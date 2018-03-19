@@ -37,6 +37,14 @@ public class TranslateToCellPos {
         return new Position(x, y);
     }
 
+    public int[] toPixels(int gridX, int gridY){
+        int[] pos = new int[2];
+        pos[0] = BOARD_PADDING+CELL_DIM*gridX;
+        pos[1] = BOARD_PADDING+CELL_DIM*gridY;
+    return pos;
+    }
+
+
     private int translateY(int y) {
         return Math.abs(y-Gdx.graphics.getHeight()+BOARD_PADDING);
     }

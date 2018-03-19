@@ -7,6 +7,10 @@ import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 import com.grnn.chess.TranslateToCellPos;
 import com.grnn.chess.objects.AbstractChessPiece;
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+import javafx.geometry.Pos;
+
+import java.util.ArrayList;
 
 /**
  * @author Amund 15.03.18
@@ -15,6 +19,10 @@ public class PlayState extends State {
     Board board;
     Texture bg;
     Texture bgBoard;
+    private Position selected;
+    private ArrayList<Position> potentialMoves;
+    private TranslateToCellPos translator;
+    private Boolean turn;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -22,10 +30,14 @@ public class PlayState extends State {
         bgBoard = new Texture("sjakk2.png");
         board = new Board();
         board.addPieces();
+        selected = null;
+        potentialMoves = new ArrayList<Position>();
+        translator = new TranslateToCellPos();
+        turn = true;
     }
 
     @Override
-    public void update(float dt) {}
+    public void update(float dt) {handleInput();}
 
     @Override
     public void render(SpriteBatch batch) {
@@ -41,6 +53,12 @@ public class PlayState extends State {
                 }
             }
         }
+        if(!potentialMoves.isEmpty()) {
+            for (Position potPos : potentialMoves) {
+                int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
+                batch.draw(new Texture("ChessPieces/Potential.png"), pos[0], pos[1]);
+            }
+        }
        // batch.draw(new Texture(board.getPieceAt(new Position(3,0)).getImage()),40,40);
         //batch.draw(new Texture(board.getPieceAt(new Position(3,1)).getImage()), 3*(600/9), 2*(600/9));
         batch.end();
@@ -54,15 +72,37 @@ public class PlayState extends State {
         System.out.println("PlayState Disposed");
     }
 
-    @Override
+
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
-        int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
-        System.out.println(x+", "+y);
-        int texturePosX = 600;
-        int  texturePosY = 600;
-        if (x > texturePosX && y > texturePosY && x < bgBoard.getWidth()+texturePosX && y < bgBoard.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new MenuState(gsm));
+        int y = Math.abs(Gdx.input.getY());
+
+        if(Gdx.input.justTouched() && selected==null){
+            selected = translator.toCellPos(x,y);
+            AbstractChessPiece selectedPiece = board.getPieceAt(selected);
+            if(selectedPiece == null){
+                System.out.println("selected is null");
+                selected = null;
+            }else {
+                if (selectedPiece.getColor() == turn){
+                    potentialMoves = selectedPiece.getValidMoves(board);
+                } else {
+                    selected = null;
+                }
+            }
         }
+        else if(Gdx.input.justTouched() && selected != null){
+            Position potentialPos = translator.toCellPos(x,y);
+            System.out.println("selected is not null and potential" + potentialPos);
+            if(potentialMoves.contains(potentialPos)) {
+                System.out.println("moving");
+                board.movePiece(selected, potentialPos);
+                selected = null;
+                potentialMoves = new ArrayList<Position>();
+                turn = !turn;
+            }
+
+        }
+
     }
 }

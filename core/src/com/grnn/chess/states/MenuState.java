@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 public class MenuState extends State {
     private Texture background;
     private Texture playBtn;
-    private int Xplay, Yplay;
+    private int Xplay, Yplay, Count;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
@@ -21,6 +21,7 @@ public class MenuState extends State {
         // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
         Xplay = 400;
         Yplay = 380;
+        Count = 20;
     }
 
     @Override
@@ -45,11 +46,15 @@ public class MenuState extends State {
         sb.begin();
 
         sb.draw(background, 0,0);
-        if(Xplay > 350 ){
+        Count++;
+        if(Count < 40 ) {
             Xplay++;
-        }else if(Xplay <= 450){
+        } else if (Count < 80){
             Xplay--;
+        } else {
+            Count = 0;
         }
+
         sb.draw(playBtn, Xplay, Yplay);
 
 //        sb.draw(play, 50, 50);
