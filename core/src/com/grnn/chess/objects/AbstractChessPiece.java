@@ -19,6 +19,7 @@ public abstract class AbstractChessPiece {
     protected String image = "";
     protected final int value = 0; // Should value be set in the abstract class?
 
+
     //private Direction askedToGo;
 
     /*public Position getPosition(){
@@ -37,7 +38,7 @@ public abstract class AbstractChessPiece {
         return board.getPosition(this);
     }
 
-    public boolean equals(Object otherPiece) { return this.hashCode() == otherPiece.hashCode(); }
+    public boolean equals(AbstractChessPiece otherPiece) { return this.hashCode() == otherPiece.hashCode(); }
 
     public ArrayList<Position> getValidMoves(Board board) {
         return new ArrayList<Position>();

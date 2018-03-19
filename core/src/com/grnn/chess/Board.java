@@ -13,14 +13,16 @@ public class Board {
     private int size = 8;
     private ArrayList<ArrayList<AbstractChessPiece>> grid = new ArrayList<ArrayList<AbstractChessPiece>>(size);
     private ArrayList<AbstractChessPiece> removedPieces;
+    private ArrayList<Move> moveHistory;
 
     public Board() {
+        moveHistory = new ArrayList<Move>();
+
         for(int i = 0; i < size; i++) {
             grid.add(new ArrayList<AbstractChessPiece>(size));
             for (int j = 0; j < size; j++)
                 grid.get(i).add(null);
         }
-
         addPieces();
     }
     public AbstractChessPiece removePiece(){
@@ -35,6 +37,9 @@ public class Board {
         setPiece(piece, endPos);
         setPiece(null, startPos);
         piece.move();
+        moveHistory.add(new Move(endPos, startPos, piece));
+        System.out.println(endPos.getY() +", " + startPos.getY() + ", " +piece);
+        enPassant();
     }
 
     public Board updateBoard(){
@@ -88,14 +93,17 @@ public class Board {
     }
 
     public AbstractChessPiece getPieceAt(Position p) {
-        return grid.get(p.getY()).get(p.getX());
+        if(posIsWithinBoard(p)) {
+            return grid.get(p.getY()).get(p.getX());
+        }
+        return null;
     }
 
     public Position getPosition(AbstractChessPiece piece) {
         for(int y = 0; y < size(); y++) {
             for(int x = 0; x < size(); x++) {
                 Position p = new Position(x, y);
-                if(getPieceAt(p).equals(piece))
+                if(getPieceAt(p) != null && getPieceAt(p).equals(piece))
                     return p;
             }
         }
@@ -104,6 +112,14 @@ public class Board {
 
     public boolean posIsWithinBoard(Position pos){
         return (pos.getX()>=0 && pos.getX()< size && pos.getY()>=0 && pos.getY()< size );
+    }
+
+    public boolean equals(Board other){
+        return grid.equals(other.grid);
+    }
+
+    public ArrayList<Move> getMoveHistory(){
+        return moveHistory;
     }
 
     public String toString() {
@@ -130,5 +146,31 @@ public class Board {
         }
         out += "  A|B|C|D|E|F|G|H\n";
         return out;
+    }
+
+    public void enPassant(){
+        if(moveHistory.size()>2) {
+            Move lastMove = moveHistory.get(moveHistory.size()-1);
+            Position lastFromPos = lastMove.getFromPos();
+            Position lastToPos = lastMove.getToPos();
+            AbstractChessPiece lastPiece = lastMove.getPiece();
+
+            Move conditionMove = moveHistory.get(moveHistory.size()-2);
+            Position conditionFromPos = conditionMove.getFromPos();
+            Position conditionToPos = conditionMove.getToPos();
+            AbstractChessPiece conditionPiece = conditionMove.getPiece();
+
+            if(conditionToPos.getX()==lastToPos.getX()+1 || conditionToPos.getX()==lastToPos.getX()-1)
+                if(lastPiece.getColor() && lastFromPos.getY()==4 && lastToPos.getY()==5){
+                    if(!conditionPiece.getColor() && conditionFromPos.getY()==6 && conditionToPos.getY()==4){
+                        setPiece(null,conditionToPos);
+                    }
+                }else{
+                    if(conditionPiece.getColor() && conditionFromPos.getY()==1 && conditionToPos.getY()==3){
+                        setPiece(null, conditionToPos);
+                    }
+
+                }
+        }
     }
 }
