@@ -1,6 +1,8 @@
 package com.grnn.chess;
 
 
+import javafx.geometry.Pos;
+
 /**
  * Created by hakon on 12.03.2018.
  */
