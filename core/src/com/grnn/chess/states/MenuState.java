@@ -20,7 +20,7 @@ public class MenuState extends State {
        //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
         // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
         Xplay = 350;
-        Yplay = 330;
+        Yplay = 380;
     }
 
     @Override
