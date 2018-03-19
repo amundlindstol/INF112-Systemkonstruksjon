@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Queen extends AbstractChessPiece{
 	private final int value = 9;
 	String letterRepresentation = "q";
-	String image = "queen.png";
+	String image = "ChessPieces/Queen";
 	public Queen(boolean isWhite) {
 		super(isWhite);
 	}
