@@ -19,7 +19,7 @@ public class MenuState extends State {
         playBtn = new Texture("Menu/menu_button.png");
        //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
         // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
-        Xplay = 350;
+        Xplay = 400;
         Yplay = 380;
     }
 
