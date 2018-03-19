@@ -1,10 +1,5 @@
 package com.grnn.chess;
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 4a21f7f14300f23be9fe0a4a8fbe2e08315c5b3c
 /**
  * Created by hakon on 12.03.2018.
  */
