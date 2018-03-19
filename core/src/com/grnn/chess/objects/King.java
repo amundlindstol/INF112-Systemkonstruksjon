@@ -13,6 +13,7 @@ public class King extends AbstractChessPiece {
 	public boolean isInCheck;
 	public King(boolean w) {
 		super(w);
+		setImage("King");
 	}
 
 	public String toString() {

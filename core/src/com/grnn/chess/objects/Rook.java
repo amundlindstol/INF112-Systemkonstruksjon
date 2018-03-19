@@ -10,10 +10,11 @@ import java.util.List;
 public class Rook extends AbstractChessPiece {
 	private final int value = 5;
 	String letterRepresentation = "t";
-	String image = "Rook";
+	protected String image = "ChessPieces/Rook";
 
 	public Rook(boolean isWhite) {
 		super(isWhite);
+		setImage("Rook");
 	}
 
 	public String toString() {

@@ -9,8 +9,10 @@ public class Knight extends AbstractChessPiece {
 	private final int value = 3;
 	String letterRepresentation = "h";
 
+
 	public Knight(boolean isWhite) {
 		super(isWhite);
+		setImage("Knight");
 	}
 
 	@Override
