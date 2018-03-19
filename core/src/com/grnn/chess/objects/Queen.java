@@ -101,19 +101,7 @@ public class Queen extends AbstractChessPiece{
 
 	public String getImage(){ return image;}
 
-	public ArrayList<Position> getValidMoves(Board board) {
-		Position pawnPos = getPosition(board);
-		System.out.println(pawnPos.getX()+","+pawnPos.getY()+" "+this.isWhite);
-
-		if(isWhite){
-
-		}else {
-
-		}
-		return null;
-	}
-
-	public ArrayList<Position> getValidMovesWest(Board board) {
+	/*public ArrayList<Position> getValidMovesWest(Board board) {
 		Position pawnPos = getPosition(board);
 
 		int i = 1;
@@ -124,7 +112,7 @@ public class Queen extends AbstractChessPiece{
 			else break;
 		} while (board.getPieceAt(pawnPos.west(i++))==null);
 
-	}
+	} */
 
 
 		public int getValue() {
