@@ -58,10 +58,22 @@ public class Main {
         if(piece.getColor()!=turn) return false;
 
         ArrayList<Position> vMoves = board.getPieceAt(potential).getValidMoves(board);
+        removeNotValidMoves(vMoves);
+
         if(vMoves.size()==0) return false;
         print(vMoves);
         int mNumber = input.nextInt();
         board.movePiece(potential, vMoves.get(mNumber));
         return true;
+    }
+
+    public static void removeNotValidMoves(ArrayList<Position> moves){
+        for(Position pos : moves){
+            int x = pos.getX();
+            int y = pos.getY();
+            if(x<0 || x>7 || y<0 || y>7){
+                moves.remove(pos);
+            }
+        }
     }
 }

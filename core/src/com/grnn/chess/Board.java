@@ -93,7 +93,10 @@ public class Board {
     }
 
     public AbstractChessPiece getPieceAt(Position p) {
-        return grid.get(p.getY()).get(p.getX());
+        if(posIsWithinBoard(p)) {
+            return grid.get(p.getY()).get(p.getX());
+        }
+        return null;
     }
 
     public Position getPosition(AbstractChessPiece piece) {
