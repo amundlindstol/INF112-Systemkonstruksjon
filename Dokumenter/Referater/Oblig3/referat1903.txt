@@ -1,1 +1,27 @@
-re
+Referat 19.03.2018
+
+Oppmøte: 
+	- Eivind Halderaker
+	- Simon Riple "Lord Riple"
+	- Amund Lindstøl (referent)
+	- Håkon Osland
+   	- Helge Mikael Landro
+
+
+Andre gruppesamling for Oblig 3.
+
+Features added:
+    - AI som gjør tilfeldige trekk
+    - Oversetting fra cursor-posisjon til celle-posisjon
+    - Brikker lagt til på brettet
+    - Førsteutkast av GUI
+    - Lagt til flere tester
+    - captureMoves
+    
+Til neste gang:
+    - Fikse bishop´s validMoves
+    - Lage flere states
+    - Videreutvikle GUI
+    - Implementere logikk til GUI
+    - Forberede presentasjon
+
