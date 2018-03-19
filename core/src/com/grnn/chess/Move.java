@@ -19,4 +19,10 @@ public class Move {
     public Position getFromPos() { return fromPos; }
 
     public AbstractChessPiece getPiece() { return piece; }
+
+    @Override
+    public String toString() {
+        return "adding move from pos " + fromPos + " to " + toPos + " with piece: " + piece;
+
+    }
 }
