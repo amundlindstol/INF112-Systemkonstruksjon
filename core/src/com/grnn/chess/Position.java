@@ -5,7 +5,7 @@ package com.grnn.chess;
 /**
  * Created by hakon on 12.03.2018.
  */
-public class Position implements Comparable<Object>{
+public class Position implements Comparable<Object> {
 	private int posX;
 	private int posY;
 
@@ -21,6 +21,15 @@ public class Position implements Comparable<Object>{
 	public int getY() {
 		return posY;
 	}
+
+	public Position north() { return new Position(posX,posY+1); }
+
+	public Position west() { return new Position(posX-1,posY); }
+
+	public Position east() { return new Position(posX+1,posY); }
+
+	public Position south() { return new Position(posX,posY-1); }
+
 
 	//Returns a new position 'steps' tiles further north
 	public Position north(int steps) { return new Position(posX,posY+steps); }
