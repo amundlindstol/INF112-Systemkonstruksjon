@@ -22,7 +22,7 @@ public class Move {
 
     @Override
     public String toString() {
-        return "adding move from pos " + fromPos + " to " + toPos + " with piece: " + piece;
+        return "Move from pos " + fromPos + " to " + toPos + " with piece: " + piece;
 
     }
 }

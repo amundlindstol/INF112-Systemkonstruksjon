@@ -1,6 +1,7 @@
 package com.grnn.chess;
 import com.grnn.chess.objects.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -39,6 +40,27 @@ public class Board {
         moveHistory.add(new Move(endPos, startPos, piece));
         enPassant();
     }
+    // TODO: AI is not always black
+    public ArrayList<Move> getPossibleAIMoves() { //Aka get black's moves
+
+        ArrayList<Move> possibleMoves = new ArrayList<Move>();
+
+        for(int y = 6; y <= 7; y++) {
+            for(int x = 0; x < size(); x++) {
+                Position posPiece = new Position(x, y);
+                AbstractChessPiece piece = getPieceAt(posPiece);
+                ArrayList<Position> posList = piece.getValidMoves(this);
+
+                for (Position toMove : posList) {
+                    Move newMove = new Move(toMove, posPiece, piece);
+                    possibleMoves.add(newMove);
+                    System.out.println(newMove);
+                }
+            }
+        }
+        return possibleMoves;
+    }
+
 
     public Board updateBoard(){
         return null;

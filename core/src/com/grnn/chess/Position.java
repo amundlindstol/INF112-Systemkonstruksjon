@@ -1,7 +1,5 @@
 package com.grnn.chess;
 
-
-
 /**
  * Created by hakon on 12.03.2018.
  */
