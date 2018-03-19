@@ -25,16 +25,12 @@ public class MenuState extends State {
 
     @Override
     public void handleInput() {
-        justTryingToHandleSomeStuff(playBtn, new PlayState(gsm), Xplay, Yplay);
-    }
-
-    private void justTryingToHandleSomeStuff(Texture texture, State state, int texturePosX, int texturePosY) {
-        //translate mouse (0,0) to lower left
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
-
-        if (x > texturePosX && y > texturePosY && x < texture.getWidth()+texturePosX && y < texture.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(state);
+        int texturePosX = Xplay;
+        int  texturePosY = Yplay;
+        if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+            gsm.set(new PlayState(gsm));
         }
     }
 
@@ -49,7 +45,7 @@ public class MenuState extends State {
         sb.begin();
 
         sb.draw(background, 0,0);
-        sb.draw(playBtn, Xplay, Yplay);
+        sb.draw(playBtn, ++Xplay, Yplay);
 
 //        sb.draw(play, 50, 50);
 //        sb.draw(playBtn, cam.position.x - playBtn.getWidth() / 2, cam.position.y);

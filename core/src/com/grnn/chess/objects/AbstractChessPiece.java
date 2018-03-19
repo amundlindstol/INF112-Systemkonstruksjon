@@ -18,7 +18,7 @@ public abstract class AbstractChessPiece {
     protected ArrayList<Position> validMoves;
     protected ArrayList<Position> captureMoves;
     protected String letterRepresentation = "";
-    protected String image = "";
+    protected String image = "ChessPieces/";
     protected final int value = 0; // Should value be set in the abstract class?
 
 
@@ -77,15 +77,19 @@ public abstract class AbstractChessPiece {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
 	}
 
+	public void setImage(String image){
+        this.image += image;
+    }
 	public String getImage() {
-        String image = isWhite ? this.image + "W" : this.image + "B";
+        String imageS = isWhite ? image + "W" : image + "B";
 
         if(this instanceof Bishop || this instanceof Rook || this instanceof Knight) {
-            image += "L";
+            imageS += "L";
         }
 
-        return image + ".jpg";
+        return imageS + ".png";
     }
+
 }
 
 

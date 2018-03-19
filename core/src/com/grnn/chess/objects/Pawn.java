@@ -10,10 +10,11 @@ import java.util.ArrayList;
 public class Pawn extends AbstractChessPiece {
 	private final int value = 1;
 	String letterRepresentation = "p";
-	String image = "badlogic";
+
 
 	public Pawn(boolean isWhite) {
 		super(isWhite);
+		setImage("Pawn");
 	}
 
 	@Override
@@ -64,7 +65,6 @@ public class Pawn extends AbstractChessPiece {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
 	}
 
-	public String getImage() { return image;}
 
 	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
 		if (isWhite) {

@@ -10,8 +10,9 @@ import java.util.Arrays;
 public class Bishop extends AbstractChessPiece {
 	String letterRepresentation = "b";
 	private final int value = 3;
+
 	public Bishop(boolean isWhite) {
-		super(isWhite);
+		super(isWhite); setImage("Bishop");
 	}
 	public String toString() {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
