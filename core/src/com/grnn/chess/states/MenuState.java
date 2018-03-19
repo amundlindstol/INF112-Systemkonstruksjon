@@ -45,7 +45,12 @@ public class MenuState extends State {
         sb.begin();
 
         sb.draw(background, 0,0);
-        sb.draw(playBtn, ++Xplay, Yplay);
+        if(Xplay > 350 ){
+            Xplay++;
+        }else if(Xplay <= 450){
+            Xplay--;
+        }
+        sb.draw(playBtn, Xplay, Yplay);
 
 //        sb.draw(play, 50, 50);
 //        sb.draw(playBtn, cam.position.x - playBtn.getWidth() / 2, cam.position.y);
