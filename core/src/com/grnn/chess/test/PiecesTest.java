@@ -62,8 +62,9 @@ public class PiecesTest {
 		Rook r = new Rook(true);
 		board.setPiece(r, 1, 1);
 
+
 		assertFalse(r.getValidMoves(board).contains(new Position(0, 0)));
-		assertFalse(r.getValidMoves(board).contains(new Position(3, 1)));
+		assertFalse(r.getValidMoves(board).contains(new Position(3, 3)));
 	}
 
 	@Test
