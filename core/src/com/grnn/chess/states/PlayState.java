@@ -15,7 +15,7 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        bg = new Texture("sjakk2.png");
+        bg = new Texture("GUI.png");
         board = new Board();
         board.addPieces();
     }
@@ -27,8 +27,8 @@ public class PlayState extends State {
     public void render(SpriteBatch batch) {
         batch.begin();
         batch.draw(bg, 0, 0);
-        batch.draw(new Texture(board.getPieceAt(new Position(3,0)).getImage()),40,40);
-        batch.draw(new Texture(board.getPieceAt(new Position(3,1)).getImage()), 3*(600/9), 2*(600/9));
+       // batch.draw(new Texture(board.getPieceAt(new Position(3,0)).getImage()),40,40);
+       // batch.draw(new Texture(board.getPieceAt(new Position(3,1)).getImage()), 3*(600/9), 2*(600/9));
         batch.end();
     }
 
