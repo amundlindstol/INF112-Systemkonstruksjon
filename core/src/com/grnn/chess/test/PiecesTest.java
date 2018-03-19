@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
  */
 public class PiecesTest {
 	Board board;
+
 	@Before
 	public void setup() {
 		board = new Board();
