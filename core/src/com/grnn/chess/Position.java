@@ -6,7 +6,7 @@ import javafx.geometry.Pos;
 /**
  * Created by hakon on 12.03.2018.
  */
-public class Position {
+public class Position implements Comparable<Object>{
 	private int posX;
 	private int posY;
 
@@ -23,6 +23,10 @@ public class Position {
 		return posY;
 	}
 
+	public String toString() {
+		return "(" + posX + ", " + posY + ")";
+	}
+
 	//Returns a new position 'steps' tiles further north
 	public Position north(int steps) { return new Position(posX,posY+steps); }
 
@@ -32,7 +36,31 @@ public class Position {
 
 	public Position south(int steps) { return new Position(posX,posY-steps); }
 
-	public boolean equals(Position otherPos) {
-		return getX() == otherPos.getX() && getY() == otherPos.getY();
+	@Override
+	public int compareTo(Object o) {
+		if(!(o instanceof Position)) {
+			return -1;
+		} else {
+			Position otherPos = (Position) o;
+			if (getX() > otherPos.getX()) {
+				return -1;
+			} else if(getX() < otherPos.getX()) {
+				return 1;
+			} else if (getY() > otherPos.getY()){
+				return -1;
+			} else if (getY() < otherPos.getY()) {
+				return 1;
+			} else {
+				return 0;
+			}
+
+		}
+	}
+
+	@Override
+	public boolean equals(Object otherPos) {
+		if (compareTo(otherPos) == 0)
+			return true;
+		return false;
 	}
 }

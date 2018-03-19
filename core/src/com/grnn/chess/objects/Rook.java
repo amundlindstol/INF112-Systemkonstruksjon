@@ -26,7 +26,6 @@ public class Rook extends AbstractChessPiece {
 
 		//Get the position of the rook
 		Position rookPos = getPosition(board);
-		System.out.println(rookPos.getX()+","+rookPos.getY()+" "+this.isWhite);
 
 		int i=1;
 

@@ -61,6 +61,8 @@ public abstract class AbstractChessPiece {
     }
 
     public boolean isSameColor(AbstractChessPiece otherPiece){
+        if(otherPiece == null)
+            return false;
         return getColor() == otherPiece.getColor();
     }
 
