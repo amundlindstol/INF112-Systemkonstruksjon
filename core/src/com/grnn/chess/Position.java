@@ -1,7 +1,6 @@
 package com.grnn.chess;
 
 
-import javafx.geometry.Pos;
 
 /**
  * Created by hakon on 12.03.2018.
@@ -59,7 +58,7 @@ public class Position implements Comparable<Object>{
 			return true;
 		return false;
 	}
-	
+
 	public String toString() {
 		return "(" + posX + ", " + posY + ")";
 	}
