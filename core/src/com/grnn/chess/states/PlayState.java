@@ -8,8 +8,6 @@ import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 import com.grnn.chess.TranslateToCellPos;
 import com.grnn.chess.objects.AbstractChessPiece;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
-import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 
