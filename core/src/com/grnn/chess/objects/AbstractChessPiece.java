@@ -3,7 +3,7 @@ package com.grnn.chess.objects;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
