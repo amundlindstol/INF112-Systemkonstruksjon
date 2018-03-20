@@ -3,6 +3,7 @@ package com.grnn.chess.objects;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
+import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ public abstract class AbstractChessPiece {
 	protected boolean hasMoved = false;
     protected boolean isWhite;
     protected boolean validMove;
-    protected ArrayList<Position> validMoves;
+    //protected ArrayList<Position> validMoves;
     protected ArrayList<Position> captureMoves;
     protected String letterRepresentation = "";
     protected String image = "ChessPieces/";
@@ -52,7 +53,8 @@ public abstract class AbstractChessPiece {
         List<Position> validMoves = getValidMoves(board);
 
         for(Position position : validMoves) {
-            if (!board.getPieceAt(position).isSameColor(this)) {
+            AbstractChessPiece pieceAtPos = board.getPieceAt(position);
+            if (pieceAtPos != null && !pieceAtPos.isSameColor(this)) {
                 captureMoves.add(position);
             }
         }
