@@ -39,7 +39,7 @@ public class Board {
         AbstractChessPiece piece = getPieceAt(startPos);
 
 
-        if (piece.getValidMoves(this).contains(endPos)) {
+        if (piece.getValidMoves(this).contains(endPos) || piece.getCaptureMoves(this).contains(endPos)) {
             setPiece(piece, endPos);
             setPiece(null, startPos);
             piece.move();
@@ -204,7 +204,7 @@ public class Board {
             Position conditionToPos = conditionMove.getToPos();
             AbstractChessPiece conditionPiece = conditionMove.getPiece();
 
-            if (conditionToPos.getX() == lastToPos.getX() + 1 || conditionToPos.getX() == lastToPos.getX() - 1)
+            if (conditionToPos.getX() == lastToPos.getX())
                 if (lastPiece.getColor() && lastFromPos.getY() == 4 && lastToPos.getY() == 5) {
                     if (!conditionPiece.getColor() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
                         setPiece(null, conditionToPos);

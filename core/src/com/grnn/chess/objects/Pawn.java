@@ -33,12 +33,7 @@ public class Pawn extends AbstractChessPiece {
 			if(board.getPieceAt(pawnPos.north())==null){
 				validMoves.add(pawnPos.north());
 			}
-			if(board.getPieceAt(pawnPos.east().north())!=null && !isSameColor(board.getPieceAt(pawnPos.east().north()))){
-				validMoves.add(pawnPos.east().north());
-			}
-			if(board.getPieceAt(pawnPos.west().north())!=null && !isSameColor(board.getPieceAt(pawnPos.west().north()))){
-				validMoves.add(pawnPos.west().north());
-			}
+
 		}else {
 			if(!hasMoved){
 				if(board.getPieceAt(pawnPos.south(2))==null) {
@@ -48,16 +43,36 @@ public class Pawn extends AbstractChessPiece {
 			if(board.getPieceAt(pawnPos.south())==null){
 				validMoves.add(pawnPos.south());
 			}
-			if(board.getPieceAt(pawnPos.east().south())!=null && !isSameColor(board.getPieceAt(pawnPos.east().south()))){
-				validMoves.add(pawnPos.east().south());
-			}
-			if(board.getPieceAt(pawnPos.west().south())!=null && !isSameColor(board.getPieceAt(pawnPos.east().south()))){
-				validMoves.add(pawnPos.west().south());
-			}
 		}
 		return validMoves;
 	}
 
+	@Override
+	public ArrayList<Position> getCaptureMoves(Board board) {
+		Position pawnPos = getPosition(board);
+		ArrayList<Position> captureMoves = new ArrayList<Position>();
+
+		if (getColor()){
+			if(board.getPieceAt(pawnPos.east().north())!=null && !isSameColor(board.getPieceAt(pawnPos.east().north()))){
+				captureMoves.add(pawnPos.east().north());
+			}
+			if(board.getPieceAt(pawnPos.west().north())!=null && !isSameColor(board.getPieceAt(pawnPos.west().north()))){
+				captureMoves.add(pawnPos.west().north());
+			}
+		} else {
+			if(board.getPieceAt(pawnPos.east().south())!=null && !isSameColor(board.getPieceAt(pawnPos.east().south()))){
+				captureMoves.add(pawnPos.east().south());
+			}
+			if(board.getPieceAt(pawnPos.west().south())!=null && !isSameColor(board.getPieceAt(pawnPos.west().south()))){
+				captureMoves.add(pawnPos.west().south());
+			}
+		}
+		Position enPass = enPassant(board,pawnPos);
+		if (enPass != null) {
+			captureMoves.add(enPass);
+		}
+		return captureMoves;
+	}
 
 	public String toString() {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
@@ -87,5 +102,30 @@ public class Pawn extends AbstractChessPiece {
 	public int getValue() {
 		// Position pos = getPosition() 	How to get
 		return value;
+	}
+
+	public Position enPassant(Board board, Position pawnPos){
+		ArrayList<Move> moveHistory = board.getMoveHistory();
+
+		if (moveHistory.size() > 2) {
+
+			Move conditionMove = moveHistory.get(moveHistory.size() - 1);
+			Position conditionFromPos = conditionMove.getFromPos();
+			Position conditionToPos = conditionMove.getToPos();
+			AbstractChessPiece conditionPiece = conditionMove.getPiece();
+
+			if (conditionToPos.getX() == pawnPos.getX() + 1 || conditionToPos.getX() == pawnPos.getX() - 1)
+				if (this.getColor() && pawnPos.getY() == 4) {
+					if (!conditionPiece.getColor() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
+						return conditionToPos.north();
+					}
+				} else {
+					if (conditionPiece.getColor() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
+						return conditionToPos.south();
+					}
+
+				}
+		}
+		return null;
 	}
 }

@@ -64,7 +64,7 @@ public class PlayState extends State {
         }
         if(!captureMoves.isEmpty()) {
             for(Position capPos : captureMoves) {
-                int[] pos = translator.toPixels(capPos.getX(),capPos.getY());
+                int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
                 batch.draw(new Texture("ChessPieces/Capture.png"), pos[0], pos[1]);
             }
         }
@@ -96,17 +96,30 @@ public class PlayState extends State {
             }
         }
         //second selected piece
-        else if(Gdx.input.justTouched() && selected != null){
-            Position potentialPos = translator.toCellPos(x,y);
-            if(potentialMoves.contains(potentialPos) || captureMoves.contains(potentialPos)) {
-                AbstractChessPiece potentialPiece = board.getPieceAt(potentialPos);
-                if(potentialPiece!=null){
+        else if(Gdx.input.justTouched() && selected != null) {
+            Position potentialPos = translator.toCellPos(x, y);
+            AbstractChessPiece potentialPiece = board.getPieceAt(potentialPos);
+            Boolean valid = potentialMoves.contains(potentialPos) || captureMoves.contains(potentialPos);
+            if (potentialPiece != null){
+                if (valid) {
                     board.removePiece(potentialPiece);
+                    board.movePiece(selected, potentialPos);
+                    reset();
+                    turn = !turn;
                 }
+                else if (potentialPiece.getColor()==turn){
+                    reset();
+                    potentialMoves = potentialPiece.getValidMoves(board);
+                    captureMoves = potentialPiece.getCaptureMoves(board);
+                    selected = potentialPos;
+                }else{
+                    reset();
+                }
+            }else if(potentialPiece == null && valid) {
                 board.movePiece(selected, potentialPos);
                 reset();
                 turn = !turn;
-            } else {
+            }else {
                 reset();
             }
 
