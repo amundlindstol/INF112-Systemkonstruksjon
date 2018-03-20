@@ -18,15 +18,19 @@ public class Board {
 
     public Board() {
         moveHistory = new ArrayList<Move>();
-
+        removedPieces = new ArrayList<AbstractChessPiece>();
         for(int i = 0; i < size; i++) {
             grid.add(new ArrayList<AbstractChessPiece>(size));
             for (int j = 0; j < size; j++)
                 grid.get(i).add(null);
         }
     }
-    public AbstractChessPiece removePiece(){
-        return null;
+    public void removePiece(AbstractChessPiece piece){
+        removedPieces.add(piece);
+    }
+
+    public ArrayList<AbstractChessPiece> getRemovedPieces() {
+        return removedPieces;
     }
 
     public void movePiece(Position startPos, Position endPos) {

@@ -24,7 +24,6 @@ public class Pawn extends AbstractChessPiece {
 		//Get the position of the pawn
 		Position pawnPos = getPosition(board);
 
-
 		if(isWhite){
 			if(!hasMoved){
 				if(board.getPieceAt(pawnPos.north(2))==null) {
@@ -34,13 +33,6 @@ public class Pawn extends AbstractChessPiece {
 			if(board.getPieceAt(pawnPos.north(1))==null){
 				validMoves.add(pawnPos.north(1));
 			}
-			if(board.getPieceAt(pawnPos.east(1).north(1))!=null && !isSameColor(board.getPieceAt(pawnPos.east(1).north(1)))){
-				validMoves.add(pawnPos.east(1).north(1));
-			}
-			if(board.getPieceAt(pawnPos.west(1).north(1))!=null && !isSameColor(board.getPieceAt(pawnPos.west(1).north(1)))){
-			validMoves.add(pawnPos.west(1).north(1));
-			}
-
 		}else {
 			if(!hasMoved){
 				if(board.getPieceAt(pawnPos.south(2))==null) {
@@ -50,15 +42,30 @@ public class Pawn extends AbstractChessPiece {
 			if(board.getPieceAt(pawnPos.south(1))==null){
 				validMoves.add(pawnPos.south(1));
 			}
-			if(board.getPieceAt(pawnPos.east(1).south(1))!=null && !isSameColor(board.getPieceAt(pawnPos.east(1).south(1)))){
-				validMoves.add(pawnPos.east(1).south(1));
-			}
-			if(board.getPieceAt(pawnPos.west(1).south(1))!=null && !isSameColor(board.getPieceAt(pawnPos.east(1).south(1)))){
-				validMoves.add(pawnPos.west(1).south(1));
-			}
-
 		}
 		return validMoves;
+	}
+
+	public ArrayList<Position> getCaptureMoves(Board board) {
+		ArrayList<Position> capturedMoves = new ArrayList<Position>();
+
+		Position pawnPos = getPosition(board);
+		if(isWhite){
+			if(board.getPieceAt(pawnPos.east(1).north(1))!=null && !isSameColor(board.getPieceAt(pawnPos.east(1).north(1)))){
+				capturedMoves.add(pawnPos.east(1).north(1));
+			}
+			if(board.getPieceAt(pawnPos.west(1).north(1))!=null && !isSameColor(board.getPieceAt(pawnPos.west(1).north(1)))){
+				capturedMoves.add(pawnPos.west(1).north(1));
+			}
+		} else {
+			if(board.getPieceAt(pawnPos.east(1).south(1))!=null && !isSameColor(board.getPieceAt(pawnPos.east(1).south(1)))){
+				capturedMoves.add(pawnPos.east(1).south(1));
+			}
+			if(board.getPieceAt(pawnPos.west(1).south(1))!=null && !isSameColor(board.getPieceAt(pawnPos.east(1).south(1)))){
+				capturedMoves.add(pawnPos.west(1).south(1));
+			}
+		}
+		return capturedMoves;
 	}
 
 	public String toString() {
