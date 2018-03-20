@@ -37,9 +37,14 @@ public class Bishop extends AbstractChessPiece {
 		Position bishopPos = getPosition(board);
 
 		Position southEast = bishopPos.south().east();
+
 		while(board.posIsWithinBoard(southEast) && board.getPieceAt(southEast) == null) {
 			validMoves.add(southEast);
 			southEast = southEast.south().east();
+		}
+
+		if(board.posIsWithinBoard(southEast) && !board.getPieceAt(southEast).isSameColor(this)) {
+			validMoves.add(southEast);
 		}
 
 		return validMoves;
@@ -55,6 +60,11 @@ public class Bishop extends AbstractChessPiece {
 			validMoves.add(southWest);
 			southWest = southWest.south().west();
 		}
+
+		if(board.posIsWithinBoard(southWest) && !board.getPieceAt(southWest).isSameColor(this)) {
+			validMoves.add(southWest);
+		}
+
 		return validMoves;
 	}
 
@@ -67,6 +77,11 @@ public class Bishop extends AbstractChessPiece {
 			validMoves.add(northEast);
 			northEast = northEast.north().east();
 		}
+
+		if(board.posIsWithinBoard(northEast) && !board.getPieceAt(northEast).isSameColor(this)) {
+			validMoves.add(northEast);
+		}
+
 		return validMoves;
 	}
 	
@@ -81,60 +96,11 @@ public class Bishop extends AbstractChessPiece {
 			northWest = northWest.north().west();
 		}
 
+		if(board.posIsWithinBoard(northWest) && !board.getPieceAt(northWest).isSameColor(this)) {
+			validMoves.add(northWest);
+		}
 		return validMoves;
 	}
-	/*
-	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
-        Position posToCheck = pos.north(1).west((1));
-        while (board.posIsWithinBoard(posToCheck)){
-            if (board.getPieceAt(posToCheck)!=null){
-                if (board.getPieceAt(posToCheck).equals(king))
-                    return true;
-                break;
-            }
-            posToCheck = posToCheck.north(1).west(1);
-        }
-
-        posToCheck = pos.north(1).east(1);
-        while (board.posIsWithinBoard(posToCheck)){
-            if (board.getPieceAt(posToCheck)!=null){
-                if (board.getPieceAt(posToCheck).equals(king))
-                    return true;
-                break;
-            }
-            posToCheck = posToCheck.north(1).east(1);
-        }
-
-        posToCheck = pos.south(1).west(1);
-        while (board.posIsWithinBoard(posToCheck)){
-            if (board.getPieceAt(posToCheck)!=null){
-                if (board.getPieceAt(posToCheck).equals(king))
-                    return true;
-                break;
-            }
-            posToCheck = posToCheck.south(1).west(1);
-        }
-
-        posToCheck = pos.south(1).east(1);
-        while (board.posIsWithinBoard(posToCheck)){
-            if (board.getPieceAt(posToCheck)!=null){
-                if (board.getPieceAt(posToCheck).equals(king))
-                    return true;
-                break;
-            }
-            posToCheck = posToCheck.south(1).east(1);
-        }
-
-        return false;
-
-    }
-        */
-
-	//TODO: actually implement this
-	public ArrayList<Position> getCaptureMoves(Board board) {
-		return (ArrayList<Position>) Arrays.asList(board.getPosition(this));
-	}
-
 	public int getValue() {
 		return value;
 	}
