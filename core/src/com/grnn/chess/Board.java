@@ -1,7 +1,6 @@
 package com.grnn.chess;
 import com.grnn.chess.objects.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -113,7 +112,20 @@ public class Board {
     }
 
     public void setPiece(AbstractChessPiece piece, int x, int y) {
+        if(pawnCanPromote(piece, y)) {
+            piece = new Queen(piece.getColor());
+        }
         grid.get(y).set(x, piece);
+    }
+
+    private boolean pawnCanPromote(AbstractChessPiece piece, int y) {
+        if(piece instanceof Pawn) {
+            if((piece.getColor() && y == size() - 1)
+                    || (!piece.getColor() && y == 0)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public AbstractChessPiece getPieceAt(Position p) {
