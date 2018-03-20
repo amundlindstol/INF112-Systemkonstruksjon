@@ -48,7 +48,7 @@ public abstract class AbstractChessPiece {
 
     public ArrayList<Position> getCaptureMoves(Board board) {
 
-        List<Position> captureMoves = Arrays.asList(board.getPosition(this));
+        List<Position> captureMoves = new ArrayList<Position>();
         List<Position> validMoves = getValidMoves(board);
 
         for(Position position : validMoves) {
