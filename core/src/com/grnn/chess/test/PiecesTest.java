@@ -2,6 +2,7 @@ package com.grnn.chess.test;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
+import com.grnn.chess.exceptions.IllegalMoveException;
 import com.grnn.chess.objects.*;
 import javafx.geometry.Pos;
 import org.junit.Before;
@@ -30,22 +31,22 @@ public class PiecesTest {
 	}
 
 	//TODO: check that it only accepts valid moves
-	@Test
-	public void moveRookTest() {
-		Position startPosition = new Position(0, 0);
-		Position endPosition = new Position(3, 2);
-		movePieceTest(startPosition, endPosition);
-	}
-
-	public void movePieceTest(Position startPosition, Position endPosition) {
-
-		AbstractChessPiece piece = board.getPieceAt(startPosition);
-
-		board.movePiece(startPosition, endPosition);
-
-
-		assertThat(board.getPieceAt(endPosition), is(piece));
-	}
+//q	@Test
+//	public void moveRookTest() {
+//		Position startPosition = new Position(0, 0);
+//		Position endPosition = new Position(3, 2);
+//		movePieceTest(startPosition, endPosition);
+//	}
+//
+//	public void movePieceTest(Position startPosition, Position endPosition) {
+//
+//		AbstractChessPiece piece = board.getPieceAt(startPosition);
+//
+//		board.movePiece(startPosition, endPosition);
+//
+//
+//		assertThat(board.getPieceAt(endPosition), is(piece));
+//	}
 
 	@Test
 	public void rookValidMoveTest() {
@@ -146,7 +147,7 @@ public class PiecesTest {
 		assertFalse(r.getValidMoves(board).contains(new Position(1, 0)));
 	}
 
-	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	@Test
 	public void unableToMovePieceOutsideBoardTest() {
 		Board board = new Board();
 
@@ -161,7 +162,11 @@ public class PiecesTest {
 		board.setPiece(blackKnight, blackKnightPos);
 
 		Position outsideBoardPos = new Position(-1, 0);
-
-		board.movePiece(whiteKnightPos, outsideBoardPos);
+		try {
+			board.movePiece(whiteKnightPos, outsideBoardPos);
+			fail();
+		} catch (IllegalMoveException e) {
+			// should throw this exception
+		}
 	}
 }
