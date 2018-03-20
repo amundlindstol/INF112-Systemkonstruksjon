@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * A class to represent the menu for selection AI level for the game
+ * A class to represent the menu for select AI level for the game
  * @author Helge Mikael Landro, 19.03.2018
  */
 public class SelectAIState extends State {
@@ -53,6 +53,11 @@ public class SelectAIState extends State {
 
     @Override
     public void dispose() {
+        background.dispose();
+        playBtn.dispose();
+        playBtn2.dispose();
+        playBtn3.dispose();
+        System.out.println("SelectAI State Disposed");
 
     }
 }
