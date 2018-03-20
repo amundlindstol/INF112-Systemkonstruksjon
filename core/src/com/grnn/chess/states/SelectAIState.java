@@ -16,7 +16,7 @@ public class SelectAIState extends State {
 
     private Texture background;
     private Texture playBtn, playBtn2, playBtn3;
-    private Texture emoticonEasy, emoticonEasy2, emoticonMedium, emoticonMedium2;
+    private Texture emoticonEasy, emoticonEasy2, emoticonMedium, emoticonMedium2, emoticonHard, emoticonHard2;
     private int xPlay, yPlay, count;
     private ArrayList<Texture> test;
 
@@ -30,6 +30,8 @@ public class SelectAIState extends State {
         emoticonEasy2 = new Texture("Menu/Animations/Emoji_1/2.png");
         emoticonMedium = new Texture("Menu/Animations/Emoji_2/3.png");
         emoticonMedium2 = new Texture("Menu/Animations/Emoji_2/4.png");
+        emoticonHard = new Texture("Menu/Animations/Emoji_3/5.png");
+        emoticonHard2 = new Texture("Menu/Animations/Emoji_3/6.png");
         xPlay = 450;
         yPlay = 440;
         count = 0;
@@ -38,6 +40,8 @@ public class SelectAIState extends State {
         test.add(emoticonEasy2);
         test.add(emoticonMedium);
         test.add(emoticonMedium2);
+        test.add(emoticonHard);
+        test.add(emoticonHard2);
 
 
     }
@@ -63,19 +67,22 @@ public class SelectAIState extends State {
         sb.begin();
         sb.draw(background, 0,0);
         sb.draw(playBtn, xPlay, yPlay);
-        sb.draw(playBtn2, xPlay, yPlay - 60);
-        sb.draw(playBtn3, xPlay, yPlay - 120);
+        sb.draw(playBtn2, xPlay, yPlay - 70);
+        sb.draw(playBtn3, xPlay, yPlay - 140);
 
         count++;
 
         // Draw emojis
         if(count  < 15 ) {
             sb.draw(test.get(0), xPlay-30, yPlay);
-            sb.draw(test.get(2), xPlay-10, yPlay-114);
+            sb.draw(test.get(4), xPlay-17, yPlay-88);
+            sb.draw(test.get(2), xPlay-10, yPlay-134);
 
         } else{
             sb.draw(test.get(1), xPlay-30, yPlay);
-            sb.draw(test.get(3), xPlay-10, yPlay-114);
+            sb.draw(test.get(5), xPlay-17, yPlay-88);
+            sb.draw(test.get(3), xPlay-10, yPlay-134);
+
             if(count  == 30)
                 count = 0;
         }
