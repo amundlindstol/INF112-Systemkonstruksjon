@@ -30,14 +30,14 @@ public class Pawn extends AbstractChessPiece {
 					validMoves.add(pawnPos.north(2));
 				}
 			}
-			if(board.getPieceAt(pawnPos.north(1))==null){
-				validMoves.add(pawnPos.north(1));
+			if(board.getPieceAt(pawnPos.north())==null){
+				validMoves.add(pawnPos.north());
 			}
-			if(board.getPieceAt(pawnPos.east(1).north(1))!=null && !isSameColor(board.getPieceAt(pawnPos.east(1).north(1)))){
-				validMoves.add(pawnPos.east(1).north(1));
+			if(board.getPieceAt(pawnPos.east().north())!=null && !isSameColor(board.getPieceAt(pawnPos.east().north()))){
+				validMoves.add(pawnPos.east().north());
 			}
-			if(board.getPieceAt(pawnPos.west(1).north(1))!=null && !isSameColor(board.getPieceAt(pawnPos.west(1).north(1)))){
-				validMoves.add(pawnPos.west(1).north(1));
+			if(board.getPieceAt(pawnPos.west().north())!=null && !isSameColor(board.getPieceAt(pawnPos.west().north()))){
+				validMoves.add(pawnPos.west().north());
 			}
 		}else {
 			if(!hasMoved){
@@ -45,14 +45,14 @@ public class Pawn extends AbstractChessPiece {
 					validMoves.add(pawnPos.south(2));
 				}
 			}
-			if(board.getPieceAt(pawnPos.south(1))==null){
-				validMoves.add(pawnPos.south(1));
+			if(board.getPieceAt(pawnPos.south())==null){
+				validMoves.add(pawnPos.south());
 			}
-			if(board.getPieceAt(pawnPos.east(1).south(1))!=null && !isSameColor(board.getPieceAt(pawnPos.east(1).south(1)))){
-				validMoves.add(pawnPos.east(1).south(1));
+			if(board.getPieceAt(pawnPos.east().south())!=null && !isSameColor(board.getPieceAt(pawnPos.east().south()))){
+				validMoves.add(pawnPos.east().south());
 			}
-			if(board.getPieceAt(pawnPos.west(1).south(1))!=null && !isSameColor(board.getPieceAt(pawnPos.east(1).south(1)))){
-				validMoves.add(pawnPos.west(1).south(1));
+			if(board.getPieceAt(pawnPos.west().south())!=null && !isSameColor(board.getPieceAt(pawnPos.east().south()))){
+				validMoves.add(pawnPos.west().south());
 			}
 		}
 		return validMoves;
@@ -66,19 +66,19 @@ public class Pawn extends AbstractChessPiece {
 
 	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
 		if (isWhite) {
-			if (board.posIsWithinBoard(pos.north(1).east(1)))
-				if (king.getPosition(board).equals(pos.north(1).east(1)))
+			if (board.posIsWithinBoard(pos.north().east()))
+				if (king.getPosition(board).equals(pos.north().east()))
 					return true;
-			if (board.posIsWithinBoard(pos.north(1).west(1)))
-				if (king.getPosition(board).equals(pos.north(1).west(1)))
+			if (board.posIsWithinBoard(pos.north().west()))
+				if (king.getPosition(board).equals(pos.north().west()))
 					return true;
 		}
 		else {
-			if (board.posIsWithinBoard(pos.south(1).east(1)))
-				if (king.getPosition(board).equals(pos.south(1).east(1)))
+			if (board.posIsWithinBoard(pos.south().east()))
+				if (king.getPosition(board).equals(pos.south().east()))
 					return true;
-			if (board.posIsWithinBoard(pos.south(1).west(1)))
-				if (king.getPosition(board).equals(pos.south(1).west(1)))
+			if (board.posIsWithinBoard(pos.south().west()))
+				if (king.getPosition(board).equals(pos.south().west()))
 					return true;
 		}
 		return false;
