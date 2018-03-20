@@ -69,9 +69,7 @@ public class MenuState extends State {
         }
 
         // Animate King
-        sb.draw(kingBlack, CountKing, Yplay-382);
-
-
+        sb.draw(kingBlack, CountKing, Yplay-346);
         sb.draw(pieces, 0, 0);
         sb.draw(playBtn, Xplay, Yplay);
 
