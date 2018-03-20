@@ -49,11 +49,15 @@ public class MenuState extends State {
         Count++;
         if(Count < 40 ) {
             Xplay++;
+            sb.draw(playBtn, Xplay, Yplay);
+
         } else if (Count < 80){
             Xplay--;
         } else {
             Count = 0;
         }
+
+
 
         sb.draw(playBtn, Xplay, Yplay);
 

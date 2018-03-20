@@ -4,7 +4,7 @@ import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 import com.grnn.chess.exceptions.IllegalMoveException;
 import com.grnn.chess.objects.*;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 import org.junit.Before;
 import org.junit.Test;
 

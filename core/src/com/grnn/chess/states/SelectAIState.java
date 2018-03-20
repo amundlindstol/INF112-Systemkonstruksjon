@@ -2,7 +2,11 @@ package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import java.util.ArrayList;
 
 /**
  * A class to represent the menu for select AI level for the game
@@ -12,7 +16,9 @@ public class SelectAIState extends State {
 
     private Texture background;
     private Texture playBtn, playBtn2, playBtn3;
-    private int xPlay, yPlay;
+    private Texture emoticonEasy, emoticonEasy2;
+    private int xPlay, yPlay, count;
+    private ArrayList<Texture> test;
 
     public SelectAIState(GameStateManager gsm){
         super(gsm);
@@ -20,8 +26,15 @@ public class SelectAIState extends State {
         playBtn = new Texture("Menu/menu_button_AI_easy.png");
         playBtn2 = new Texture("Menu/menu_button_AI_medium.png");
         playBtn3 = new Texture("Menu/menu_button_AI_hard.png");
+        emoticonEasy = new Texture("Menu/1.png");
+        emoticonEasy2 = new Texture("Menu/2.png");
         xPlay = 450;
         yPlay = 440;
+        count = 0;
+        test = new ArrayList<Texture>();
+        test.add(emoticonEasy);
+        test.add(emoticonEasy2);
+
 
     }
 
@@ -48,6 +61,18 @@ public class SelectAIState extends State {
         sb.draw(playBtn, xPlay, yPlay);
         sb.draw(playBtn2, xPlay, yPlay - 60);
         sb.draw(playBtn3, xPlay, yPlay - 120);
+
+        count++;
+
+        // Draw emojis
+        if(count  < 15 ) {
+            sb.draw(test.get(1), xPlay-30, yPlay);
+
+        } else{
+            sb.draw(test.get(0), xPlay-30, yPlay);
+            if(count  == 30)
+                count = 0;
+        }
         sb.end();
     }
 
@@ -57,6 +82,8 @@ public class SelectAIState extends State {
         playBtn.dispose();
         playBtn2.dispose();
         playBtn3.dispose();
+        emoticonEasy.dispose();
+        emoticonEasy2.dispose();
         System.out.println("SelectAI State Disposed");
 
     }
