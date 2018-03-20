@@ -2,10 +2,7 @@ package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import java.util.ArrayList;
 
 /**
@@ -98,6 +95,5 @@ public class SelectAIState extends State {
         emoticonEasy.dispose();
         emoticonEasy2.dispose();
         System.out.println("SelectAI State Disposed");
-
     }
 }
