@@ -3,6 +3,7 @@ package com.grnn.chess.test;
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 import com.grnn.chess.objects.*;
+import javafx.geometry.Pos;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -143,5 +144,24 @@ public class PiecesTest {
 
 		assertFalse(r.getValidMoves(board).contains(new Position(6, 0)));
 		assertFalse(r.getValidMoves(board).contains(new Position(1, 0)));
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void unableToMovePieceOutsideBoardTest() {
+		Board board = new Board();
+
+		Position whiteKnightPos = new Position(1,0);
+		Position blackKnightPos = new Position(1,7);
+
+
+		Knight whiteKnight = new Knight(true);
+		Knight blackKnight = new Knight(false);
+
+		board.setPiece(whiteKnight, whiteKnightPos);
+		board.setPiece(blackKnight, blackKnightPos);
+
+		Position outsideBoardPos = new Position(-1, 0);
+
+		board.movePiece(whiteKnightPos, outsideBoardPos);
 	}
 }
