@@ -16,7 +16,7 @@ public class SelectAIState extends State {
 
     private Texture background;
     private Texture playBtn, playBtn2, playBtn3;
-    private Texture emoticonEasy, emoticonEasy2;
+    private Texture emoticonEasy, emoticonEasy2, emoticonMedium, emoticonMedium2;
     private int xPlay, yPlay, count;
     private ArrayList<Texture> test;
 
@@ -26,14 +26,18 @@ public class SelectAIState extends State {
         playBtn = new Texture("Menu/menu_button_AI_easy.png");
         playBtn2 = new Texture("Menu/menu_button_AI_medium.png");
         playBtn3 = new Texture("Menu/menu_button_AI_hard.png");
-        emoticonEasy = new Texture("Menu/1.png");
-        emoticonEasy2 = new Texture("Menu/2.png");
+        emoticonEasy = new Texture("Menu/Animations/Emoji_1/1.png");
+        emoticonEasy2 = new Texture("Menu/Animations/Emoji_1/2.png");
+        emoticonMedium = new Texture("Menu/Animations/Emoji_2/3.png");
+        emoticonMedium2 = new Texture("Menu/Animations/Emoji_2/4.png");
         xPlay = 450;
         yPlay = 440;
         count = 0;
         test = new ArrayList<Texture>();
         test.add(emoticonEasy);
         test.add(emoticonEasy2);
+        test.add(emoticonMedium);
+        test.add(emoticonMedium2);
 
 
     }
@@ -66,10 +70,12 @@ public class SelectAIState extends State {
 
         // Draw emojis
         if(count  < 15 ) {
-            sb.draw(test.get(1), xPlay-30, yPlay);
+            sb.draw(test.get(0), xPlay-30, yPlay);
+            sb.draw(test.get(2), xPlay-10, yPlay-114);
 
         } else{
-            sb.draw(test.get(0), xPlay-30, yPlay);
+            sb.draw(test.get(1), xPlay-30, yPlay);
+            sb.draw(test.get(3), xPlay-10, yPlay-114);
             if(count  == 30)
                 count = 0;
         }
