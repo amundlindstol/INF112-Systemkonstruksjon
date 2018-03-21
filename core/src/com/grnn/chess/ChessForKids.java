@@ -5,11 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.grnn.chess.objects.AbstractChessPiece;
 import com.grnn.chess.states.GameStateManager;
 import com.grnn.chess.states.LoginState;
 import com.grnn.chess.states.MenuState;
-import com.grnn.chess.states.PlayState;
 
 public class ChessForKids extends ApplicationAdapter {
 	GameStateManager gsm;
@@ -28,6 +26,9 @@ public class ChessForKids extends ApplicationAdapter {
 
 		gsm.push(new LoginState(gsm));
 
+		GameData data = new GameData();
+		SerialGame hakonVsSimon = data.getGame(1);
+		System.out.println(hakonVsSimon.getWhiteName());
 	}
 
 	@Override
