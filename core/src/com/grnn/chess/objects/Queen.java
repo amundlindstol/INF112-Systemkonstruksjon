@@ -70,14 +70,14 @@ public class Queen extends AbstractChessPiece{
 
 		do {
 			if (board.posIsWithinBoard(queenPos.west(i).north(i)) && !isSameColor(board.getPieceAt(queenPos.west(i).north(i)))){
-				validMoves.add(queenPos.west(i));
+				validMoves.add(queenPos.west(i).north(i));
 			}
 			else break;
 		} while (board.getPieceAt(queenPos.west(i).north(i++))==null);
 		i = 1;
 
 		do { if (board.posIsWithinBoard(queenPos.east(i).north(i)) && !isSameColor(board.getPieceAt(queenPos.east(i).north(i)))){
-			validMoves.add(queenPos.east(i));
+			validMoves.add(queenPos.east(i).north(i));
 		}
 		else break;
 		} while (board.getPieceAt(queenPos.east(i).north(i++))==null);

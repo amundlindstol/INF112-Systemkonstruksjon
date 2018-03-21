@@ -11,7 +11,10 @@ public class Pawn extends AbstractChessPiece {
 	private final int value = 1;
 	String letterRepresentation = "p";
 
-
+    /**
+     * Consturtur of pawn, will set image to "Pawn"
+     * @param isWhite
+     */
 	public Pawn(boolean isWhite) {
 		super(isWhite);
 		setImage("Pawn");
@@ -74,11 +77,6 @@ public class Pawn extends AbstractChessPiece {
 		return captureMoves;
 	}
 
-	public String toString() {
-		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
-	}
-
-
 	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
 		if (isWhite) {
 			if (board.posIsWithinBoard(pos.north().east()))
@@ -104,6 +102,12 @@ public class Pawn extends AbstractChessPiece {
 		return value;
 	}
 
+    /**
+     * This method returns the position that a pawn can capture if enPassant is possible.
+     * @param board the board of the pawn.
+     * @param pawnPos the pawns position on the board.
+     * @return A possible position for the pawn to capture.
+     */
 	public Position enPassant(Board board, Position pawnPos){
 		ArrayList<Move> moveHistory = board.getMoveHistory();
 
