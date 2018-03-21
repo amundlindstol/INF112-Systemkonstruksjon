@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author Helge Mikael Landro, 21.03.2018
  * A class to represent the login menu.
  */
-
 public class LoginState extends State {
 
     // Variables
@@ -16,9 +15,11 @@ public class LoginState extends State {
     private Texture loginBtn, registerBtn;
     private int Xplay, Yplay, Xreg, Yreg;
 
-
+    /**
+     * Constructor for the Login State
+     * @param gsm, the GameStateManager
+     */
     public LoginState(GameStateManager gsm) {
-
         super(gsm);
         background = new Texture("Menu/Menu_background.png");
         pieces = new Texture("Menu/Menu_pieces.png");
@@ -29,7 +30,6 @@ public class LoginState extends State {
         Xreg = Xplay;
         Yreg = Yplay-loginBtn.getHeight();
     }
-
 
     @Override
     public void handleInput() {

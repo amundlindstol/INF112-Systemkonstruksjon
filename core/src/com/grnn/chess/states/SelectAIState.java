@@ -19,6 +19,10 @@ public class SelectAIState extends State {
     private int xPlay, yPlay, count;
     private ArrayList<Texture> test;
 
+    /**
+     * Constructor for the AI State
+     * @param gsm, the GameStateManager
+     */
     public SelectAIState(GameStateManager gsm){
         super(gsm);
         background = new Texture("Menu/Menu_background.png");
@@ -44,7 +48,9 @@ public class SelectAIState extends State {
         test.add(emoticonHard2);
     }
 
-    // Handle mouse clicks
+    /**
+     * Method to handle inputs from the mouse
+     */
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());

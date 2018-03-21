@@ -42,6 +42,7 @@ public class PlayState extends State {
     private AI ai;
     private BitmapFont font;
     private Boolean removed;
+    private String text;
 
 
     public PlayState(GameStateManager gsm, boolean aiPlayer) {
@@ -94,16 +95,19 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
         if (turn) {
-            font.draw(batch, "Venter på at du skal gjøre neste trekk", 635, 295);
+            text = "Venter på at du skal gjøre neste trekk.";
             if (removed) {
-                font.draw(batch, "Datamaskinen tok en av dine brikker. FAEN I HELVETE :(", 635, 315);
+                text = "Uff. Datamaskinen tok en brikke av deg... Det er din tur.";
             }
+
         } else {
-            font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 635, 380);
+            text = "Venter på at datamaskinen skal gjøre neste trekk.";
             if (removed) {
-                font.draw(batch, "Du tok en brikke! Bra jobbet :)", 635, 315);
+                text = "Bra jobbet! Du tok en brikke. Det er datamaskinen sin tur.";
             }
         }
+
+        font.draw(batch, text, 645, 334);
 
         for(int i=0; i<positions.size() ; i++) {
             Position piecePos = positions.get(i);
@@ -180,6 +184,7 @@ public class PlayState extends State {
                 if (potentialPiece != null) {
                     if (validMove) {
                         board.removePiece(potentialPiece);
+                        removed = true;
                         board.movePiece(selected, potentialPos);
                         reset();
                         turn = !turn;
@@ -188,7 +193,9 @@ public class PlayState extends State {
                         potentialMoves = potentialPiece.getValidMoves(board);
                         captureMoves = potentialPiece.getCaptureMoves(board);
                         selected = potentialPos;
+                        removed = false;
                     } else {
+                        removed = false;
                         reset();
                     }
                 } else if (potentialPiece == null && validMove) {
@@ -196,8 +203,10 @@ public class PlayState extends State {
                     board.movePiece(selected, potentialPos);
                     reset();
                     turn = !turn;
+                    removed = false;
                 } else {
                     reset();
+                    removed = false;
                 }
             }
         }
