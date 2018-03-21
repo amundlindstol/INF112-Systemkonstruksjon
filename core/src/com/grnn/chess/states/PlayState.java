@@ -1,14 +1,16 @@
 package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 import com.grnn.chess.TranslateToCellPos;
 import com.grnn.chess.objects.AbstractChessPiece;
-
 import java.util.ArrayList;
 
 /**
@@ -25,6 +27,9 @@ public class PlayState extends State {
     private Boolean turn;
     private Boolean aiPlayer;
     private AI ai;
+    private BitmapFont font;
+
+
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -37,6 +42,9 @@ public class PlayState extends State {
         captureMoves = new ArrayList<Position>();
         translator = new TranslateToCellPos();
         turn = true;
+
+        font = new BitmapFont();
+        font.setColor(Color.BLACK);
     }
 
     @Override
@@ -47,6 +55,9 @@ public class PlayState extends State {
         batch.begin();
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
+        font.draw(batch, "Venter på at Lord Riple skal gjøre neste trekk", 630, 380);
+
+
         for(int y = 40, yi=0; y<560 ; y+=65, yi++ ){
             for(int x=40, xi=0; x<560; x+=65, xi++){
                 AbstractChessPiece piece = board.getPieceAt(new Position(xi,yi));
