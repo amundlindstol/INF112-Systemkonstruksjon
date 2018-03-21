@@ -14,7 +14,7 @@ public class AI {
     public Move calculateBestMove(Board board) {
         ArrayList<Move> moves = board.getPossibleAIMoves();
         if(moves.isEmpty()) return null;
-        return moves.get((int)(Math.random() * (moves.size() + 1)));
+        return moves.get((int)(Math.random() * (moves.size() - 1)));
     }
 
 }
