@@ -28,6 +28,7 @@ public class PlayState extends State {
     private Boolean aiPlayer;
     private AI ai;
     private BitmapFont font;
+    private Boolean playerTurn;
 
 
 
@@ -42,7 +43,7 @@ public class PlayState extends State {
         captureMoves = new ArrayList<Position>();
         translator = new TranslateToCellPos();
         turn = true;
-
+        playerTurn = true;
         font = new BitmapFont();
         font.setColor(Color.BLACK);
     }
@@ -55,9 +56,14 @@ public class PlayState extends State {
         batch.begin();
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
-        font.draw(batch, "Venter på at Lord Riple skal gjøre neste trekk", 630, 380);
 
-
+        if(turn){
+            font.draw(batch, "Venter på at Lord Riple skal gjøre neste trekk", 630, 380);
+        }
+        else{
+            font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 630, 380);
+        }
+        
         for(int y = 40, yi=0; y<560 ; y+=65, yi++ ){
             for(int x=40, xi=0; x<560; x+=65, xi++){
                 AbstractChessPiece piece = board.getPieceAt(new Position(xi,yi));
@@ -133,9 +139,7 @@ public class PlayState extends State {
             }else {
                 reset();
             }
-
         }
-
 
     }
      public void reset(){
