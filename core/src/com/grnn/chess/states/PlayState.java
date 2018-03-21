@@ -30,6 +30,7 @@ public class PlayState extends State {
     private Boolean aiPlayer;
     private AI ai;
     private BitmapFont font;
+    private Boolean removed;
 
 
     public PlayState(GameStateManager gsm) {
@@ -45,6 +46,7 @@ public class PlayState extends State {
         turn = true;
         font = new BitmapFont();
         font.setColor(Color.BLACK);
+        removed = false;
     }
 
     @Override
@@ -57,10 +59,16 @@ public class PlayState extends State {
         batch.draw(bgBoard, 0, 0);
 
         if(turn){
-            font.draw(batch, "Venter på at Lord Riple skal gjøre neste trekk", 630, 295);
+            font.draw(batch, "Venter på at du skal gjøre neste trekk", 630, 295);
+            if(removed){
+                font.draw(batch, "Datamaskinen tok en av dine brikker. FAEN I HELVETE :(", 630, 315);
+            }
         }
         else{
             font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 630, 380);
+            if(removed){
+                font.draw(batch, "Du tok en brikke! Bra jobbet :)", 630, 295);
+            }
         }
 
         for(int y = 40, yi=0; y<560 ; y+=65, yi++ ){
@@ -119,12 +127,14 @@ public class PlayState extends State {
             if (potentialPiece != null){
                 if (valid) {
                     board.removePiece(potentialPiece);
+                    removed = true;
                     board.movePiece(selected, potentialPos);
                     reset();
                     turn = !turn;
                 }
                 else if (potentialPiece.getColor()==turn){
                     reset();
+                    removed = false;
                     potentialMoves = potentialPiece.getValidMoves(board);
                     captureMoves = potentialPiece.getCaptureMoves(board);
                     selected = potentialPos;
