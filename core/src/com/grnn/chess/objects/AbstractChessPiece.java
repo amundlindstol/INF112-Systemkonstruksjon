@@ -22,12 +22,6 @@ public abstract class AbstractChessPiece {
     protected final int value = 0; // Should value be set in the abstract class?
 
 
-    //private Direction askedToGo;
-
-    /*public Position getPosition(){
-
-    }*/
-
     public AbstractChessPiece(boolean isWhite) {
         this.isWhite = isWhite;
     }
