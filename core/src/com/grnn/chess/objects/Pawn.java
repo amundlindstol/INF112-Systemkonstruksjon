@@ -115,11 +115,11 @@ public class Pawn extends AbstractChessPiece {
 			AbstractChessPiece conditionPiece = conditionMove.getPiece();
 
 			if (conditionToPos.getX() == pawnPos.getX() + 1 || conditionToPos.getX() == pawnPos.getX() - 1)
-				if (this.getColor() && pawnPos.getY() == 4) {
+				if (this.getColor() && pawnPos.getY() == 4 && this.getPosition(board).getY() == 4) {
 					if (!conditionPiece.getColor() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
 						return conditionToPos.north();
 					}
-				} else {
+				} else if (!this.getColor() && pawnPos.getY() ==3 && this.getPosition(board).getY() == 3){
 					if (conditionPiece.getColor() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
 						return conditionToPos.south();
 					}
