@@ -52,7 +52,7 @@ public class Pawn extends AbstractChessPiece {
 		Position pawnPos = getPosition(board);
 		ArrayList<Position> captureMoves = new ArrayList<Position>();
 
-		if (getColor()){
+		if (isWhite()){
 			if(board.getPieceAt(pawnPos.east().north())!=null && !isSameColor(board.getPieceAt(pawnPos.east().north()))){
 				captureMoves.add(pawnPos.east().north());
 			}
@@ -115,12 +115,12 @@ public class Pawn extends AbstractChessPiece {
 			AbstractChessPiece conditionPiece = conditionMove.getPiece();
 
 			if (conditionToPos.getX() == pawnPos.getX() + 1 || conditionToPos.getX() == pawnPos.getX() - 1)
-				if (this.getColor() && pawnPos.getY() == 4) {
-					if (!conditionPiece.getColor() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
+				if (this.isWhite() && pawnPos.getY() == 4) {
+					if (!conditionPiece.isWhite() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
 						return conditionToPos.north();
 					}
 				} else {
-					if (conditionPiece.getColor() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
+					if (conditionPiece.isWhite() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
 						return conditionToPos.south();
 					}
 

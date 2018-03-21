@@ -6,7 +6,6 @@ import com.grnn.chess.Position;
 //import javafx.geometry.Pos;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +32,7 @@ public abstract class AbstractChessPiece {
         this.isWhite = isWhite;
     }
 
-    public boolean getColor(){
+    public boolean isWhite(){
         return isWhite;
     }
 
@@ -65,7 +64,7 @@ public abstract class AbstractChessPiece {
     public boolean isSameColor(AbstractChessPiece otherPiece){
         if(otherPiece == null)
             return false;
-        return getColor() == otherPiece.getColor();
+        return isWhite() == otherPiece.isWhite();
     }
 
     /*
