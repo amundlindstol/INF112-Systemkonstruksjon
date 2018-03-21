@@ -9,18 +9,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
  * @author Amund 15.03.18
  */
 public class MenuState extends State {
-    private Texture background;
+    private Texture background, pieces, kingBlack;
     private Texture playBtn;
-    private int Xplay, Yplay;
+    private int Xplay, Yplay, Count, CountKing;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
-        background = new Texture("Menu/Menu.png");
+        background = new Texture("Menu/Menu_background.png");
+        pieces = new Texture("Menu/Menu_pieces.png");
         playBtn = new Texture("Menu/menu_button.png");
+        kingBlack = new Texture("Menu/KingBlack.png");
        //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
         // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
         Xplay = 400;
-        Yplay = 380;
+        Yplay = 340;
+        Count = 20;
+        CountKing = -200;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class MenuState extends State {
         int texturePosX = Xplay;
         int  texturePosY = Yplay;
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm));
+            gsm.set(new SelectAIState(gsm));
         }
     }
 
@@ -43,13 +47,30 @@ public class MenuState extends State {
     public void render(SpriteBatch sb) {
 //        sb.setProjectionMatrix(cam.combined);
         sb.begin();
-
         sb.draw(background, 0,0);
-        if(Xplay > 350 ){
+
+        Count++;
+        CountKing++;
+
+        // Animate button
+        if(Count < 40 ) {
             Xplay++;
-        }else if(Xplay <= 450){
+            sb.draw(playBtn, Xplay, Yplay);
+        }
+        else if (Count < 80){
             Xplay--;
         }
+        else {
+            Count = 0;
+        }
+
+        if(CountKing > 450){
+            CountKing--;
+        }
+
+        // Animate King
+        sb.draw(kingBlack, CountKing, Yplay-346);
+        sb.draw(pieces, 0, 0);
         sb.draw(playBtn, Xplay, Yplay);
 
 //        sb.draw(play, 50, 50);
