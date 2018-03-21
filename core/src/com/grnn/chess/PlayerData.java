@@ -11,6 +11,12 @@ import java.util.ArrayList;
 public class PlayerData {
 	FileHandle userHandle;
 	ArrayList<Player> accounts;
+
+	/**
+	 * Object for getting userdata from the database.
+	 * Initialises a file handle.
+	 * Adds test data if none is present.
+	 */
 	public PlayerData() {
 		userHandle = Gdx.files.local("data/players.csv");
 
@@ -22,6 +28,9 @@ public class PlayerData {
 		}
 	}
 
+	/**
+	 * Adds test players Simon and Håkon
+	 */
 	public void addTestAccounts() {
 		Player test1 = new Player("Håkon", "123456");
 		Player test2 = new Player("Simon", "123456");
@@ -29,6 +38,11 @@ public class PlayerData {
 		addAccount(test2);
 	}
 
+	/**
+	 * gets a player by playerName
+	 * @param playerName
+	 * @return the Player named playerName, else null
+	 */
 	public Player getPlayer(String playerName) {
 		for(Player account : accounts) {
 			if(account.getName().equals(playerName)) {
@@ -40,6 +54,10 @@ public class PlayerData {
 	}
 
 
+	/**
+	 * Gets all accounts in the database
+	 * @return
+	 */
 	public ArrayList<Player> getAccounts() {
 		ArrayList<Player> players = new ArrayList<Player>();
 		String text = userHandle.readString();
@@ -60,6 +78,9 @@ public class PlayerData {
 		return players;
 	}
 
+	/**
+	 * Saves accounts
+	 */
 	public void saveAccounts() {
 		String out = "";
 		for(Player account : accounts) {
@@ -75,6 +96,10 @@ public class PlayerData {
 		userHandle.writeString(out, false);
 	}
 
+	/**
+	 * adds an account
+	 * @param account the account to be added
+	 */
 	public void addAccount(Player account) {
 		if(!nameExists(account.name)) {
 			accounts.add(account);
@@ -84,6 +109,11 @@ public class PlayerData {
 		}
 	}
 
+	/**
+	 * Checks if a name is taken
+	 * @param name
+	 * @return true if the name is taken, else false
+	 */
 	public boolean nameExists(String name) {
 		for(Player a : accounts) {
 			if(a.getName().equals(name))

@@ -23,6 +23,13 @@ public class SerialGame {
 		return whiteName;
 	}
 
+	/**
+	 * constructs a object that is used to serialize game data.
+	 * @param whiteName
+	 * @param blackName
+	 * @param id
+	 * @param result
+	 */
 	SerialGame(String whiteName, String blackName, int id, int result) {
 		this.whiteName = whiteName;
 		this.blackName = blackName;

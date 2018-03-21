@@ -11,6 +11,12 @@ import java.util.ArrayList;
 public class GameData {
 	FileHandle userHandle;
 	ArrayList<SerialGame> games;
+
+	/**
+	 * Initializes the userHandle
+	 * constructs new object for modifying and getting games in the database.
+	 * Adds test data if empty
+	 */
 	public GameData() {
 		userHandle = Gdx.files.local("data/games.csv");
 
@@ -22,6 +28,9 @@ public class GameData {
 		}
 	}
 
+	/**
+	 * Adds test games between Simon and Håkon
+	 */
 	private void addTestGames() {
 		SerialGame test1 = new SerialGame("Håkon", "Simon", 1, 1);
 		SerialGame test2 = new SerialGame("Simon", "Håkon", 1, 1);
@@ -29,6 +38,11 @@ public class GameData {
 		addGame(test2);
 	}
 
+	/**
+	 * gets the specified game
+	 * @param gameId
+	 * @return the game which has gameId, else null
+	 */
 	public SerialGame getGame(int gameId) {
 		for(SerialGame game : games) {
 			if(game.getId() == (gameId)) {
@@ -39,7 +53,9 @@ public class GameData {
 		return null;
 	}
 
-
+	/**
+	 * @return all the games in the database
+	 */
 	public ArrayList<SerialGame> getGames() {
 		ArrayList<SerialGame> games = new ArrayList<SerialGame>();
 		String text = userHandle.readString();
@@ -63,6 +79,9 @@ public class GameData {
 		return games;
 	}
 
+	/**
+	 * save all games
+	 */
 	private void saveGames() {
 		String out = "";
 		for(SerialGame game : games) {
@@ -77,6 +96,10 @@ public class GameData {
 		userHandle.writeString(out, false);
 	}
 
+	/**
+	 * saves a game
+	 * @param game
+	 */
 	public void addGame(SerialGame game) {
 		games.add(game);
 		saveGames();
