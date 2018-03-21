@@ -17,6 +17,8 @@ import java.util.ArrayList;
  * @author Amund 15.03.18
  */
 public class PlayState extends State {
+
+    // Variables
     Board board;
     Texture bg;
     Texture bgBoard;
@@ -28,8 +30,6 @@ public class PlayState extends State {
     private Boolean aiPlayer;
     private AI ai;
     private BitmapFont font;
-    private Boolean playerTurn;
-
 
 
     public PlayState(GameStateManager gsm) {
@@ -43,7 +43,6 @@ public class PlayState extends State {
         captureMoves = new ArrayList<Position>();
         translator = new TranslateToCellPos();
         turn = true;
-        playerTurn = true;
         font = new BitmapFont();
         font.setColor(Color.BLACK);
     }
@@ -58,12 +57,12 @@ public class PlayState extends State {
         batch.draw(bgBoard, 0, 0);
 
         if(turn){
-            font.draw(batch, "Venter på at Lord Riple skal gjøre neste trekk", 630, 380);
+            font.draw(batch, "Venter på at Lord Riple skal gjøre neste trekk", 630, 295);
         }
         else{
             font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 630, 380);
         }
-        
+
         for(int y = 40, yi=0; y<560 ; y+=65, yi++ ){
             for(int x=40, xi=0; x<560; x+=65, xi++){
                 AbstractChessPiece piece = board.getPieceAt(new Position(xi,yi));
