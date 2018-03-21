@@ -85,54 +85,48 @@ public class PlayState extends State {
         batch.begin();
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
-
-
-
-        for(int i=0; i<positions.size() ; i++){
-            Position piecePos = positions.get(i);
-            AbstractChessPiece piece = board.getPieceAt(piecePos);
-            if(piece != null){
-                Texture pieceTex = new Texture(piece.getImage());
-                pieceTexures.add(pieceTex);
-                batch.draw(pieceTex,translator.toPixels(piecePos.getX(),piecePos.getY())[0], translator.toPixels(piecePos.getX(),piecePos.getY())[1]) ;
-
-        if(turn){
+        if (turn) {
             font.draw(batch, "Venter på at du skal gjøre neste trekk", 635, 295);
-            if(removed){
+            if (removed) {
                 font.draw(batch, "Datamaskinen tok en av dine brikker. FAEN I HELVETE :(", 635, 315);
             }
-            else{
-                font.dispose();
-            }
-        }
-        else{
+        } else {
             font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 635, 380);
-            if(removed){
+            if (removed) {
                 font.draw(batch, "Du tok en brikke! Bra jobbet :)", 635, 315);
             }
         }
 
-
-        if(!potentialMoves.isEmpty()) {
-            for (Position potPos : potentialMoves) {
-                int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
-                batch.draw(potentialTex, pos[0], pos[1]);
+        for(int i=0; i<positions.size() ; i++) {
+            Position piecePos = positions.get(i);
+            AbstractChessPiece piece = board.getPieceAt(piecePos);
+            if (piece != null) {
+                Texture pieceTex = new Texture(piece.getImage());
+                pieceTexures.add(pieceTex);
+                batch.draw(pieceTex, translator.toPixels(piecePos.getX(), piecePos.getY())[0], translator.toPixels(piecePos.getX(), piecePos.getY())[1]);
             }
         }
-        if(!captureMoves.isEmpty()) {
-            for(Position capPos : captureMoves) {
-                int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
-                batch.draw(captureTex, pos[0], pos[1]);
-            }
-        }
-        batch.end();
-        if(!pieceTexures.isEmpty()){
-            for(Texture oldTexture : pieceTexures){
-                if (oldTexture.isManaged()) {
-                    oldTexture.dispose();
+                if (!potentialMoves.isEmpty()) {
+                    for (Position potPos : potentialMoves) {
+                        int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
+                        batch.draw(potentialTex, pos[0], pos[1]);
+                    }
                 }
-            }
-        }
+                if (!captureMoves.isEmpty()) {
+                    for (Position capPos : captureMoves) {
+                        int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
+                        batch.draw(captureTex, pos[0], pos[1]);
+                    }
+                }
+                batch.end();
+                if (!pieceTexures.isEmpty()) {
+                    for (Texture oldTexture : pieceTexures) {
+                        if (oldTexture.isManaged()) {
+                            oldTexture.dispose();
+                        }
+                    }
+                }
+
     }
 
     @Override
