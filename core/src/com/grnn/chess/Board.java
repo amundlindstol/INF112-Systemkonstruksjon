@@ -71,16 +71,20 @@ public class Board {
 
         ArrayList<Move> possibleMoves = new ArrayList<Move>();
 
-        for (int y = 6; y <= 7; y++) {
-            for (int x = 0; x < size(); x++) {
-                Position posPiece = new Position(x, y);
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                Position posPiece = new Position(y, x);
                 AbstractChessPiece piece = getPieceAt(posPiece);
-                ArrayList<Position> posList = piece.getValidMoves(this);
-
-                for (Position toMove : posList) {
-                    Move newMove = new Move(toMove, posPiece, piece);
-                    possibleMoves.add(newMove);
-                    System.out.println(newMove);
+                if(piece!=null && !piece.isWhite()) {
+                    ArrayList<Position> posList = piece.getValidMoves(this);
+                    posList.addAll(piece.getCaptureMoves(this));
+                    if (!posList.isEmpty()){
+                        for (Position toMove : posList) {
+                            Move newMove = new Move(toMove, posPiece, piece);
+                            possibleMoves.add(newMove);
+                            System.out.println(newMove);
+                        }
+                    }
                 }
             }
         }

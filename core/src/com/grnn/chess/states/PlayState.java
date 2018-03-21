@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.Board;
+import com.grnn.chess.Move;
 import com.grnn.chess.Position;
 import com.grnn.chess.TranslateToCellPos;
 import com.grnn.chess.objects.AbstractChessPiece;
@@ -43,7 +44,7 @@ public class PlayState extends State {
     private Boolean removed;
 
 
-    public PlayState(GameStateManager gsm) {
+    public PlayState(GameStateManager gsm, boolean aiPlayer) {
         super(gsm);
         bg = new Texture("GUI2.png");
         bgBoard = new Texture("sjakk2.png");
@@ -60,14 +61,19 @@ public class PlayState extends State {
         font = new BitmapFont();
         font.setColor(Color.BLACK);
         removed = false;
+        this.aiPlayer = aiPlayer;
 
         potentialTex = new Texture("ChessPieces/Potential.png");
         captureTex = new Texture("ChessPieces/Capture.png");
 
+        if(aiPlayer){
+            ai = new AI();
+        }
 
-        for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
-            for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
-                AbstractChessPiece piece = board.getPieceAt(new Position(xi, yi));
+
+        for( int y = 40, yi = 0; y<560; y+=65, yi++){
+            for(int x=40, xi= 0; x<560; x+=65, xi++){
+                AbstractChessPiece piece = board.getPieceAt(new Position(xi,yi));
 
                 Position pos = new Position(xi, yi);
                 positions.add(pos);
@@ -77,9 +83,7 @@ public class PlayState extends State {
     }
 
     @Override
-    public void update(float dt) {
-        handleInput();
-    }
+    public void update(float dt) {handleInput();}
 
     @Override
     public void render(SpriteBatch batch) {
@@ -101,7 +105,7 @@ public class PlayState extends State {
             }
         }
 
-        for (int i = 0; i < positions.size(); i++) {
+        for(int i=0; i<positions.size() ; i++) {
             Position piecePos = positions.get(i);
             AbstractChessPiece piece = board.getPieceAt(piecePos);
             if (piece != null) {
@@ -110,26 +114,26 @@ public class PlayState extends State {
                 batch.draw(pieceTex, translator.toPixels(piecePos.getX(), piecePos.getY())[0], translator.toPixels(piecePos.getX(), piecePos.getY())[1]);
             }
         }
-        if (!potentialMoves.isEmpty()) {
-            for (Position potPos : potentialMoves) {
-                int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
-                batch.draw(potentialTex, pos[0], pos[1]);
-            }
-        }
-        if (!captureMoves.isEmpty()) {
-            for (Position capPos : captureMoves) {
-                int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
-                batch.draw(captureTex, pos[0], pos[1]);
-            }
-        }
-        batch.end();
-        if (!pieceTexures.isEmpty()) {
-            for (Texture oldTexture : pieceTexures) {
-                if (oldTexture.isManaged()) {
-                    oldTexture.dispose();
+                if (!potentialMoves.isEmpty()) {
+                    for (Position potPos : potentialMoves) {
+                        int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
+                        batch.draw(potentialTex, pos[0], pos[1]);
+                    }
                 }
-            }
-        }
+                if (!captureMoves.isEmpty()) {
+                    for (Position capPos : captureMoves) {
+                        int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
+                        batch.draw(captureTex, pos[0], pos[1]);
+                    }
+                }
+                batch.end();
+                if (!pieceTexures.isEmpty()) {
+                    for (Texture oldTexture : pieceTexures) {
+                        if (oldTexture.isManaged()) {
+                            oldTexture.dispose();
+                        }
+                    }
+                }
 
     }
 
@@ -137,7 +141,7 @@ public class PlayState extends State {
     public void dispose() {
         bg.dispose();
         bgBoard.dispose();
-        for (Texture tex : pieceTexures) {
+        for(Texture tex : pieceTexures){
             tex.dispose();
         }
         potentialTex.dispose();
@@ -149,7 +153,14 @@ public class PlayState extends State {
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY());
-        if (x > 0 && x < 601 && y > 0 && y < 601) {
+        if (x>0 && x< 601 && y>0 && y<601) {
+            //AI
+            if(aiPlayer && !turn){
+                Move aiMove = ai.calculateBestMove(board);
+                board.movePiece(aiMove.getFromPos(),aiMove.getToPos());
+                turn = !turn;
+            }
+
             //first selected piece
             if (Gdx.input.justTouched() && selected == null) {
                 selected = translator.toCellPos(x, y);
@@ -162,14 +173,13 @@ public class PlayState extends State {
                 }
             }
             //second selected piece
-            else if (Gdx.input.justTouched() && selected != null) {
+            if (Gdx.input.justTouched() && selected != null) {
                 Position potentialPos = translator.toCellPos(x, y);
                 AbstractChessPiece potentialPiece = board.getPieceAt(potentialPos);
-                Boolean valid = potentialMoves.contains(potentialPos) || captureMoves.contains(potentialPos);
+                Boolean validMove = potentialMoves.contains(potentialPos) || captureMoves.contains(potentialPos) || castlingMoves.contains(potentialPos);
                 if (potentialPiece != null) {
-                    if (valid) {
+                    if (validMove) {
                         board.removePiece(potentialPiece);
-                        removed = true;
                         board.movePiece(selected, potentialPos);
                         reset();
                         turn = !turn;
@@ -181,66 +191,19 @@ public class PlayState extends State {
                     } else {
                         reset();
                     }
-                } else if (potentialPiece == null && valid) {
+                } else if (potentialPiece == null && validMove) {
+                    handleCastling(potentialPos);
                     board.movePiece(selected, potentialPos);
                     reset();
                     turn = !turn;
                 } else {
                     reset();
                 }
-
-                //first selected piece
-                if (Gdx.input.justTouched() && selected == null) {
-                    selected = translator.toCellPos(x, y);
-                    AbstractChessPiece selectedPiece = board.getPieceAt(selected);
-                    if (selectedPiece != null && selectedPiece.isWhite() == turn) {
-                        potentialMoves = selectedPiece.getValidMoves(board);
-                        captureMoves = selectedPiece.getCaptureMoves(board);
-                        if (selectedPiece instanceof King) {
-                            System.out.println("getting castlingMove");
-                            castlingMoves = ((King) selectedPiece).getCastlingMoves(board, selected);
-                        }
-                    } else {
-                        selected = null;
-                    }
-                }
-                //second selected piece
-                else if (Gdx.input.justTouched() && selected != null) {
-                    Boolean validMove = potentialMoves.contains(potentialPos) || captureMoves.contains(potentialPos) || castlingMoves.contains(potentialPos);
-                    if(!castlingMoves.isEmpty())
-                        System.out.println("Non-empty castlingMove");
-
-                    if (potentialPiece != null) {
-                        if (validMove) {
-                            board.removePiece(potentialPiece);
-                            board.movePiece(selected, potentialPos);
-                            reset();
-                            turn = !turn;
-                        } else if (potentialPiece.isWhite() == turn) {
-                            reset();
-                            potentialMoves = potentialPiece.getValidMoves(board);
-                            captureMoves = potentialPiece.getCaptureMoves(board);
-                            selected = potentialPos;
-                        } else {
-                            reset();
-                        }
-                    } else if (potentialPiece == null && validMove) {
-                        handleCastling(potentialPos);        castlingMoves = new ArrayList<Position>();
-
-                        board.movePiece(selected, potentialPos);
-                        reset();
-                        turn = !turn;
-                    } else {
-                        reset();
-                    }
-
-                }
             }
-        } else if (Gdx.input.justTouched()) {
+        }
+        else if (Gdx.input.justTouched()) {
             Gdx.app.exit();
         }
-
-
     }
 
     /**
@@ -250,12 +213,9 @@ public class PlayState extends State {
      */
 
     private void handleCastling(Position potentialPos) {
-        System.out.println("Handling castlning before");
-
         if (!castlingMoves.contains(potentialPos))
             return;
 
-        System.out.println("Handling castlning");
         AbstractChessPiece potentialPiece = board.getPieceAt(selected);
         Position rookOriginalPos = null;
         Position rookNewPos = null;

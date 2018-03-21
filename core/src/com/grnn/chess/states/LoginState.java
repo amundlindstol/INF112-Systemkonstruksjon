@@ -43,7 +43,7 @@ public class LoginState extends State {
         texturePosX = Xreg;
         texturePosY = Yreg;
         if (x > texturePosX && y > texturePosY && x < registerBtn.getWidth()+texturePosX && y < registerBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new RegisterUserState(gsm));
+            gsm.set(new PlayState(gsm,false));
         }
 
     }
