@@ -3,13 +3,17 @@ package com.grnn.chess.objects;
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 public class Bishop extends AbstractChessPiece {
 	String letterRepresentation = "b";
+	private final int value = 3;
+
 	public Bishop(boolean isWhite) {
-		super(isWhite);
+		super(isWhite); setImage("Bishop");
 	}
 	public String toString() {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
@@ -20,44 +24,84 @@ public class Bishop extends AbstractChessPiece {
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 
 		//Get the position of the rook
-		Position bishopPos = getPosition(board);
-		System.out.println(bishopPos.getX()+","+bishopPos.getY()+" "+this.isWhite);
+		validMoves.addAll(getValidMovesNorthWest(board));
+		validMoves.addAll(getValidMovesNorthEast(board));
+		validMoves.addAll(getValidMovesSouthWest(board));
+		validMoves.addAll(getValidMovesSouthEast(board));
 
-		int i=1;
-
-		do {
-			if (board.posIsWithinBoard(bishopPos.west(i).north(i)) && !isSameColor(board.getPieceAt(bishopPos.west(i).north(i)))){
-				validMoves.add(bishopPos.west(i));
-			}
-			else break;
-		} while (board.getPieceAt(bishopPos.west(i).north(i++))==null);
-		i = 1;
-
-		do { if (board.posIsWithinBoard(bishopPos.east(i).north(i)) && !isSameColor(board.getPieceAt(bishopPos.east(i).north(i)))){
-			validMoves.add(bishopPos.east(i));
-		}
-		else break;
-		} while (board.getPieceAt(bishopPos.east(i).north(i++))==null);
-		i = 1;
-
-		do { if (board.posIsWithinBoard(bishopPos.west(i).south(i)) && !isSameColor(board.getPieceAt(bishopPos.west(i).south(i)))){
-			validMoves.add(bishopPos.west(i).south(i));
-		}
-		else break;
-		} while (board.getPieceAt(bishopPos.west(i).south(i++))==null);
-		i = 1;
-
-		do { if (board.posIsWithinBoard(bishopPos.east(i).south(i)) && !isSameColor(board.getPieceAt(bishopPos.east(i).south(i)))){
-			validMoves.add(bishopPos.east(i).south(i));
-		}
-		else break;
-		} while (board.getPieceAt(bishopPos.east(i).south(i++))==null);
-
-		return validMoves;//(ArrayList<Position>) Arrays.asList(board.getPosition(this));
+		return validMoves;
 	}
 
-	//TODO: actually implement this
-	public ArrayList<Position> getCaptureMoves(Board board) {
-		return (ArrayList<Position>) Arrays.asList(board.getPosition(this));
+	private ArrayList<Position> getValidMovesSouthEast(Board board) {
+		ArrayList<Position> validMoves = new ArrayList<Position>();
+		Position bishopPos = getPosition(board);
+
+		Position southEast = bishopPos.south().east();
+
+		while(board.posIsWithinBoard(southEast) && board.getPieceAt(southEast) == null) {
+			validMoves.add(southEast);
+			southEast = southEast.south().east();
+		}
+
+		if(board.posIsWithinBoard(southEast) && !board.getPieceAt(southEast).isSameColor(this)) {
+			validMoves.add(southEast);
+		}
+
+		return validMoves;
+
+	}
+
+	private ArrayList<Position> getValidMovesSouthWest(Board board) {
+		ArrayList<Position> validMoves = new ArrayList<Position>();
+		Position bishopPos = getPosition(board);
+
+		Position southWest = bishopPos.south().west();
+		while(board.posIsWithinBoard(southWest) && board.getPieceAt(southWest) == null) {
+			validMoves.add(southWest);
+			southWest = southWest.south().west();
+		}
+
+		if(board.posIsWithinBoard(southWest) && !board.getPieceAt(southWest).isSameColor(this)) {
+			validMoves.add(southWest);
+		}
+
+		return validMoves;
+	}
+
+	private ArrayList<Position> getValidMovesNorthEast(Board board) {
+		ArrayList<Position> validMoves = new ArrayList<Position>();
+		Position bishopPos = getPosition(board);
+
+		Position northEast = bishopPos.north().east();
+		while(board.posIsWithinBoard(northEast) && board.getPieceAt(northEast) == null) {
+			validMoves.add(northEast);
+			northEast = northEast.north().east();
+		}
+
+		if(board.posIsWithinBoard(northEast) && !board.getPieceAt(northEast).isSameColor(this)) {
+			validMoves.add(northEast);
+		}
+
+		return validMoves;
+	}
+	
+
+	private ArrayList<Position> getValidMovesNorthWest(Board board) {
+		ArrayList<Position> validMoves = new ArrayList<Position>();
+		Position bishopPos = getPosition(board);
+
+		Position northWest = bishopPos.north().west();
+		while(board.posIsWithinBoard(northWest) && board.getPieceAt(northWest) == null) {
+			validMoves.add(northWest);
+			northWest = northWest.north().west();
+		}
+
+		if(board.posIsWithinBoard(northWest) && !board.getPieceAt(northWest).isSameColor(this)) {
+			validMoves.add(northWest);
+		}
+		return validMoves;
+	}
+	public int getValue() {
+		return value;
 	}
 }
