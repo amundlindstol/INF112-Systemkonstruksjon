@@ -1,9 +1,11 @@
 package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
  * @author Amund 15.03.18
  */
 public class PlayState extends State {
+
+    // Variables
     Board board;
     Texture bg;
     Texture bgBoard;
@@ -33,6 +37,9 @@ public class PlayState extends State {
     private Boolean turn;
     private Boolean aiPlayer;
     private AI ai;
+    private BitmapFont font;
+    private Boolean removed;
+
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -47,6 +54,9 @@ public class PlayState extends State {
         captureMoves = new ArrayList<Position>();
         translator = new TranslateToCellPos();
         turn = true;
+        font = new BitmapFont();
+        font.setColor(Color.BLACK);
+        removed = false;
 
         potentialTex = new Texture("ChessPieces/Potential.png");
         captureTex = new Texture("ChessPieces/Capture.png");
@@ -86,8 +96,23 @@ public class PlayState extends State {
                 Texture pieceTex = new Texture(piece.getImage());
                 pieceTexures.add(pieceTex);
                 batch.draw(pieceTex,translator.toPixels(piecePos.getX(),piecePos.getY())[0], translator.toPixels(piecePos.getX(),piecePos.getY())[1]) ;
+
+        if(turn){
+            font.draw(batch, "Venter på at du skal gjøre neste trekk", 635, 295);
+            if(removed){
+                font.draw(batch, "Datamaskinen tok en av dine brikker. FAEN I HELVETE :(", 635, 315);
+            }
+            else{
+                font.dispose();
             }
         }
+        else{
+            font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 635, 380);
+            if(removed){
+                font.draw(batch, "Du tok en brikke! Bra jobbet :)", 635, 315);
+            }
+        }
+
 
         if(!potentialMoves.isEmpty()) {
             for (Position potPos : potentialMoves) {
@@ -147,6 +172,7 @@ public class PlayState extends State {
                 if (potentialPiece != null) {
                     if (valid) {
                         board.removePiece(potentialPiece);
+                        removed = true;
                         board.movePiece(selected, potentialPos);
                         reset();
                         turn = !turn;
