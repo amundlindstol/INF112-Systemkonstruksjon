@@ -70,7 +70,6 @@ public class PlayState extends State {
                 AbstractChessPiece piece = board.getPieceAt(new Position(xi, yi));
 
                 Position pos = new Position(xi, yi);
-                System.out.println(pos);
                 positions.add(pos);
 
             }
@@ -198,6 +197,7 @@ public class PlayState extends State {
                         potentialMoves = selectedPiece.getValidMoves(board);
                         captureMoves = selectedPiece.getCaptureMoves(board);
                         if (selectedPiece instanceof King) {
+                            System.out.println("getting castlingMove");
                             castlingMoves = ((King) selectedPiece).getCastlingMoves(board, selected);
                         }
                     } else {
@@ -207,6 +207,9 @@ public class PlayState extends State {
                 //second selected piece
                 else if (Gdx.input.justTouched() && selected != null) {
                     Boolean validMove = potentialMoves.contains(potentialPos) || captureMoves.contains(potentialPos) || castlingMoves.contains(potentialPos);
+                    if(!castlingMoves.isEmpty())
+                        System.out.println("Non-empty castlingMove");
+
                     if (potentialPiece != null) {
                         if (validMove) {
                             board.removePiece(potentialPiece);
@@ -222,7 +225,8 @@ public class PlayState extends State {
                             reset();
                         }
                     } else if (potentialPiece == null && validMove) {
-                        handleCastling(potentialPos);
+                        handleCastling(potentialPos);        castlingMoves = new ArrayList<Position>();
+
                         board.movePiece(selected, potentialPos);
                         reset();
                         turn = !turn;
@@ -246,9 +250,12 @@ public class PlayState extends State {
      */
 
     private void handleCastling(Position potentialPos) {
+        System.out.println("Handling castlning before");
+
         if (!castlingMoves.contains(potentialPos))
             return;
 
+        System.out.println("Handling castlning");
         AbstractChessPiece potentialPiece = board.getPieceAt(selected);
         Position rookOriginalPos = null;
         Position rookNewPos = null;
@@ -277,6 +284,5 @@ public class PlayState extends State {
         selected = null;
         potentialMoves = new ArrayList<Position>();
         captureMoves = new ArrayList<Position>();
-        castlingMoves = new ArrayList<Position>();
     }
 }

@@ -134,13 +134,10 @@ public class King extends AbstractChessPiece {
             System.out.println(board.getPieceAt(posToCheck) + " at pos: " + posToCheck);
             if (board.getPieceAt(posToCheck) != null) {
                 System.out.println("ska ikkje skje");
-
                 return false;
             }
         }
-
         return pieceEastCorner != null && pieceEastCorner instanceof Rook && !((Rook) pieceEastCorner).hasMoved();
-
     }
 
     public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos) {
