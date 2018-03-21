@@ -86,13 +86,13 @@ public class PlayState extends State {
         if(!potentialMoves.isEmpty()) {
             for (Position potPos : potentialMoves) {
                 int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
-                batch.draw(new Texture("ChessPieces/Potential.png"), pos[0], pos[1]);
+                batch.draw(new Texture("ChessPieces/Potential.png"), pos[0] +1, pos[1] +2);
             }
         }
         if(!captureMoves.isEmpty()) {
             for(Position capPos : captureMoves) {
                 int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
-                batch.draw(new Texture("ChessPieces/Capture.png"), pos[0], pos[1]);
+                batch.draw(new Texture("ChessPieces/Capture.png"), pos[0] +1, pos[1] +2);
             }
         }
         batch.end();
