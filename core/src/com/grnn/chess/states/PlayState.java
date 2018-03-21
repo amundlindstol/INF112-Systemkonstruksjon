@@ -59,15 +59,18 @@ public class PlayState extends State {
         batch.draw(bgBoard, 0, 0);
 
         if(turn){
-            font.draw(batch, "Venter på at du skal gjøre neste trekk", 630, 295);
+            font.draw(batch, "Venter på at du skal gjøre neste trekk", 635, 295);
             if(removed){
-                font.draw(batch, "Datamaskinen tok en av dine brikker. FAEN I HELVETE :(", 630, 315);
+                font.draw(batch, "Datamaskinen tok en av dine brikker. FAEN I HELVETE :(", 635, 315);
+            }
+            else{
+                font.dispose();
             }
         }
         else{
-            font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 630, 380);
+            font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 635, 380);
             if(removed){
-                font.draw(batch, "Du tok en brikke! Bra jobbet :)", 630, 295);
+                font.draw(batch, "Du tok en brikke! Bra jobbet :)", 635, 315);
             }
         }
 
@@ -134,7 +137,6 @@ public class PlayState extends State {
                 }
                 else if (potentialPiece.getColor()==turn){
                     reset();
-                    removed = false;
                     potentialMoves = potentialPiece.getValidMoves(board);
                     captureMoves = potentialPiece.getCaptureMoves(board);
                     selected = potentialPos;
