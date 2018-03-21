@@ -11,7 +11,6 @@ import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 import com.grnn.chess.TranslateToCellPos;
 import com.grnn.chess.objects.AbstractChessPiece;
-
 import java.util.ArrayList;
 
 /**
@@ -196,7 +195,6 @@ public class PlayState extends State {
         }else if(Gdx.input.justTouched()){
             Gdx.app.exit();
         }
-
 
     }
      public void reset(){
