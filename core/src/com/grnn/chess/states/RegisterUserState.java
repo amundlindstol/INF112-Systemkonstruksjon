@@ -5,29 +5,28 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
+ *
  * @author Helge Mikael Landro, 21.03.2018
- * A class to represent the login menu.
  */
 
-public class LoginState extends State {
+public class RegisterUserState extends State {
 
     // Variables
     private Texture background, pieces;
-    private Texture loginBtn, registerBtn;
-    private int Xplay, Yplay, Xreg, Yreg;
+    private Texture loginBtn, createBtn;
+    private TextInputListener inputListener;
+    private int Xplay, Yplay;
 
 
-    public LoginState(GameStateManager gsm) {
-
+    public RegisterUserState(GameStateManager gsm) {
         super(gsm);
+        inputListener = new TextInputListener();
+        Gdx.input.getTextInput(inputListener, "title", "", "IN PROGRESS... QUIT PROGRAM");
         background = new Texture("Menu/Menu_background.png");
-        pieces = new Texture("Menu/Menu_pieces.png");
+//        pieces = new Texture("Menu/Menu_pieces.png");
         loginBtn = new Texture("Menu/menu_button_login.png");
-        registerBtn = new Texture("Menu/menu_button_login.png");
         Xplay = 400;
         Yplay = 340;
-        Xreg = Xplay;
-        Yreg = Yplay-loginBtn.getHeight();
     }
 
 
@@ -39,11 +38,6 @@ public class LoginState extends State {
         int  texturePosY = Yplay;
         if (x > texturePosX && y > texturePosY && x < loginBtn.getWidth()+texturePosX && y < loginBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             gsm.set(new MenuState(gsm));
-        }
-        texturePosX = Xreg;
-        texturePosY = Yreg;
-        if (x > texturePosX && y > texturePosY && x < registerBtn.getWidth()+texturePosX && y < registerBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new RegisterUserState(gsm));
         }
 
     }
@@ -57,17 +51,13 @@ public class LoginState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0,0);
-        sb.draw(pieces, 0, 0);
-        sb.draw(loginBtn, Xplay, Yplay);
-        sb.draw(registerBtn, Xreg, Yreg);
+//        sb.draw(pieces, 0, 0);
+//        sb.draw(loginBtn, Xplay, Yplay);
         sb.end();
     }
 
     @Override
     public void dispose() {
-        background.dispose();
-        pieces.dispose();
-        loginBtn.dispose();
-        registerBtn.dispose();
+
     }
 }
