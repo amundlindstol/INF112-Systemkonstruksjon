@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 
 /**
- * A class to represent the menu for select AI level for the game
  * @author Helge Mikael Landro, 19.03.2018
+ * A class to represent the menu for select AI level for the game.
+ * The user can choose from three levels of difficulty.
  */
 public class SelectAIState extends State {
 
+    // Variables
     private Texture background, pieces;
     private Texture playBtn, playBtn2, playBtn3;
     private Texture emoticonEasy, emoticonEasy2, emoticonMedium, emoticonMedium2, emoticonHard, emoticonHard2;
@@ -42,6 +44,7 @@ public class SelectAIState extends State {
         test.add(emoticonHard2);
     }
 
+    // Handle mouse clicks
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
@@ -50,7 +53,6 @@ public class SelectAIState extends State {
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             gsm.set(new PlayState(gsm));
         }
-
     }
 
     @Override
