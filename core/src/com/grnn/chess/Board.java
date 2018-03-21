@@ -39,7 +39,7 @@ public class Board {
         AbstractChessPiece piece = getPieceAt(startPos);
 
 
-        if (piece.getValidMoves(this).contains(endPos) || piece.getCaptureMoves(this).contains(endPos)) {
+        if (isValidMove(startPos, endPos)) {
             setPiece(piece, endPos);
             setPiece(null, startPos);
             piece.move();
@@ -49,6 +49,21 @@ public class Board {
         } else {
             throw new IllegalMoveException("movePiece was called with illegal arguments");
         }
+    }
+
+    private boolean isValidMove(Position startPos, Position endPos) {
+        AbstractChessPiece piece = getPieceAt(startPos);
+        boolean containsCastlingMove;
+        if(piece instanceof King) {
+            ArrayList<Position> castlingMoves = ((King) piece).getCastlingMoves(this, startPos);
+            containsCastlingMove = castlingMoves.contains(endPos);
+        } else {
+            containsCastlingMove = false;
+        }
+
+        return piece.getValidMoves(this).contains(endPos)
+                || piece.getCaptureMoves(this).contains(endPos)
+                || containsCastlingMove;
     }
 
     // TODO: AI is not always black
@@ -121,15 +136,15 @@ public class Board {
 
     public void setPiece(AbstractChessPiece piece, int x, int y) {
         if (pawnCanPromote(piece, y)) {
-            piece = new Queen(piece.getColor());
+            piece = new Queen(piece.isWhite());
         }
         grid.get(y).set(x, piece);
     }
 
     private boolean pawnCanPromote(AbstractChessPiece piece, int y) {
         if (piece instanceof Pawn) {
-            if ((piece.getColor() && y == size() - 1)
-                    || (!piece.getColor() && y == 0)) {
+            if ((piece.isWhite() && y == size() - 1)
+                    || (!piece.isWhite() && y == 0)) {
                 return true;
             }
         }
@@ -205,12 +220,12 @@ public class Board {
             AbstractChessPiece conditionPiece = conditionMove.getPiece();
 
             if (conditionToPos.getX() == lastToPos.getX())
-                if (lastPiece.getColor() && lastFromPos.getY() == 4 && lastToPos.getY() == 5) {
-                    if (!conditionPiece.getColor() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
+                if (lastPiece.isWhite() && lastFromPos.getY() == 4 && lastToPos.getY() == 5) {
+                    if (!conditionPiece.isWhite() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
                         setPiece(null, conditionToPos);
                     }
                 } else {
-                    if (conditionPiece.getColor() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
+                    if (conditionPiece.isWhite() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
                         setPiece(null, conditionToPos);
                     }
 
