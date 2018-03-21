@@ -1,20 +1,24 @@
 package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 import com.grnn.chess.TranslateToCellPos;
 import com.grnn.chess.objects.AbstractChessPiece;
-
 import java.util.ArrayList;
 
 /**
  * @author Amund 15.03.18
  */
 public class PlayState extends State {
+
+    // Variables
     Board board;
     Texture bg;
     Texture bgBoard;
@@ -25,6 +29,9 @@ public class PlayState extends State {
     private Boolean turn;
     private Boolean aiPlayer;
     private AI ai;
+    private BitmapFont font;
+    private Boolean removed;
+
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -37,6 +44,9 @@ public class PlayState extends State {
         captureMoves = new ArrayList<Position>();
         translator = new TranslateToCellPos();
         turn = true;
+        font = new BitmapFont();
+        font.setColor(Color.BLACK);
+        removed = false;
     }
 
     @Override
@@ -47,6 +57,23 @@ public class PlayState extends State {
         batch.begin();
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
+
+        if(turn){
+            font.draw(batch, "Venter på at du skal gjøre neste trekk", 635, 295);
+            if(removed){
+                font.draw(batch, "Datamaskinen tok en av dine brikker. FAEN I HELVETE :(", 635, 315);
+            }
+            else{
+                font.dispose();
+            }
+        }
+        else{
+            font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 635, 380);
+            if(removed){
+                font.draw(batch, "Du tok en brikke! Bra jobbet :)", 635, 315);
+            }
+        }
+
         for(int y = 40, yi=0; y<560 ; y+=65, yi++ ){
             for(int x=40, xi=0; x<560; x+=65, xi++){
                 AbstractChessPiece piece = board.getPieceAt(new Position(xi,yi));
@@ -59,13 +86,13 @@ public class PlayState extends State {
         if(!potentialMoves.isEmpty()) {
             for (Position potPos : potentialMoves) {
                 int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
-                batch.draw(new Texture("ChessPieces/Potential.png"), pos[0], pos[1]);
+                batch.draw(new Texture("ChessPieces/Potential.png"), pos[0] +1, pos[1] +2);
             }
         }
         if(!captureMoves.isEmpty()) {
             for(Position capPos : captureMoves) {
                 int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
-                batch.draw(new Texture("ChessPieces/Capture.png"), pos[0], pos[1]);
+                batch.draw(new Texture("ChessPieces/Capture.png"), pos[0] +1, pos[1] +2);
             }
         }
         batch.end();
@@ -103,6 +130,7 @@ public class PlayState extends State {
             if (potentialPiece != null){
                 if (valid) {
                     board.removePiece(potentialPiece);
+                    removed = true;
                     board.movePiece(selected, potentialPos);
                     reset();
                     turn = !turn;
@@ -122,9 +150,7 @@ public class PlayState extends State {
             }else {
                 reset();
             }
-
         }
-
 
     }
      public void reset(){

@@ -19,7 +19,7 @@ public class MenuState extends State {
         pieces = new Texture("Menu/Menu_pieces.png");
         playBtn = new Texture("Menu/menu_button.png");
         kingBlack = new Texture("Menu/KingBlack.png");
-       //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
+        //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
         // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
         Xplay = 400;
         Yplay = 340;
@@ -68,13 +68,9 @@ public class MenuState extends State {
             CountKing--;
         }
 
-        // Animate King
         sb.draw(kingBlack, CountKing, Yplay-346);
         sb.draw(pieces, 0, 0);
         sb.draw(playBtn, Xplay, Yplay);
-
-//        sb.draw(play, 50, 50);
-//        sb.draw(playBtn, cam.position.x - playBtn.getWidth() / 2, cam.position.y);
         sb.end();
     }
 
