@@ -153,7 +153,7 @@ public class PlayState extends State {
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY());
-        if (x>0 && x< 601 && y>0 && y<601) {
+        if (x>40 && x< 560 && y>40 && y<560) {
             //AI
             if(aiPlayer && !turn){
                 Move aiMove = ai.calculateBestMove(board);
