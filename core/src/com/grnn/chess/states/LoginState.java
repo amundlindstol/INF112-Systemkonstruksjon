@@ -27,8 +27,8 @@ public class LoginState extends State {
         registerBtn = new Texture("Menu/menu_button_login.png");
         Xplay = 400;
         Yplay = 340;
-        Xreg = Xplay;
-        Yreg = Yplay-loginBtn.getHeight();
+       // Xreg = Xplay;
+       // Yreg = Yplay-loginBtn.getHeight();
     }
 
     @Override
@@ -40,12 +40,11 @@ public class LoginState extends State {
         if (x > texturePosX && y > texturePosY && x < loginBtn.getWidth()+texturePosX && y < loginBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             gsm.set(new MenuState(gsm));
         }
-        texturePosX = Xreg;
+       /* texturePosX = Xreg;
         texturePosY = Yreg;
         if (x > texturePosX && y > texturePosY && x < registerBtn.getWidth()+texturePosX && y < registerBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             gsm.set(new PlayState(gsm,false));
-        }
-
+        }*/
     }
 
     @Override
@@ -59,7 +58,7 @@ public class LoginState extends State {
         sb.draw(background, 0,0);
         sb.draw(pieces, 70, 0);
         sb.draw(loginBtn, Xplay, Yplay);
-        sb.draw(registerBtn, Xreg, Yreg);
+       // sb.draw(registerBtn, Xreg, Yreg);
         sb.end();
     }
 

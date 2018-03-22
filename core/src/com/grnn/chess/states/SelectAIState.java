@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 /**
  * @author Helge Mikael Landro, 19.03.2018
- * A class to represent the menu for select AI level for the game.
- * The user can choose from three levels of difficulty.
+ * A class to represent the game menu.
+ * The user can choose from three levels of difficulty for playing against an AI, or play against a friend
  */
 public class SelectAIState extends State {
 
@@ -16,7 +16,7 @@ public class SelectAIState extends State {
     private Texture background, pieces;
     private Texture playBtn, playBtn2, playBtn3, playBtn4;
     private Texture emoticonEasy, emoticonEasy2, emoticonMedium, emoticonMedium2, emoticonHard, emoticonHard2;
-    private int xPlay, yPlay, count;
+    private int xPlay, yPlay, Xreg, Yreg, count;
     private ArrayList<Texture> test;
 
     /**
@@ -39,6 +39,8 @@ public class SelectAIState extends State {
         emoticonHard2 = new Texture("Menu/Animations/Emoji_3/6.png");
         xPlay = 300;
         yPlay = 350;
+        Xreg = xPlay + 290;
+        Yreg = yPlay;
         count = 0;
         test = new ArrayList<Texture>();
         test.add(emoticonEasy);
@@ -57,8 +59,17 @@ public class SelectAIState extends State {
         int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
         int texturePosX = xPlay;
         int  texturePosY = yPlay;
+
+        // Buttons for play against AI
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             gsm.set(new PlayState(gsm, true));
+        }
+        texturePosX = Xreg;
+        texturePosY = Yreg;
+
+        // Button for play with a friend
+        if (x > texturePosX && y > texturePosY && x < playBtn4.getWidth()+texturePosX && y < playBtn4.getHeight()+texturePosY && Gdx.input.justTouched()) {
+            gsm.set(new PlayState(gsm,false));
         }
     }
 
@@ -79,7 +90,7 @@ public class SelectAIState extends State {
 
         count++;
 
-        // Draw emojis
+        // Draw emoticons
         if(count  < 15 ) {
             sb.draw(test.get(0), xPlay-30, yPlay);
             sb.draw(test.get(4), xPlay-17, yPlay-88);
