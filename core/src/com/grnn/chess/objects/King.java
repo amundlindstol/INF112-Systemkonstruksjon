@@ -81,7 +81,6 @@ public class King extends AbstractChessPiece {
      * @return If the king can do castling west.
      */
     private boolean canDoCastlingWest(Board board, Position kingPos) {
-        System.out.println("canDoCastlingWest");
         King king = (King) board.getPieceAt(kingPos);
         AbstractChessPiece pieceWestCorner = null;
 
@@ -109,7 +108,6 @@ public class King extends AbstractChessPiece {
      * @return The possible castling positions for the king in direction west
      */
     private ArrayList<Position> getCastlingMoveWest(Board board, Position kingPos) {
-        System.out.println("getCastlingMoveWest");
         ArrayList<Position> validMoves = new ArrayList<Position>();
 
         if (!canDoCastlingWest(board, kingPos)) {
@@ -127,7 +125,6 @@ public class King extends AbstractChessPiece {
      * @return The possible castling positions for the king in direction west
      */
     private ArrayList<Position> getCastlingMoveEast(Board board, Position kingPos) {
-        System.out.println("getCastlingMoveEast");
 
         ArrayList<Position> validMoves = new ArrayList<Position>();
 
@@ -147,7 +144,6 @@ public class King extends AbstractChessPiece {
      * @return If the king can do castling east.
      */
     private boolean canDoCastlingEast(Board board, Position kingPos) {
-        System.out.println("canDoCastlingEast");
 
         King king = (King) board.getPieceAt(kingPos);
         AbstractChessPiece pieceEastCorner;
@@ -162,9 +158,7 @@ public class King extends AbstractChessPiece {
         }
 
         for (Position posToCheck = kingPos.east(); posToCheck.getX() < board.size() - 1; posToCheck = posToCheck.east()) {
-            System.out.println(board.getPieceAt(posToCheck) + " at pos: " + posToCheck);
             if (board.getPieceAt(posToCheck) != null) {
-                System.out.println("ska ikkje skje");
                 return false;
             }
         }

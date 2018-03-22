@@ -259,7 +259,6 @@ public class PlayState extends State {
                     potentialMoves = selectedPiece.getValidMoves(board);
                     captureMoves = selectedPiece.getCaptureMoves(board);
                     if(selectedPiece instanceof King) {
-                        System.out.println("adding castling moves");
                         castlingMoves = ((King) selectedPiece).getCastlingMoves(board, selected);
                     }
                 } else {
