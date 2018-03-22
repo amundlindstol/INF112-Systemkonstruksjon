@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.*;
 import com.grnn.chess.AI.AI;
-import com.grnn.chess.states.LoginState;
 import com.grnn.chess.objects.*;
 
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ public class PlayState extends State {
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
         board = new Board();
-        board.addPieces();
+        board.initializeBoard();
         selected = null;
         humanPlayer = player;
         potentialMoves = new ArrayList<Position>();
