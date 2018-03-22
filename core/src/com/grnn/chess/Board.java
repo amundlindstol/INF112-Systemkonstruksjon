@@ -33,6 +33,7 @@ public class Board {
         }
     }
 
+
     public void removePiece(AbstractChessPiece piece) {
         removedPieces.add(piece);
     }
@@ -75,6 +76,11 @@ public class Board {
     }
 
     // TODO: AI is not always black
+
+    /**
+     * Gets possible moves the AI can do.
+     * @return possible moves the AI can do.
+     */
     public ArrayList<Move> getPossibleAIMoves() { //Aka get black's moves
 
         ArrayList<Move> possibleMoves = new ArrayList<Move>();
@@ -104,8 +110,10 @@ public class Board {
         return grid.size();
     }
 
-    public void addPieces() {
-
+    /**
+     * Initializes the board with pieces in standard starting positions
+     */
+    public void initializeBoard() {
 
         for (int i = 0; i < size(); i++) {
             setPiece(new Pawn(true), i, 1);
@@ -134,8 +142,6 @@ public class Board {
 
         setPiece(new King(true), 4, 0);
         setPiece(new King(false), 4, 7);
-
-
     }
 
     public void setPiece(AbstractChessPiece piece, Position pos) {
@@ -215,6 +221,9 @@ public class Board {
         return out;
     }
 
+    /**
+     * Handles the en passant move
+     */
     public void enPassant() {
         if (moveHistory.size() > 2) {
             Move lastMove = moveHistory.get(moveHistory.size() - 1);

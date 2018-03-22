@@ -57,6 +57,12 @@ public class King extends AbstractChessPiece {
         return validMoves;
     }
 
+    /**
+     * Gets the possible moves involved in castling
+     * @param board The board
+     * @param kingPos Position of the king
+     * @return The possible castling positions for the king
+     */
     public ArrayList<Position> getCastlingMoves(Board board, Position kingPos) {
         ArrayList<Position> validMoves = new ArrayList<Position>();
 
@@ -68,6 +74,12 @@ public class King extends AbstractChessPiece {
         return validMoves;
     }
 
+    /**
+     * Checks whether or not the king can do castling in direction west.
+     * @param board The board.
+     * @param kingPos Position of the king.
+     * @return If the king can do castling west.
+     */
     private boolean canDoCastlingWest(Board board, Position kingPos) {
         System.out.println("canDoCastlingWest");
         King king = (King) board.getPieceAt(kingPos);
@@ -90,7 +102,12 @@ public class King extends AbstractChessPiece {
         return pieceWestCorner != null && pieceWestCorner instanceof Rook && !((Rook) pieceWestCorner).hasMoved();
 
     }
-
+    /**
+     * Gets the possible moves involved in castling west
+     * @param board The board
+     * @param kingPos Position of the king
+     * @return The possible castling positions for the king in direction west
+     */
     private ArrayList<Position> getCastlingMoveWest(Board board, Position kingPos) {
         System.out.println("getCastlingMoveWest");
         ArrayList<Position> validMoves = new ArrayList<Position>();
@@ -103,6 +120,12 @@ public class King extends AbstractChessPiece {
         return validMoves;
     }
 
+    /**
+     * Gets the possible moves involved in castling west
+     * @param board The board
+     * @param kingPos Position of the king
+     * @return The possible castling positions for the king in direction west
+     */
     private ArrayList<Position> getCastlingMoveEast(Board board, Position kingPos) {
         System.out.println("getCastlingMoveEast");
 
@@ -117,6 +140,12 @@ public class King extends AbstractChessPiece {
 
     }
 
+    /**
+     * Checks whether or not the king can do castling in direction east.
+     * @param board The board.
+     * @param kingPos Position of the king.
+     * @return If the king can do castling east.
+     */
     private boolean canDoCastlingEast(Board board, Position kingPos) {
         System.out.println("canDoCastlingEast");
 
