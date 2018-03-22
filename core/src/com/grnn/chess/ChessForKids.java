@@ -21,7 +21,7 @@ public class ChessForKids extends ApplicationAdapter {
 
 		bg = new Texture("Graphics/GUI/ChessBoard.png");
 		board = new Board();
-		board.addPieces();
+		board.initializeBoard();
 
 		gsm.push(new LoginState(gsm));
 
