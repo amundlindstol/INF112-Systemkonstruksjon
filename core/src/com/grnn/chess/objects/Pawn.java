@@ -28,22 +28,17 @@ public class Pawn extends AbstractChessPiece {
 		Position pawnPos = getPosition(board);
 
 		if(isWhite){
-			if(!hasMoved){
-				if(board.getPieceAt(pawnPos.north(2))==null) {
+			if(board.getPieceAt(pawnPos.north())==null){
+				if(!hasMoved && board.getPieceAt(pawnPos.north(2))==null) {
 					validMoves.add(pawnPos.north(2));
 				}
-			}
-			if(board.getPieceAt(pawnPos.north())==null){
 				validMoves.add(pawnPos.north());
 			}
-
 		}else {
-			if(!hasMoved){
-				if(board.getPieceAt(pawnPos.south(2))==null) {
+			if(board.getPieceAt(pawnPos.south())==null){
+				if(!hasMoved && board.getPieceAt(pawnPos.south(2))==null) {
 					validMoves.add(pawnPos.south(2));
 				}
-			}
-			if(board.getPieceAt(pawnPos.south())==null){
 				validMoves.add(pawnPos.south());
 			}
 		}
@@ -123,7 +118,7 @@ public class Pawn extends AbstractChessPiece {
 					if (!conditionPiece.isWhite() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
 						return conditionToPos.north();
 					}
-				} else {
+				} else if (!this.isWhite() && pawnPos.getY() == 3) {
 					if (conditionPiece.isWhite() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
 						return conditionToPos.south();
 					}

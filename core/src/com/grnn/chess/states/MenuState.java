@@ -3,7 +3,7 @@ package com.grnn.chess.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.grnn.chess.Player;
 
 /**
  * @author Amund 15.03.18
@@ -11,20 +11,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 public class MenuState extends State {
     private Texture background, pieces, kingBlack;
     private Texture playBtn;
-    private int Xplay, Yplay, Count, CountKing;
+    private int Xplay, Yplay, Count;
+    private Player currentPlayer;
 
-    public MenuState(GameStateManager gsm) {
+    public MenuState(GameStateManager gsm) { //TODO this constructor should be deleted when never used
         super(gsm);
-        background = new Texture("Menu/Menu_background.png");
-        pieces = new Texture("Menu/Menu_pieces.png");
-        playBtn = new Texture("Menu/menu_button.png");
-        kingBlack = new Texture("Menu/KingBlack.png");
+        new MenuState(gsm, new Player("delete", "me"));
+    }
+
+    /**
+     * main menu when logged in
+     * @param gsm
+     * @param player player currently logged in
+     */
+    public MenuState(GameStateManager gsm, Player player) {
+        super(gsm);
+        this.currentPlayer = player;
+        background = new Texture("Graphics/Menu/Menu_background.png");
+        pieces = new Texture("Graphics/Menu/Menu_pieces.png");
+        playBtn = new Texture("Graphics/Menu/menu_button.png");
         //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
         // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
         Xplay = 400;
         Yplay = 340;
         Count = 20;
-        CountKing = -200;
+        currentPlayer = player;
     }
 
     @Override
@@ -34,7 +45,7 @@ public class MenuState extends State {
         int texturePosX = Xplay;
         int  texturePosY = Yplay;
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new SelectAIState(gsm));
+            gsm.set(new SelectAIState(gsm, currentPlayer));
         }
     }
 
@@ -50,7 +61,6 @@ public class MenuState extends State {
         sb.draw(background, 0,0);
 
         Count++;
-        CountKing++;
 
         // Animate button
         if(Count < 40 ) {
@@ -64,11 +74,6 @@ public class MenuState extends State {
             Count = 0;
         }
 
-        if(CountKing > 450){
-            CountKing--;
-        }
-
-        sb.draw(kingBlack, CountKing, Yplay-346);
         sb.draw(pieces, 0, 0);
         sb.draw(playBtn, Xplay, Yplay);
         sb.end();

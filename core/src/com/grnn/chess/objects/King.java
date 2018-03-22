@@ -4,6 +4,7 @@ package com.grnn.chess.objects;
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -113,6 +114,7 @@ public class King extends AbstractChessPiece {
         validMoves.add(kingPos.east(2));
 
         return validMoves;
+
     }
 
     private boolean canDoCastlingEast(Board board, Position kingPos) {
@@ -165,9 +167,46 @@ public class King extends AbstractChessPiece {
     }
 
     public boolean willThisKingBePutInCheckByMoveTo(Board board, Position pos) {
-
+       for (int i=0; i<board.size(); i++) {
+           for (int j=0; j<board.size(); j++) {
+               Position posOtherPiece = new Position(i,j);
+               AbstractChessPiece otherPiece = board.getPieceAt(posOtherPiece);
+               if (!isSameColor(otherPiece)){
+                   if (!(otherPiece instanceof Pawn)) {
+                       if (otherPiece.getValidMoves(board).contains(pos))
+                           return true;
+                   }
+                   else {
+                       if(otherPiece.isWhite){
+                           if(otherPiece.getPosition(board).north(1).east(1).equals(pos))
+                               return true;
+                           if(otherPiece.getPosition(board).north(1).west(1).equals(pos))
+                               return true;
+                       }
+                       else {
+                           if(otherPiece.getPosition(board).south(1).east(1).equals(pos))
+                               return true;
+                           if(otherPiece.getPosition(board).south(1).west(1).equals(pos))
+                               return true;
+                       }
+                   }
+               }
+           }
+       }
         return false;
     }
+/*
+    public boolean isInStalemate(Board board){
+        int[][] offsets = { {1,0}, {0,1}, {-1,0}, {0,-1}, {1,1}, {-1,1}, {-1,-1}, {1,-1} };
+        Position kingPos = board.getPosition(this);
+        Position pos;
+        for (int[] moves: offsets){
+            pos = new Position(kingPos+moves[0], kingPos+moves[1]);
+            if (board.posIsWithinBoard(pos) && !willThisKingBePutInCheckByMoveTo(board, pos))
+                return false;
+        }
+        return true;
+    }*/
 
     public int getValue() {
         return value;

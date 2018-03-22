@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.states.GameStateManager;
 import com.grnn.chess.states.LoginState;
-import com.grnn.chess.states.MenuState;
 
 public class ChessForKids extends ApplicationAdapter {
 	GameStateManager gsm;
@@ -20,7 +19,7 @@ public class ChessForKids extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
 
-		bg = new Texture("sjakk2.png");
+		bg = new Texture("Graphics/GUI/ChessBoard.png");
 		board = new Board();
 		board.addPieces();
 

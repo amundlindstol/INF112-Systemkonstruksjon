@@ -6,13 +6,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.grnn.chess.*;
 import com.grnn.chess.AI.AI;
-import com.grnn.chess.Board;
-import com.grnn.chess.Move;
-import com.grnn.chess.Position;
-import com.grnn.chess.TranslateToCellPos;
-import com.grnn.chess.objects.AbstractChessPiece;
-import com.grnn.chess.objects.King;
+import com.grnn.chess.states.LoginState;
+import com.grnn.chess.objects.*;
 
 import java.util.ArrayList;
 
@@ -27,11 +24,8 @@ public class PlayState extends State {
     Texture bgBoard;
     Texture potentialTex;
     Texture captureTex;
-
     ArrayList<Texture> pieceTexures;
     ArrayList<Position> positions;
-
-
     private Position selected;
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
@@ -40,36 +34,59 @@ public class PlayState extends State {
     private Boolean turn;
     private Boolean aiPlayer;
     private AI ai;
-    private BitmapFont font;
+    private BitmapFont fontText;
+    private BitmapFont fontCounter;
     private Boolean removed;
+    private String text;
+    private String tiss;
+    private Player humanPlayer;
+    private int pawnCounter, bishopCounter, kingCounter, queenCounter, rookCounter, knightCounter;
+    private int pawnCounterPlayer, bishopCounterPlayer, kingCounterPlayer, queenCounterPlayer, rookCounterPlayer, knightCounterPlayer;
 
 
-    public PlayState(GameStateManager gsm, boolean aiPlayer) {
+    public PlayState(GameStateManager gsm, boolean aiPlayer, Player player) {
         super(gsm);
-        bg = new Texture("GUI2.png");
-        bgBoard = new Texture("sjakk2.png");
+        bg = new Texture("Graphics/GUI/GUI.png");
+        bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
         board = new Board();
         board.addPieces();
         selected = null;
+        humanPlayer = player;
         potentialMoves = new ArrayList<Position>();
         captureMoves = new ArrayList<Position>();
         castlingMoves = new ArrayList<Position>();
         translator = new TranslateToCellPos();
         turn = true;
-        font = new BitmapFont();
-        font.setColor(Color.BLACK);
+        fontText = new BitmapFont();
+        fontText.setColor(Color.BLACK);
+        fontCounter = new BitmapFont();
+        fontCounter.setColor(Color.WHITE);
         removed = false;
         this.aiPlayer = aiPlayer;
+        pawnCounter = 0;
+        bishopCounter = 0;
+        kingCounter = 0;
+        queenCounter = 0;
+        knightCounter = 0;
+        rookCounter = 0;
+        pawnCounterPlayer = 0;
+        bishopCounterPlayer = 0;
+        kingCounterPlayer = 0;
+        queenCounterPlayer = 0;
+        knightCounterPlayer = 0;
+        rookCounterPlayer = 0;
 
-        potentialTex = new Texture("ChessPieces/Potential.png");
-        captureTex = new Texture("ChessPieces/Capture.png");
+        LoginUserState test = new LoginUserState(gsm);
+        tiss = test.getUsername();
+
+        potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
+        captureTex = new Texture("Graphics/ChessPieces/Capture.png");
 
         if(aiPlayer){
             ai = new AI();
         }
-
 
         for( int y = 40, yi = 0; y<560; y+=65, yi++){
             for(int x=40, xi= 0; x<560; x+=65, xi++){
@@ -93,17 +110,56 @@ public class PlayState extends State {
         batch.begin();
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
-        if (turn) {
-            font.draw(batch, "Venter på at du skal gjøre neste trekk", 635, 295);
-            if (removed) {
-                font.draw(batch, "Datamaskinen tok en av dine brikker. FAEN I HELVETE :(", 635, 315);
-            }
-        } else {
-            font.draw(batch, "Venter på at Datamaskin skal gjøre neste trekk", 635, 380);
-            if (removed) {
-                font.draw(batch, "Du tok en brikke! Bra jobbet :)", 635, 315);
+
+        if(aiPlayer){
+            if (turn) {
+                text = "Venter på at du skal gjøre neste trekk.";
+                if (removed) {
+                    text = "Bra jobbet! Du tok en brikke.";
+                }
+
+            } else {
+                if (removed) {
+                    text = "Uff. Datamaskinen tok en brikke av deg. FAEN I HELVETE!!";
+                }
             }
         }
+
+        else{
+            if (turn) {
+                text = "Venter på at du skal gjøre neste trekk.";
+                if (removed) {
+                    text = "Uff. Datamaskinen tok en brikke av deg. FAEN I HELVETE!!";
+                }
+
+            } else {
+                text = "Venter på at datamaskinen skal gjøre neste trekk.";
+
+                if (removed) {
+                    text = "Bra jobbet! Du tok en brikke. Det er datamaskinen sin tur.";
+                }
+            }
+        }
+
+        fontText.draw(batch, text, 645, 334);
+        fontCounter.draw(batch, "" + pawnCounter, 668, 420);
+        fontCounter.draw(batch, "" + bishopCounter, 727, 420);
+        fontCounter.draw(batch, "" + knightCounter, 785, 420);
+        fontCounter.draw(batch, "" + rookCounter, 843, 420);
+        fontCounter.draw(batch, "" + queenCounter, 900, 420);
+        fontCounter.draw(batch, "" + kingCounter, 959, 420);
+
+        fontCounter.draw(batch, "" + pawnCounterPlayer, 668, 100);
+        fontCounter.draw(batch, "" + bishopCounterPlayer, 727, 100);
+        fontCounter.draw(batch, "" + knightCounterPlayer, 785, 100);
+        fontCounter.draw(batch, "" + rookCounterPlayer, 843, 100);
+        fontCounter.draw(batch, "" + queenCounterPlayer, 900, 100);
+        fontCounter.draw(batch, "" + kingCounterPlayer, 959, 100);
+
+        // Username
+        fontCounter.draw(batch, "NAVN: " + humanPlayer.getName() , 650, 210);
+
+
 
         for(int i=0; i<positions.size() ; i++) {
             Position piecePos = positions.get(i);
@@ -114,49 +170,88 @@ public class PlayState extends State {
                 batch.draw(pieceTex, translator.toPixels(piecePos.getX(), piecePos.getY())[0], translator.toPixels(piecePos.getX(), piecePos.getY())[1]);
             }
         }
-                if (!potentialMoves.isEmpty()) {
-                    for (Position potPos : potentialMoves) {
-                        int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
-                        batch.draw(potentialTex, pos[0], pos[1]);
-                    }
-                }
-                if (!captureMoves.isEmpty()) {
-                    for (Position capPos : captureMoves) {
-                        int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
-                        batch.draw(captureTex, pos[0], pos[1]);
-                    }
-                }
-                batch.end();
-                if (!pieceTexures.isEmpty()) {
-                    for (Texture oldTexture : pieceTexures) {
-                        if (oldTexture.isManaged()) {
-                            oldTexture.dispose();
-                        }
-                    }
-                }
 
-    }
-
-    @Override
-    public void dispose() {
-        bg.dispose();
-        bgBoard.dispose();
-        for(Texture tex : pieceTexures){
-            tex.dispose();
+        if (!potentialMoves.isEmpty()) {
+            for (Position potPos : potentialMoves) {
+                int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
+                batch.draw(potentialTex, pos[0], pos[1]);
+            }
         }
-        potentialTex.dispose();
-        captureTex.dispose();
-        System.out.println("PlayState Disposed");
+        if (!captureMoves.isEmpty()) {
+            for (Position capPos : captureMoves) {
+                int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
+                batch.draw(captureTex, pos[0], pos[1]);
+            }
+        }
+        batch.end();
+        if (!pieceTexures.isEmpty()) {
+            for (Texture oldTexture : pieceTexures) {
+                if (oldTexture.isManaged()) {
+                    oldTexture.dispose();
+                }
+            }
+        }
     }
 
+    /**
+     * Method to update the GUI's counter for removed pieces
+     * @param removedPiece, the piece that is removed
+     * @param player, boolean to tell which player
+     */
+    public void updatePieceCounter(AbstractChessPiece removedPiece, Boolean player){
+
+        if(player){
+            if(removedPiece instanceof Pawn){
+                if(player)
+                    pawnCounterPlayer ++;
+                else
+                    pawnCounter ++;
+            }
+            else if(removedPiece instanceof Bishop){
+                if(player)
+                    bishopCounterPlayer ++;
+                else
+                    bishopCounter ++;
+            }
+            else if(removedPiece instanceof King){
+                if(player)
+                    kingCounterPlayer ++;
+                else
+                    kingCounter ++;
+            }
+            else if(removedPiece instanceof Queen){
+                if(player)
+                    queenCounterPlayer ++;
+                else
+                    queenCounter ++;
+            }
+            else if(removedPiece instanceof Rook){
+                if(player)
+                    rookCounterPlayer ++;
+                else{
+                    rookCounter ++;
+                }
+            }
+            else if(removedPiece instanceof Knight){
+                if(player)
+                    knightCounterPlayer ++;
+                else
+                    knightCounter ++;
+            }
+        }
+    }
 
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY());
-        if (x>0 && x< 601 && y>0 && y<601) {
+        if (x>40 && x< 560 && y>40 && y<560) {
             //AI
             if(aiPlayer && !turn){
                 Move aiMove = ai.calculateBestMove(board);
+                AbstractChessPiece victim = board.getPieceAt(aiMove.getToPos());
+                if(victim !=null) {
+                    board.removePiece(victim);
+                }
                 board.movePiece(aiMove.getFromPos(),aiMove.getToPos());
                 turn = !turn;
             }
@@ -184,6 +279,8 @@ public class PlayState extends State {
                 if (potentialPiece != null) {
                     if (validMove) {
                         board.removePiece(potentialPiece);
+                        removed = true;
+                        updatePieceCounter(potentialPiece, turn);
                         board.movePiece(selected, potentialPos);
                         reset();
                         turn = !turn;
@@ -195,7 +292,9 @@ public class PlayState extends State {
                             castlingMoves = ((King) potentialPiece).getCastlingMoves(board, potentialPos);
                         }
                         selected = potentialPos;
+                        removed = false;
                     } else {
+                        removed = false;
                         reset();
                     }
                 } else if (potentialPiece == null && validMove) {
@@ -203,8 +302,10 @@ public class PlayState extends State {
                     board.movePiece(selected, potentialPos);
                     reset();
                     turn = !turn;
+                    removed = false;
                 } else {
                     reset();
+                    removed = false;
                 }
             }
         }
@@ -246,6 +347,19 @@ public class PlayState extends State {
         }
         board.movePiece(rookOriginalPos, rookNewPos);
     }
+
+    @Override
+    public void dispose() {
+        bg.dispose();
+        bgBoard.dispose();
+        for(Texture tex : pieceTexures){
+            tex.dispose();
+        }
+        potentialTex.dispose();
+        captureTex.dispose();
+        System.out.println("PlayState Disposed");
+    }
+
 
     public void reset() {
         selected = null;
