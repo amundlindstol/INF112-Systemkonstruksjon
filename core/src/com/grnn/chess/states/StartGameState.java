@@ -8,15 +8,15 @@ import com.grnn.chess.Player;
 /**
  * @author Amund 15.03.18
  */
-public class MenuState extends State {
+public class StartGameState extends State {
     private Texture background, pieces, kingBlack;
     private Texture playBtn;
     private int Xplay, Yplay, Count;
     private Player currentPlayer;
 
-    public MenuState(GameStateManager gsm) { //TODO this constructor should be deleted when never used
+    public StartGameState(GameStateManager gsm) { //TODO this constructor should be deleted when never used
         super(gsm);
-        new MenuState(gsm, new Player("delete", "me"));
+        new StartGameState(gsm, new Player("delete", "me"));
     }
 
     /**
@@ -24,7 +24,7 @@ public class MenuState extends State {
      * @param gsm
      * @param player player currently logged in
      */
-    public MenuState(GameStateManager gsm, Player player) {
+    public StartGameState(GameStateManager gsm, Player player) {
         super(gsm);
         this.currentPlayer = player;
         background = new Texture("Graphics/Menu/Menu_background.png");

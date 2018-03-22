@@ -41,7 +41,7 @@ public class MainMenuState extends State {
         int texturePosX = Xplay;
         int texturePosY = Yplay;
         if (x > texturePosX && y > texturePosY && x < loginBtn.getWidth()+texturePosX && y < loginBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new LoginUserState(gsm)); //change to MenuState if u want to skip login
+            gsm.set(new LoginUserState(gsm)); //change to StartGameState if u want to skip login
         }
         texturePosX = Xreg;
         texturePosY = Yreg;
