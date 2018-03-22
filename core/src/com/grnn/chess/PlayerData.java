@@ -116,7 +116,7 @@ public class PlayerData {
 	 */
 	public boolean nameExists(String name) {
 		for(Player a : accounts) {
-			if(a.getName().equals(name))
+			if(a.getName().equals(name) || a.getName().toLowerCase().equals(name.toLowerCase()))
 				return true;
 		}
 

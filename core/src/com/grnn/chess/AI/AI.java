@@ -11,6 +11,12 @@ public class AI {
     // TODO: AI isn't always black
 
     // TODO: Not doing random move
+
+    /**
+     * Calculates the best move the AI can do
+     * @param board The board
+     * @return The best move
+     */
     public Move calculateBestMove(Board board) {
         ArrayList<Move> moves = board.getPossibleAIMoves();
         if(moves.isEmpty()) return null;

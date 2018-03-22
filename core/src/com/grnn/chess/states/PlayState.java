@@ -6,11 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.grnn.chess.*;
 import com.grnn.chess.AI.AI;
-import com.grnn.chess.Board;
-import com.grnn.chess.Move;
-import com.grnn.chess.Position;
-import com.grnn.chess.TranslateToCellPos;
 import com.grnn.chess.objects.*;
 
 import java.util.ArrayList;
@@ -40,19 +37,21 @@ public class PlayState extends State {
     private BitmapFont fontCounter;
     private Boolean removed;
     private String text;
+    private Player humanPlayer;
     private int pawnCounter, bishopCounter, kingCounter, queenCounter, rookCounter, knightCounter;
     private int pawnCounterPlayer, bishopCounterPlayer, kingCounterPlayer, queenCounterPlayer, rookCounterPlayer, knightCounterPlayer;
 
 
-    public PlayState(GameStateManager gsm, boolean aiPlayer) {
+    public PlayState(GameStateManager gsm, boolean aiPlayer, Player player) {
         super(gsm);
         bg = new Texture("Graphics/GUI/GUI.png");
         bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
         board = new Board();
-        board.addPieces();
+        board.initializeBoard();
         selected = null;
+        humanPlayer = player;
         potentialMoves = new ArrayList<Position>();
         captureMoves = new ArrayList<Position>();
         castlingMoves = new ArrayList<Position>();
@@ -76,7 +75,6 @@ public class PlayState extends State {
         queenCounterPlayer = 0;
         knightCounterPlayer = 0;
         rookCounterPlayer = 0;
-
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
 
@@ -140,17 +138,23 @@ public class PlayState extends State {
         fontText.draw(batch, text, 645, 334);
         fontCounter.draw(batch, "" + pawnCounter, 668, 420);
         fontCounter.draw(batch, "" + bishopCounter, 727, 420);
-        fontCounter.draw(batch, "" + kingCounter, 785, 420);
-        fontCounter.draw(batch, "" + queenCounter, 843, 420);
-        fontCounter.draw(batch, "" + knightCounter, 900, 420);
-        fontCounter.draw(batch, "" + rookCounter, 959, 420);
+        fontCounter.draw(batch, "" + knightCounter, 785, 420);
+        fontCounter.draw(batch, "" + rookCounter, 843, 420);
+        fontCounter.draw(batch, "" + queenCounter, 900, 420);
+        fontCounter.draw(batch, "" + kingCounter, 959, 420);
 
         fontCounter.draw(batch, "" + pawnCounterPlayer, 668, 100);
         fontCounter.draw(batch, "" + bishopCounterPlayer, 727, 100);
-        fontCounter.draw(batch, "" + kingCounterPlayer, 785, 100);
-        fontCounter.draw(batch, "" + queenCounterPlayer, 843, 100);
-        fontCounter.draw(batch, "" + knightCounterPlayer, 900, 100);
-        fontCounter.draw(batch, "" + rookCounterPlayer, 959, 100);
+        fontCounter.draw(batch, "" + knightCounterPlayer, 785, 100);
+        fontCounter.draw(batch, "" + rookCounterPlayer, 843, 100);
+        fontCounter.draw(batch, "" + queenCounterPlayer, 900, 100);
+        fontCounter.draw(batch, "" + kingCounterPlayer, 959, 100);
+
+        // Player names
+        fontCounter.draw(batch, "" + humanPlayer.getName() , 700, 250);
+        fontCounter.draw(batch, "" + "Datamaskin" , 700, 560);
+
+
 
         for(int i=0; i<positions.size() ; i++) {
             Position piecePos = positions.get(i);
@@ -239,6 +243,10 @@ public class PlayState extends State {
             //AI
             if(aiPlayer && !turn){
                 Move aiMove = ai.calculateBestMove(board);
+                AbstractChessPiece victim = board.getPieceAt(aiMove.getToPos());
+                if(victim !=null) {
+                    board.removePiece(victim);
+                }
                 board.movePiece(aiMove.getFromPos(),aiMove.getToPos());
                 turn = !turn;
             }
@@ -250,6 +258,9 @@ public class PlayState extends State {
                 if (selectedPiece != null && selectedPiece.isWhite() == turn) {
                     potentialMoves = selectedPiece.getValidMoves(board);
                     captureMoves = selectedPiece.getCaptureMoves(board);
+                    if(selectedPiece instanceof King) {
+                        castlingMoves = ((King) selectedPiece).getCastlingMoves(board, selected);
+                    }
                 } else {
                     selected = null;
                 }
@@ -271,6 +282,9 @@ public class PlayState extends State {
                         reset();
                         potentialMoves = potentialPiece.getValidMoves(board);
                         captureMoves = potentialPiece.getCaptureMoves(board);
+                        if(potentialPiece instanceof King) {
+                            castlingMoves = ((King) potentialPiece).getCastlingMoves(board, potentialPos);
+                        }
                         selected = potentialPos;
                         removed = false;
                     } else {

@@ -3,18 +3,30 @@ package com.grnn.chess.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.grnn.chess.Player;
 
 /**
  * @author Amund 15.03.18
  */
-public class MenuState extends State {
+public class StartGameState extends State {
     private Texture background, pieces, kingBlack;
     private Texture playBtn;
     private int Xplay, Yplay, Count;
+    private Player currentPlayer;
 
-    public MenuState(GameStateManager gsm) {
+    public StartGameState(GameStateManager gsm) { //TODO this constructor should be deleted when never used
         super(gsm);
+        new StartGameState(gsm, new Player("delete", "me"));
+    }
+
+    /**
+     * main menu when logged in
+     * @param gsm
+     * @param player player currently logged in
+     */
+    public StartGameState(GameStateManager gsm, Player player) {
+        super(gsm);
+        this.currentPlayer = player;
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
         playBtn = new Texture("Graphics/Menu/menu_button.png");
@@ -23,6 +35,7 @@ public class MenuState extends State {
         Xplay = 400;
         Yplay = 340;
         Count = 20;
+        currentPlayer = player;
     }
 
     @Override
@@ -32,7 +45,7 @@ public class MenuState extends State {
         int texturePosX = Xplay;
         int  texturePosY = Yplay;
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new SelectAIState(gsm));
+            gsm.set(new SelectPlayerState(gsm, currentPlayer));
         }
     }
 

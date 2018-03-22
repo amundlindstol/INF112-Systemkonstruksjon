@@ -4,6 +4,7 @@ package com.grnn.chess.objects;
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -26,20 +27,42 @@ public class King extends AbstractChessPiece {
     public ArrayList<Position> getValidMoves(Board board) {
         ArrayList<Position> validMoves = new ArrayList<Position>();
         Position kingPos = getPosition(board);
-        int[][] offsets = { {1,0}, {0,1}, {-1,0}, {0,-1}, {1,1}, {-1,1}, {-1,-1}, {1,-1} };
-        Position pos;
 
-        for (int[] moves: offsets){
-            pos = new Position(kingPos.getX()+moves[0], kingPos.getY()+moves[1]);
-            if (board.posIsWithinBoard(pos) && !isSameColor(board.getPieceAt(pos)))
-                validMoves.add(pos);
-        }
+        if (board.posIsWithinBoard(kingPos.west()) && !isSameColor(board.getPieceAt(kingPos.west())))
+            validMoves.add(kingPos.west());
+
+        if (board.posIsWithinBoard(kingPos.east()) && !isSameColor(board.getPieceAt(kingPos.east())))
+            validMoves.add(kingPos.east());
+
+        if (board.posIsWithinBoard(kingPos.north()) && !isSameColor(board.getPieceAt(kingPos.north())))
+            validMoves.add(kingPos.north());
+
+        if (board.posIsWithinBoard(kingPos.south()) && !isSameColor(board.getPieceAt(kingPos.south())))
+            validMoves.add(kingPos.south());
+
+        if (board.posIsWithinBoard(kingPos.north().west()) && !isSameColor(board.getPieceAt(kingPos.north().west())))
+            validMoves.add(kingPos.north().west());
+
+        if (board.posIsWithinBoard(kingPos.north().east()) && !isSameColor(board.getPieceAt(kingPos.north().east())))
+            validMoves.add(kingPos.north().east());
+
+        if (board.posIsWithinBoard(kingPos.south().west()) && !isSameColor(board.getPieceAt(kingPos.south().west())))
+            validMoves.add(kingPos.south().west());
+
+        if (board.posIsWithinBoard(kingPos.south().east()) && !isSameColor(board.getPieceAt(kingPos.south().east())))
+            validMoves.add(kingPos.south().east());
 
         validMoves.addAll(getCastlingMoves(board, kingPos));
 
         return validMoves;
     }
 
+    /**
+     * Gets the possible moves involved in castling
+     * @param board The board
+     * @param kingPos Position of the king
+     * @return The possible castling positions for the king
+     */
     public ArrayList<Position> getCastlingMoves(Board board, Position kingPos) {
         ArrayList<Position> validMoves = new ArrayList<Position>();
 
@@ -51,8 +74,13 @@ public class King extends AbstractChessPiece {
         return validMoves;
     }
 
+    /**
+     * Checks whether or not the king can do castling in direction west.
+     * @param board The board.
+     * @param kingPos Position of the king.
+     * @return If the king can do castling west.
+     */
     private boolean canDoCastlingWest(Board board, Position kingPos) {
-        System.out.println("canDoCastlingWest");
         King king = (King) board.getPieceAt(kingPos);
         AbstractChessPiece pieceWestCorner = null;
 
@@ -73,9 +101,13 @@ public class King extends AbstractChessPiece {
         return pieceWestCorner != null && pieceWestCorner instanceof Rook && !((Rook) pieceWestCorner).hasMoved();
 
     }
-
+    /**
+     * Gets the possible moves involved in castling west
+     * @param board The board
+     * @param kingPos Position of the king
+     * @return The possible castling positions for the king in direction west
+     */
     private ArrayList<Position> getCastlingMoveWest(Board board, Position kingPos) {
-        System.out.println("getCastlingMoveWest");
         ArrayList<Position> validMoves = new ArrayList<Position>();
 
         if (!canDoCastlingWest(board, kingPos)) {
@@ -86,8 +118,13 @@ public class King extends AbstractChessPiece {
         return validMoves;
     }
 
+    /**
+     * Gets the possible moves involved in castling west
+     * @param board The board
+     * @param kingPos Position of the king
+     * @return The possible castling positions for the king in direction west
+     */
     private ArrayList<Position> getCastlingMoveEast(Board board, Position kingPos) {
-        System.out.println("getCastlingMoveEast");
 
         ArrayList<Position> validMoves = new ArrayList<Position>();
 
@@ -97,27 +134,31 @@ public class King extends AbstractChessPiece {
         validMoves.add(kingPos.east(2));
 
         return validMoves;
+
     }
 
+    /**
+     * Checks whether or not the king can do castling in direction east.
+     * @param board The board.
+     * @param kingPos Position of the king.
+     * @return If the king can do castling east.
+     */
     private boolean canDoCastlingEast(Board board, Position kingPos) {
-        System.out.println("canDoCastlingEast");
 
         King king = (King) board.getPieceAt(kingPos);
         AbstractChessPiece pieceEastCorner;
 
         if (king.isWhite) {
-            Position posEastCorner = new Position(7, 0);
+            Position posEastCorner = new Position(5, 0); //TODO: This is wrong, should be x = 7, y = 0;
             pieceEastCorner = board.getPieceAt(posEastCorner);
 
         } else {
-            Position posEastCorner = new Position(7, 7);
+            Position posEastCorner = new Position(5, 7);
             pieceEastCorner = board.getPieceAt(posEastCorner);
         }
 
         for (Position posToCheck = kingPos.east(); posToCheck.getX() < board.size() - 1; posToCheck = posToCheck.east()) {
-            System.out.println(board.getPieceAt(posToCheck) + " at pos: " + posToCheck);
             if (board.getPieceAt(posToCheck) != null) {
-                System.out.println("ska ikkje skje");
                 return false;
             }
         }
@@ -177,20 +218,18 @@ public class King extends AbstractChessPiece {
        }
         return false;
     }
-
-    public boolean hasNoLegalMoves(Board board){
-        ArrayList<Position> validMoves = getValidMoves(board);
-        for (Position p : validMoves){
-            if (!willThisKingBePutInCheckByMoveTo(board, p))
+/*
+    public boolean isInStalemate(Board board){
+        int[][] offsets = { {1,0}, {0,1}, {-1,0}, {0,-1}, {1,1}, {-1,1}, {-1,-1}, {1,-1} };
+        Position kingPos = board.getPosition(this);
+        Position pos;
+        for (int[] moves: offsets){
+            pos = new Position(kingPos+moves[0], kingPos+moves[1]);
+            if (board.posIsWithinBoard(pos) && !willThisKingBePutInCheckByMoveTo(board, pos))
                 return false;
         }
         return true;
-    }
-
-    public boolean isInStalemate(Board board){
-        return (hasNoLegalMoves(board) && !isInCheck);
-    }
-
+    }*/
 
     public int getValue() {
         return value;

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.states.GameStateManager;
-import com.grnn.chess.states.LoginState;
+import com.grnn.chess.states.MainMenuState;
 
 public class ChessForKids extends ApplicationAdapter {
 	GameStateManager gsm;
@@ -21,9 +21,9 @@ public class ChessForKids extends ApplicationAdapter {
 
 		bg = new Texture("Graphics/GUI/ChessBoard.png");
 		board = new Board();
-		board.addPieces();
+		board.initializeBoard();
 
-		gsm.push(new LoginState(gsm));
+		gsm.push(new MainMenuState(gsm));
 
 		GameData data = new GameData();
 		SerialGame hakonVsSimon = data.getGame(1);

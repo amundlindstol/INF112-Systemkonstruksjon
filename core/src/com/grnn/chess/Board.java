@@ -33,6 +33,7 @@ public class Board {
         }
     }
 
+
     public void removePiece(AbstractChessPiece piece) {
         removedPieces.add(piece);
     }
@@ -44,17 +45,19 @@ public class Board {
     public void movePiece(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
 
+        if (piece.getValidMoves(this).contains(endPos) || piece.getCaptureMoves(this).contains(endPos)) {
 
-        //if (isValidMove(startPos, endPos)) {
+            //if (isValidMove(startPos, endPos)) {
             setPiece(piece, endPos);
             setPiece(null, startPos);
             piece.move();
             moveHistory.add(new Move(endPos, startPos, piece));
             enPassant();
 
-        //} else {
-        //    throw new IllegalMoveException("movePiece was called with illegal arguments");
-        //}
+            //} else {
+            //    throw new IllegalMoveException("movePiece was called with illegal arguments");
+            //}
+        }
     }
 
     private boolean isValidMove(Position startPos, Position endPos) {
@@ -73,6 +76,11 @@ public class Board {
     }
 
     // TODO: AI is not always black
+
+    /**
+     * Gets possible moves the AI can do.
+     * @return possible moves the AI can do.
+     */
     public ArrayList<Move> getPossibleAIMoves() { //Aka get black's moves
 
         ArrayList<Move> possibleMoves = new ArrayList<Move>();
@@ -102,8 +110,10 @@ public class Board {
         return grid.size();
     }
 
-    public void addPieces() {
-
+    /**
+     * Initializes the board with pieces in standard starting positions
+     */
+    public void initializeBoard() {
 
         for (int i = 0; i < size(); i++) {
             setPiece(new Pawn(true), i, 1);
@@ -132,8 +142,6 @@ public class Board {
 
         setPiece(new King(true), 4, 0);
         setPiece(new King(false), 4, 7);
-
-
     }
 
     public void setPiece(AbstractChessPiece piece, Position pos) {
@@ -213,6 +221,9 @@ public class Board {
         return out;
     }
 
+    /**
+     * Handles the en passant move
+     */
     public void enPassant() {
         if (moveHistory.size() > 2) {
             Move lastMove = moveHistory.get(moveHistory.size() - 1);
@@ -224,18 +235,20 @@ public class Board {
             Position conditionFromPos = conditionMove.getFromPos();
             Position conditionToPos = conditionMove.getToPos();
             AbstractChessPiece conditionPiece = conditionMove.getPiece();
+            if(lastPiece.getClass() == Pawn.class && conditionPiece.getClass() == Pawn.class) {
+                if (conditionToPos.getX() == lastToPos.getX()) {
+                    if (lastPiece.isWhite() && lastFromPos.getY() == 4 && lastToPos.getY() == 5) {
+                        if (!conditionPiece.isWhite() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
+                            setPiece(null, conditionToPos);
+                        }
+                    } else if (lastFromPos.getY() == 3 && lastToPos.getY() == 2) {
+                        if (conditionPiece.isWhite() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
+                            setPiece(null, conditionToPos);
+                        }
 
-            if (conditionToPos.getX() == lastToPos.getX())
-                if (lastPiece.isWhite() && lastFromPos.getY() == 4 && lastToPos.getY() == 5) {
-                    if (!conditionPiece.isWhite() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
-                        setPiece(null, conditionToPos);
                     }
-                } else {
-                    if (conditionPiece.isWhite() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
-                        setPiece(null, conditionToPos);
-                    }
-
                 }
+            }
         }
     }
 }
