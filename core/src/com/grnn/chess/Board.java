@@ -17,13 +17,19 @@ public class Board {
     private ArrayList<AbstractChessPiece> removedPieces;
     private ArrayList<Move> moveHistory;
 
+    private ArrayList<Position> positions;
+
     public Board() {
         moveHistory = new ArrayList<Move>();
         removedPieces = new ArrayList<AbstractChessPiece>();
+        positions = new ArrayList<Position>();
+
         for (int i = 0; i < size; i++) {
             grid.add(new ArrayList<AbstractChessPiece>(size));
-            for (int j = 0; j < size; j++)
+            for (int j = 0; j < size; j++) {
                 grid.get(i).add(null);
+                positions.add(new Position(j, i));
+            }
         }
     }
 
@@ -39,16 +45,16 @@ public class Board {
         AbstractChessPiece piece = getPieceAt(startPos);
 
 
-        if (isValidMove(startPos, endPos)) {
+        //if (isValidMove(startPos, endPos)) {
             setPiece(piece, endPos);
             setPiece(null, startPos);
             piece.move();
             moveHistory.add(new Move(endPos, startPos, piece));
             enPassant();
 
-        } else {
-            throw new IllegalMoveException("movePiece was called with illegal arguments");
-        }
+        //} else {
+        //    throw new IllegalMoveException("movePiece was called with illegal arguments");
+        //}
     }
 
     private boolean isValidMove(Position startPos, Position endPos) {
@@ -71,19 +77,15 @@ public class Board {
 
         ArrayList<Move> possibleMoves = new ArrayList<Move>();
 
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                Position posPiece = new Position(y, x);
-                AbstractChessPiece piece = getPieceAt(posPiece);
-                if(piece!=null && !piece.isWhite()) {
-                    ArrayList<Position> posList = piece.getValidMoves(this);
-                    posList.addAll(piece.getCaptureMoves(this));
-                    if (!posList.isEmpty()){
-                        for (Position toMove : posList) {
-                            Move newMove = new Move(toMove, posPiece, piece);
-                            possibleMoves.add(newMove);
-                            System.out.println(newMove);
-                        }
+        for(Position position : positions){
+            AbstractChessPiece piece = this.getPieceAt(position);
+            if(piece!=null && !piece.isWhite()) {
+                ArrayList<Position> posList = piece.getValidMoves(this);
+                posList.addAll(piece.getCaptureMoves(this));
+                if (!posList.isEmpty()){
+                    for (Position toMove : posList) {
+                        Move newMove = new Move(toMove, position, piece);
+                        possibleMoves.add(newMove);
                     }
                 }
             }
