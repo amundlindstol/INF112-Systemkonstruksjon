@@ -20,7 +20,7 @@ public class PiecesTest {
 	@Before
 	public void setup() {
 		board = new Board();
-		board.addPieces();
+		board.initializeBoard();
 	}
 
 	@Test
