@@ -151,7 +151,7 @@ public class PlayState extends State {
         fontCounter.draw(batch, "" + kingCounterPlayer, 1030, 100);
 
         // Player names
-        fontCounter.draw(batch, "" + humanPlayer.getName() , 726, 245);
+        fontCounter.draw(batch, "" + humanPlayer.getName() , 726, 241);
         fontCounter.draw(batch, "" + "Datamaskin" , 723, 555);
 
 
@@ -194,45 +194,43 @@ public class PlayState extends State {
      * @param player, boolean to tell which player
      */
     public void updatePieceCounter(AbstractChessPiece removedPiece, Boolean player){
-
-        if(player){
-            if(removedPiece instanceof Pawn){
-                if(!player)
-                    pawnCounterPlayer ++;
-                else
-                    pawnCounter ++;
+        
+        if(removedPiece instanceof Pawn){
+            if(!player)
+                pawnCounterPlayer ++;
+            else
+                pawnCounter ++;
+        }
+        else if(removedPiece instanceof Bishop){
+            if(!player)
+                bishopCounterPlayer ++;
+            else
+                bishopCounter ++;
+        }
+        else if(removedPiece instanceof King){
+            if(!player)
+                kingCounterPlayer ++;
+            else
+                kingCounter ++;
+        }
+        else if(removedPiece instanceof Queen){
+            if(!player)
+                queenCounterPlayer ++;
+            else
+                queenCounter ++;
+        }
+        else if(removedPiece instanceof Rook){
+            if(!player)
+                rookCounterPlayer ++;
+            else{
+                rookCounter ++;
             }
-            else if(removedPiece instanceof Bishop){
-                if(!player)
-                    bishopCounterPlayer ++;
-                else
-                    bishopCounter ++;
-            }
-            else if(removedPiece instanceof King){
-                if(!player)
-                    kingCounterPlayer ++;
-                else
-                    kingCounter ++;
-            }
-            else if(removedPiece instanceof Queen){
-                if(!player)
-                    queenCounterPlayer ++;
-                else
-                    queenCounter ++;
-            }
-            else if(removedPiece instanceof Rook){
-                if(!player)
-                    rookCounterPlayer ++;
-                else{
-                    rookCounter ++;
-                }
-            }
-            else if(removedPiece instanceof Knight){
-                if(!player)
-                    knightCounterPlayer ++;
-                else
-                    knightCounter ++;
-            }
+        }
+        else if(removedPiece instanceof Knight){
+            if(!player)
+                knightCounterPlayer ++;
+            else
+                knightCounter ++;
         }
     }
 
