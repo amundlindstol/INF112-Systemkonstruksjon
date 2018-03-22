@@ -12,7 +12,6 @@ import com.grnn.chess.Move;
 import com.grnn.chess.Position;
 import com.grnn.chess.TranslateToCellPos;
 import com.grnn.chess.objects.AbstractChessPiece;
-import com.grnn.chess.objects.King;
 
 import java.util.ArrayList;
 
@@ -40,9 +39,11 @@ public class PlayState extends State {
     private Boolean turn;
     private Boolean aiPlayer;
     private AI ai;
-    private BitmapFont font;
+    private BitmapFont fontText;
+    private BitmapFont fontCounter;
     private Boolean removed;
     private String text;
+    private String pieceCounter;
 
 
     public PlayState(GameStateManager gsm, boolean aiPlayer) {
@@ -59,8 +60,10 @@ public class PlayState extends State {
         castlingMoves = new ArrayList<Position>();
         translator = new TranslateToCellPos();
         turn = true;
-        font = new BitmapFont();
-        font.setColor(Color.BLACK);
+        fontText = new BitmapFont();
+        fontText.setColor(Color.BLACK);
+        fontCounter = new BitmapFont();
+        fontText.setColor(Color.WHITE);
         removed = false;
         this.aiPlayer = aiPlayer;
 
@@ -104,7 +107,7 @@ public class PlayState extends State {
 
             } else {
                 if (removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg.";
+                    text = "Uff. Datamaskinen tok en brikke av deg. FAEN I HELVETE!!";
                 }
             }
         }
@@ -113,7 +116,7 @@ public class PlayState extends State {
             if (turn) {
                 text = "Venter på at du skal gjøre neste trekk.";
                 if (removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg... Det er din tur.";
+                    text = "Uff. Datamaskinen tok en brikke av deg. FAEN I HELVETE!!";
                 }
 
             } else {
@@ -125,7 +128,10 @@ public class PlayState extends State {
             }
         }
 
-        font.draw(batch, text, 645, 334);
+        fontText.draw(batch, text, 645, 334);
+
+        pieceCounter = "1";
+        fontCounter.draw(batch, pieceCounter, 655, 500);
 
         for(int i=0; i<positions.size() ; i++) {
             Position piecePos = positions.get(i);
@@ -136,27 +142,27 @@ public class PlayState extends State {
                 batch.draw(pieceTex, translator.toPixels(piecePos.getX(), piecePos.getY())[0], translator.toPixels(piecePos.getX(), piecePos.getY())[1]);
             }
         }
-                if (!potentialMoves.isEmpty()) {
-                    for (Position potPos : potentialMoves) {
-                        int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
-                        batch.draw(potentialTex, pos[0], pos[1]);
-                    }
+        
+        if (!potentialMoves.isEmpty()) {
+            for (Position potPos : potentialMoves) {
+                int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
+                batch.draw(potentialTex, pos[0], pos[1]);
+            }
+        }
+        if (!captureMoves.isEmpty()) {
+            for (Position capPos : captureMoves) {
+                int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
+                batch.draw(captureTex, pos[0], pos[1]);
+            }
+        }
+        batch.end();
+        if (!pieceTexures.isEmpty()) {
+            for (Texture oldTexture : pieceTexures) {
+                if (oldTexture.isManaged()) {
+                    oldTexture.dispose();
                 }
-                if (!captureMoves.isEmpty()) {
-                    for (Position capPos : captureMoves) {
-                        int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
-                        batch.draw(captureTex, pos[0], pos[1]);
-                    }
-                }
-                batch.end();
-                if (!pieceTexures.isEmpty()) {
-                    for (Texture oldTexture : pieceTexures) {
-                        if (oldTexture.isManaged()) {
-                            oldTexture.dispose();
-                        }
-                    }
-                }
-
+            }
+        }
     }
 
     @Override
