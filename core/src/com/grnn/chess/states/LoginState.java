@@ -21,10 +21,11 @@ public class LoginState extends State {
      */
     public LoginState(GameStateManager gsm) {
         super(gsm);
-        background = new Texture("Menu/Menu_background.png");
-        pieces = new Texture("Menu/Menu_pieces.png");
-        loginBtn = new Texture("Menu/menu_button_login.png");
-        registerBtn = new Texture("Menu/menu_button_login.png");
+        background = new Texture("Graphics/Menu/Menu_background.png");
+        pieces = new Texture("Graphics/Menu/Menu_pieces.png");
+        loginBtn = new Texture("Graphics/Menu/menu_button_login.png");
+        registerBtn = new Texture("Graphics/Menu/menu_button_login.png");
+        kingBlack = new Texture("Graphics/Menu/KingBlack.png");
         Xplay = 400;
         Yplay = 340;
         CountKing = -200;
