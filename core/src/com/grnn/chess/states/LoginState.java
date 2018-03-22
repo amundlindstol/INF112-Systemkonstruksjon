@@ -24,7 +24,7 @@ public class LoginState extends State {
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
         loginBtn = new Texture("Graphics/Menu/menu_button_login.png");
-        registerBtn = new Texture("Graphics/Menu/menu_button_login.png");
+        registerBtn = new Texture("Graphics/Menu/menu_button_reg.png");
         kingBlack = new Texture("Graphics/Menu/KingBlack.png");
         Xplay = 400;
         Yplay = 340;
@@ -45,7 +45,7 @@ public class LoginState extends State {
         texturePosX = Xreg;
         texturePosY = Yreg;
         if (x > texturePosX && y > texturePosY && x < registerBtn.getWidth()+texturePosX && y < registerBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm,false));
+            gsm.set(new RegisterUserState(gsm));
         }
 
     }
