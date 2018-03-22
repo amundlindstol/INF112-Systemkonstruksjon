@@ -61,8 +61,8 @@ public class RegisterUserState extends State {
 
         background = new Texture("Graphics/Menu/MenuRegister.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        confirmBtn = new Texture("Graphics/Menu/menu_button_ok_dark.png");
-        menuBtn = new Texture("Graphics/Menu/menu_button_menu_dark.png");
+        confirmBtn = new Texture("Graphics/Menu/Buttons/menu_button_ok_dark.png");
+        menuBtn = new Texture("Graphics/Menu/Buttons/menu_button_menu_dark.png");
 
         xPos = 450;
         yPos = 225;
@@ -87,10 +87,10 @@ public class RegisterUserState extends State {
                 message.setText("Brukernavnet finnes allerede.");
                 return;
             } else if (username.length() == 0) {
-                message.setText("           Du må lage et brukernavn.");
+                message.setText("           Oppgi et brukernavn.");
                 return;
             } else if (password.length() == 0) {
-                message.setText("           Lag et passord!"); //TODO add ascii code æøå
+                message.setText("           Lag et passord."); //TODO add ascii code æøå
                 return;
             } else if (username != checkUsr) {
                 message.setText("Brukernavnet kan ikke inneholde spesialtegn.");

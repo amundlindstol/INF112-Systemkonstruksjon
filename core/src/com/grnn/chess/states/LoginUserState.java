@@ -65,8 +65,8 @@ public class LoginUserState extends State {
 
         background = new Texture("Graphics/Menu/MenuLogin.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        confirmBtn = new Texture("Graphics/Menu/menu_button_ok_dark.png");
-        menuBtn = new Texture("Graphics/Menu/menu_button_menu_dark.png");
+        confirmBtn = new Texture("Graphics/Menu/Buttons/menu_button_ok_dark.png");
+        menuBtn = new Texture("Graphics/Menu/Buttons/menu_button_menu_dark.png");
 
         xPos = 450;
         yPos = 225;
