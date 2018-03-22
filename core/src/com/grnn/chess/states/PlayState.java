@@ -26,11 +26,8 @@ public class PlayState extends State {
     Texture bgBoard;
     Texture potentialTex;
     Texture captureTex;
-
     ArrayList<Texture> pieceTexures;
     ArrayList<Position> positions;
-
-
     private Position selected;
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
@@ -43,7 +40,7 @@ public class PlayState extends State {
     private BitmapFont fontCounter;
     private Boolean removed;
     private String text;
-    private String pieceCounter;
+    private int pieceCounter;
 
 
     public PlayState(GameStateManager gsm, boolean aiPlayer) {
@@ -66,6 +63,7 @@ public class PlayState extends State {
         fontText.setColor(Color.WHITE);
         removed = false;
         this.aiPlayer = aiPlayer;
+        pieceCounter = 0;
 
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
@@ -73,7 +71,6 @@ public class PlayState extends State {
         if(aiPlayer){
             ai = new AI();
         }
-
 
         for( int y = 40, yi = 0; y<560; y+=65, yi++){
             for(int x=40, xi= 0; x<560; x+=65, xi++){
@@ -129,9 +126,7 @@ public class PlayState extends State {
         }
 
         fontText.draw(batch, text, 645, 334);
-
-        pieceCounter = "1";
-        fontCounter.draw(batch, pieceCounter, 655, 500);
+        fontCounter.draw(batch, "" + pieceCounter, 665, 500);
 
         for(int i=0; i<positions.size() ; i++) {
             Position piecePos = positions.get(i);
@@ -142,7 +137,7 @@ public class PlayState extends State {
                 batch.draw(pieceTex, translator.toPixels(piecePos.getX(), piecePos.getY())[0], translator.toPixels(piecePos.getX(), piecePos.getY())[1]);
             }
         }
-        
+
         if (!potentialMoves.isEmpty()) {
             for (Position potPos : potentialMoves) {
                 int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
@@ -163,6 +158,13 @@ public class PlayState extends State {
                 }
             }
         }
+    }
+
+    /**
+     * Method to update the GUI's counter for removed pieces
+     */
+    public void updatePieceCounter(){
+
     }
 
     @Override
@@ -209,6 +211,7 @@ public class PlayState extends State {
                     if (validMove) {
                         board.removePiece(potentialPiece);
                         removed = true;
+                        pieceCounter ++;
                         board.movePiece(selected, potentialPos);
                         reset();
                         turn = !turn;
