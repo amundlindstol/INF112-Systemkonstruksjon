@@ -193,7 +193,7 @@ public class King extends AbstractChessPiece {
        }
         return false;
     }
-
+/*
     public boolean isInStalemate(Board board){
         int[][] offsets = { {1,0}, {0,1}, {-1,0}, {0,-1}, {1,1}, {-1,1}, {-1,-1}, {1,-1} };
         Position kingPos = board.getPosition(this);
@@ -204,7 +204,7 @@ public class King extends AbstractChessPiece {
                 return false;
         }
         return true;
-    }
+    }*/
 
     public int getValue() {
         return value;

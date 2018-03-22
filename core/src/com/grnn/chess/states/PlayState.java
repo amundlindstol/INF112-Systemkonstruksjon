@@ -193,38 +193,38 @@ public class PlayState extends State {
 
         if(player){
             if(removedPiece instanceof Pawn){
-                if(player)
+                if(!player)
                     pawnCounterPlayer ++;
                 else
                     pawnCounter ++;
             }
             else if(removedPiece instanceof Bishop){
-                if(player)
+                if(!player)
                     bishopCounterPlayer ++;
                 else
                     bishopCounter ++;
             }
             else if(removedPiece instanceof King){
-                if(player)
+                if(!player)
                     kingCounterPlayer ++;
                 else
                     kingCounter ++;
             }
             else if(removedPiece instanceof Queen){
-                if(player)
+                if(!player)
                     queenCounterPlayer ++;
                 else
                     queenCounter ++;
             }
             else if(removedPiece instanceof Rook){
-                if(player)
+                if(!player)
                     rookCounterPlayer ++;
                 else{
                     rookCounter ++;
                 }
             }
             else if(removedPiece instanceof Knight){
-                if(player)
+                if(!player)
                     knightCounterPlayer ++;
                 else
                     knightCounter ++;

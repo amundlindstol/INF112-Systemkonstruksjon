@@ -55,9 +55,9 @@ public class RegisterUserState extends State {
         stage.addActor(message);
 
 
-        background = new Texture("Menu/Menu_background.png");
-        pieces = new Texture("Menu/Menu_pieces.png");
-        confirmBtn = new Texture("Menu/menu_button_venn.png");
+        background = new Texture("Graphics/Menu/Menu_background.png");
+        pieces = new Texture("Graphics/Menu/Menu_pieces.png");
+        confirmBtn = new Texture("Graphics/Menu/menu_button_venn.png");
 
         xPos = 400;
         yPos = 240;
