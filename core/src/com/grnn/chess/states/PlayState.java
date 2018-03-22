@@ -11,7 +11,7 @@ import com.grnn.chess.Board;
 import com.grnn.chess.Move;
 import com.grnn.chess.Position;
 import com.grnn.chess.TranslateToCellPos;
-import com.grnn.chess.objects.AbstractChessPiece;
+import com.grnn.chess.objects.*;
 
 import java.util.ArrayList;
 
@@ -40,7 +40,7 @@ public class PlayState extends State {
     private BitmapFont fontCounter;
     private Boolean removed;
     private String text;
-    private int pieceCounter;
+    private int pawnCounter, bishopCounter, kingCounter, queenCounter, rookCounter, knightCounter;
 
 
     public PlayState(GameStateManager gsm, boolean aiPlayer) {
@@ -63,7 +63,12 @@ public class PlayState extends State {
         fontCounter.setColor(Color.WHITE);
         removed = false;
         this.aiPlayer = aiPlayer;
-        pieceCounter = 0;
+        pawnCounter = 0;
+        bishopCounter = 0;
+        kingCounter = 0;
+        queenCounter = 0;
+        knightCounter = 0;
+        rookCounter = 0;
 
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
@@ -126,7 +131,7 @@ public class PlayState extends State {
         }
 
         fontText.draw(batch, text, 645, 334);
-        fontCounter.draw(batch, "" + pieceCounter, 665, 500);
+        fontCounter.draw(batch, "" + pawnCounter, 668, 420);
 
         for(int i=0; i<positions.size() ; i++) {
             Position piecePos = positions.get(i);
@@ -163,22 +168,27 @@ public class PlayState extends State {
     /**
      * Method to update the GUI's counter for removed pieces
      */
-    public void updatePieceCounter(){
+    public void updatePieceCounter(AbstractChessPiece removedPiece){
 
-    }
-
-    @Override
-    public void dispose() {
-        bg.dispose();
-        bgBoard.dispose();
-        for(Texture tex : pieceTexures){
-            tex.dispose();
+        if(removedPiece instanceof Pawn){
+            pawnCounter ++;
         }
-        potentialTex.dispose();
-        captureTex.dispose();
-        System.out.println("PlayState Disposed");
+        else if(removedPiece instanceof Bishop){
+            bishopCounter ++;
+        }
+        else if(removedPiece instanceof King){
+            kingCounter ++;
+        }
+        else if(removedPiece instanceof Queen){
+            queenCounter ++;
+        }
+        else if(removedPiece instanceof Rook){
+            rookCounter ++;
+        }
+        else if(removedPiece instanceof Knight){
+            knightCounter ++;
+        }
     }
-
 
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
@@ -211,7 +221,7 @@ public class PlayState extends State {
                     if (validMove) {
                         board.removePiece(potentialPiece);
                         removed = true;
-                        pieceCounter ++;
+                        updatePieceCounter(potentialPiece);
                         board.movePiece(selected, potentialPos);
                         reset();
                         turn = !turn;
@@ -275,6 +285,19 @@ public class PlayState extends State {
         }
         board.movePiece(rookOriginalPos, rookNewPos);
     }
+
+    @Override
+    public void dispose() {
+        bg.dispose();
+        bgBoard.dispose();
+        for(Texture tex : pieceTexures){
+            tex.dispose();
+        }
+        potentialTex.dispose();
+        captureTex.dispose();
+        System.out.println("PlayState Disposed");
+    }
+
 
     public void reset() {
         selected = null;
