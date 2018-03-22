@@ -1,6 +1,7 @@
 Håkon;123456;0;1200;1200;1200
 Simon;123456;0;1200;1200;1200
 test;test;0;1200;1200;1200
-admin;test;0;0;0;1200
-HenrikTheMan;theman;0;1200;0;1200
-triki;123trikiisking;0;0;0;1200
+admin;test;0;1200;0;1200
+HenrikTheMan;theman;0;1200;1200;1200
+triki;123trikiisking;0;1200;0;1200
+helgemikael;test;0;0;0;1200
