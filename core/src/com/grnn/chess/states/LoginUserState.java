@@ -24,7 +24,7 @@ public class LoginUserState extends State {
     private Texture background, pieces;
     private Texture confirmBtn;
     private TextField usernameField, passwordField;
-    private Label message;
+    private Label message, usernameTxt, passwordTxt;
     private int xPos, yPos;
 
     private Skin skin;
@@ -41,11 +41,17 @@ public class LoginUserState extends State {
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
         usernameField = new TextField("", skin);
         passwordField = new TextField("", skin);
+        passwordField.setPasswordMode(true);
+        usernameTxt = new Label("Bruker", skin);
+        passwordTxt = new Label("Passord", skin);
         xPos = (int) (Gdx.graphics.getWidth()/2 - usernameField.getWidth()/2);
         yPos = (int) (Gdx.graphics.getHeight()/2 + usernameField.getHeight());
+        usernameTxt.setPosition(xPos - usernameTxt.getWidth()/2 - usernameField.getWidth()/2, yPos+usernameTxt.getHeight()/2);
         usernameField.setPosition(xPos, yPos);
+        passwordTxt.setPosition(xPos - passwordTxt.getWidth()/2 - passwordField.getWidth()/2, yPos-usernameField.getHeight()+passwordTxt.getHeight()/2);
         passwordField.setPosition(xPos, (int)(yPos-usernameField.getHeight()));
-        passwordField.setPasswordMode(true);
+        stage.addActor(usernameTxt);
+        stage.addActor(passwordTxt);
         stage.addActor(usernameField);
         stage.addActor(passwordField);
 

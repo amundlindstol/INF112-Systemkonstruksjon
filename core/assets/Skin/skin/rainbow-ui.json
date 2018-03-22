@@ -24,10 +24,7 @@ com.badlogic.gdx.graphics.Color: {
 		a: 1
 	}
 	selection: {
-		r: 0
-		g: 0.72911096
-		b: 1
-		a: 1
+		a: 1.0, b: 0.65882355, g: 0.6313726, r: 0.47058824
 	}
 	white: {
 		r: 1
