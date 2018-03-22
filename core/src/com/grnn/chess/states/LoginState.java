@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * @author Helge Mikael Landro, 21.03.2018
  * A class to represent the login menu.
+ * This is the initial state
  */
 public class LoginState extends State {
 
@@ -38,7 +39,7 @@ public class LoginState extends State {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
         int texturePosX = Xplay;
-        int  texturePosY = Yplay;
+        int texturePosY = Yplay;
         if (x > texturePosX && y > texturePosY && x < loginBtn.getWidth()+texturePosX && y < loginBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             gsm.set(new LoginUserState(gsm)); //change to MenuState if u want to skip login
         }
