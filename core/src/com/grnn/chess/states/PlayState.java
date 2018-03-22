@@ -150,8 +150,9 @@ public class PlayState extends State {
         fontCounter.draw(batch, "" + queenCounterPlayer, 900, 100);
         fontCounter.draw(batch, "" + kingCounterPlayer, 959, 100);
 
-        // Username
+        // Player names
         fontCounter.draw(batch, "" + humanPlayer.getName() , 700, 250);
+        fontCounter.draw(batch, "" + "Datamaskin" , 700, 560);
 
 
 

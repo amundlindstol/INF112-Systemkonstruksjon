@@ -98,11 +98,6 @@ public class LoginUserState extends State {
         }
     }
 
-
-    public String getUsername(){
-        return usernameField.getText();
-    }
-
     @Override
     public void update(float dt) {
         handleInput();
