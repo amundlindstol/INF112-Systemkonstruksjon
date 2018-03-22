@@ -151,8 +151,8 @@ public class PlayState extends State {
         fontCounter.draw(batch, "" + kingCounterPlayer, 1030, 100);
 
         // Player names
-        fontCounter.draw(batch, "" + humanPlayer.getName() , 720, 245);
-        fontCounter.draw(batch, "" + "Datamaskin" , 720, 555);
+        fontCounter.draw(batch, "" + humanPlayer.getName() , 726, 245);
+        fontCounter.draw(batch, "" + "Datamaskin" , 723, 555);
 
 
 
@@ -197,38 +197,38 @@ public class PlayState extends State {
 
         if(player){
             if(removedPiece instanceof Pawn){
-                if(player)
+                if(!player)
                     pawnCounterPlayer ++;
                 else
                     pawnCounter ++;
             }
             else if(removedPiece instanceof Bishop){
-                if(player)
+                if(!player)
                     bishopCounterPlayer ++;
                 else
                     bishopCounter ++;
             }
             else if(removedPiece instanceof King){
-                if(player)
+                if(!player)
                     kingCounterPlayer ++;
                 else
                     kingCounter ++;
             }
             else if(removedPiece instanceof Queen){
-                if(player)
+                if(!player)
                     queenCounterPlayer ++;
                 else
                     queenCounter ++;
             }
             else if(removedPiece instanceof Rook){
-                if(player)
+                if(!player)
                     rookCounterPlayer ++;
                 else{
                     rookCounter ++;
                 }
             }
             else if(removedPiece instanceof Knight){
-                if(player)
+                if(!player)
                     knightCounterPlayer ++;
                 else
                     knightCounter ++;
@@ -276,8 +276,8 @@ public class PlayState extends State {
                         removed = true;
                         updatePieceCounter(potentialPiece, turn);
                         board.movePiece(selected, potentialPos);
-                        reset();
                         turn = !turn;
+                        reset();
                     } else if (potentialPiece.isWhite() == turn) {
                         reset();
                         potentialMoves = potentialPiece.getValidMoves(board);
