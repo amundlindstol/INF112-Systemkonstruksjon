@@ -137,22 +137,22 @@ public class PlayState extends State {
 
         fontText.draw(batch, text, 645, 334);
         fontCounter.draw(batch, "" + pawnCounter, 668, 420);
-        fontCounter.draw(batch, "" + bishopCounter, 727, 420);
-        fontCounter.draw(batch, "" + knightCounter, 785, 420);
-        fontCounter.draw(batch, "" + rookCounter, 843, 420);
-        fontCounter.draw(batch, "" + queenCounter, 900, 420);
-        fontCounter.draw(batch, "" + kingCounter, 959, 420);
+        fontCounter.draw(batch, "" + bishopCounter, 738, 420);
+        fontCounter.draw(batch, "" + knightCounter, 804, 420);
+        fontCounter.draw(batch, "" + rookCounter, 873, 420);
+        fontCounter.draw(batch, "" + queenCounter, 950, 420);
+        fontCounter.draw(batch, "" + kingCounter, 1030, 420);
 
         fontCounter.draw(batch, "" + pawnCounterPlayer, 668, 100);
-        fontCounter.draw(batch, "" + bishopCounterPlayer, 727, 100);
-        fontCounter.draw(batch, "" + knightCounterPlayer, 785, 100);
-        fontCounter.draw(batch, "" + rookCounterPlayer, 843, 100);
-        fontCounter.draw(batch, "" + queenCounterPlayer, 900, 100);
-        fontCounter.draw(batch, "" + kingCounterPlayer, 959, 100);
+        fontCounter.draw(batch, "" + bishopCounterPlayer, 738, 100);
+        fontCounter.draw(batch, "" + knightCounterPlayer, 804, 100);
+        fontCounter.draw(batch, "" + rookCounterPlayer, 873, 100);
+        fontCounter.draw(batch, "" + queenCounterPlayer, 950, 100);
+        fontCounter.draw(batch, "" + kingCounterPlayer, 1030, 100);
 
         // Player names
-        fontCounter.draw(batch, "" + humanPlayer.getName() , 700, 250);
-        fontCounter.draw(batch, "" + "Datamaskin" , 700, 560);
+        fontCounter.draw(batch, "" + humanPlayer.getName() , 720, 245);
+        fontCounter.draw(batch, "" + "Datamaskin" , 720, 555);
 
 
 
