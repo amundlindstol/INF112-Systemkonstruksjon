@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.*;
 import com.grnn.chess.AI.AI;
-import com.grnn.chess.states.LoginState;
 import com.grnn.chess.objects.*;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ public class PlayState extends State {
     private BitmapFont fontCounter;
     private Boolean removed;
     private String text;
-    private String tiss;
     private Player humanPlayer;
     private int pawnCounter, bishopCounter, kingCounter, queenCounter, rookCounter, knightCounter;
     private int pawnCounterPlayer, bishopCounterPlayer, kingCounterPlayer, queenCounterPlayer, rookCounterPlayer, knightCounterPlayer;
@@ -77,10 +75,6 @@ public class PlayState extends State {
         queenCounterPlayer = 0;
         knightCounterPlayer = 0;
         rookCounterPlayer = 0;
-
-        LoginUserState test = new LoginUserState(gsm);
-        tiss = test.getUsername();
-
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
 
@@ -157,7 +151,7 @@ public class PlayState extends State {
         fontCounter.draw(batch, "" + kingCounterPlayer, 959, 100);
 
         // Username
-        fontCounter.draw(batch, "NAVN: " + humanPlayer.getName() , 650, 210);
+        fontCounter.draw(batch, "" + humanPlayer.getName() , 700, 250);
 
 
 
