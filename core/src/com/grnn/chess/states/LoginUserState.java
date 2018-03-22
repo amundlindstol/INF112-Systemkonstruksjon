@@ -7,14 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Player;
 import com.grnn.chess.PlayerData;
 
 /**
- *
+ * A class to for the handling of user login
  * @author Helge Mikael Landro, 21.03.2018
  */
 
@@ -31,7 +30,10 @@ public class LoginUserState extends State {
     private Stage stage;
     private PolygonSpriteBatch batch;
 
-
+    /**
+     * Constructor for the state
+     * @param gsm, GameStateManager
+     */
     public LoginUserState(GameStateManager gsm) {
         super(gsm);
         // create skin
