@@ -143,12 +143,12 @@ public class PlayState extends State {
         fontCounter.draw(batch, "" + queenCounter, 950, 420);
         fontCounter.draw(batch, "" + kingCounter, 1030, 420);
 
-        fontCounter.draw(batch, "" + pawnCounterPlayer, 668, 100);
-        fontCounter.draw(batch, "" + bishopCounterPlayer, 738, 100);
-        fontCounter.draw(batch, "" + knightCounterPlayer, 804, 100);
-        fontCounter.draw(batch, "" + rookCounterPlayer, 873, 100);
-        fontCounter.draw(batch, "" + queenCounterPlayer, 950, 100);
-        fontCounter.draw(batch, "" + kingCounterPlayer, 1030, 100);
+        fontCounter.draw(batch, "" + pawnCounterPlayer, 668, 105);
+        fontCounter.draw(batch, "" + bishopCounterPlayer, 738, 105);
+        fontCounter.draw(batch, "" + knightCounterPlayer, 804, 105);
+        fontCounter.draw(batch, "" + rookCounterPlayer, 873, 105);
+        fontCounter.draw(batch, "" + queenCounterPlayer, 950, 105);
+        fontCounter.draw(batch, "" + kingCounterPlayer, 1030, 105);
 
         // Player names
         fontCounter.draw(batch, "" + humanPlayer.getName() , 726, 241);
@@ -194,7 +194,7 @@ public class PlayState extends State {
      * @param player, boolean to tell which player
      */
     public void updatePieceCounter(AbstractChessPiece removedPiece, Boolean player){
-        
+
         if(removedPiece instanceof Pawn){
             if(!player)
                 pawnCounterPlayer ++;
@@ -244,6 +244,7 @@ public class PlayState extends State {
                 AbstractChessPiece victim = board.getPieceAt(aiMove.getToPos());
                 if(victim !=null) {
                     board.removePiece(victim);
+                    updatePieceCounter(victim, turn);
                 }
                 board.movePiece(aiMove.getFromPos(),aiMove.getToPos());
                 turn = !turn;
