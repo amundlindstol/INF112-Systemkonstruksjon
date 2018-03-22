@@ -73,7 +73,7 @@ public class RegisterUserState extends State {
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
-        int texturePosX = xPos;
+        int texturePosX = xPos + 115;
         int texturePosY = yPos;
         if (x > texturePosX && y > texturePosY && x < confirmBtn.getWidth()+texturePosX && y < confirmBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             PlayerData playerData = new PlayerData();
@@ -103,6 +103,11 @@ public class RegisterUserState extends State {
             playerData.addAccount(player);
             gsm.set(new StartGameState(gsm, player));
         }
+        texturePosX = xPos -100;
+        texturePosY = yPos;
+        if (x > texturePosX && y > texturePosY && x < menuBtn.getWidth()+texturePosX && y < menuBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+            gsm.set(new MainMenuState(gsm));
+        }
     }
 
     @Override
@@ -115,8 +120,8 @@ public class RegisterUserState extends State {
         sb.begin();
         sb.draw(background, 0,0);
         sb.draw(pieces, 0, 0);
-        sb.draw(confirmBtn, xPos, yPos);
-      //  sb.draw(menuBtn, xPos-100, yPos);
+        sb.draw(confirmBtn, xPos + 115, yPos);
+        sb.draw(menuBtn, xPos-100, yPos);
         sb.end();
         stage.draw();
     }
