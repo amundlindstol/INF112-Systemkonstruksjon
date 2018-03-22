@@ -57,7 +57,7 @@ public class LoginState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0,0);
-        sb.draw(pieces, 0, 0);
+        sb.draw(pieces, 70, 0);
         sb.draw(loginBtn, Xplay, Yplay);
         sb.draw(registerBtn, Xreg, Yreg);
         sb.end();

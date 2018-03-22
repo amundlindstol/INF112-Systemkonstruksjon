@@ -14,7 +14,7 @@ public class SelectAIState extends State {
 
     // Variables
     private Texture background, pieces;
-    private Texture playBtn, playBtn2, playBtn3;
+    private Texture playBtn, playBtn2, playBtn3, playBtn4;
     private Texture emoticonEasy, emoticonEasy2, emoticonMedium, emoticonMedium2, emoticonHard, emoticonHard2;
     private int xPlay, yPlay, count;
     private ArrayList<Texture> test;
@@ -25,19 +25,20 @@ public class SelectAIState extends State {
      */
     public SelectAIState(GameStateManager gsm){
         super(gsm);
-        background = new Texture("Menu/Menu_background.png");
+        background = new Texture("Menu/AI_menu.png");
         pieces = new Texture("Menu/Menu_pieces.png");
         playBtn = new Texture("Menu/menu_button_AI_easy.png");
         playBtn2 = new Texture("Menu/menu_button_AI_medium.png");
         playBtn3 = new Texture("Menu/menu_button_AI_hard.png");
+        playBtn4 = new Texture("Menu/menu_button_venn.png");
         emoticonEasy = new Texture("Menu/Animations/Emoji_1/1.png");
         emoticonEasy2 = new Texture("Menu/Animations/Emoji_1/2.png");
         emoticonMedium = new Texture("Menu/Animations/Emoji_2/3.png");
         emoticonMedium2 = new Texture("Menu/Animations/Emoji_2/4.png");
         emoticonHard = new Texture("Menu/Animations/Emoji_3/5.png");
         emoticonHard2 = new Texture("Menu/Animations/Emoji_3/6.png");
-        xPlay = 450;
-        yPlay = 400;
+        xPlay = 300;
+        yPlay = 350;
         count = 0;
         test = new ArrayList<Texture>();
         test.add(emoticonEasy);
@@ -70,10 +71,11 @@ public class SelectAIState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0,0);
-        sb.draw(pieces, 0, 0);
+        sb.draw(pieces, 70, 0);
         sb.draw(playBtn, xPlay, yPlay);
         sb.draw(playBtn2, xPlay, yPlay - 70);
         sb.draw(playBtn3, xPlay, yPlay - 140);
+        sb.draw(playBtn4, xPlay+290, yPlay );
 
         count++;
 

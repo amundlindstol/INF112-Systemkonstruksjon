@@ -94,16 +94,34 @@ public class PlayState extends State {
         batch.begin();
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
-        if (turn) {
-            text = "Venter på at du skal gjøre neste trekk.";
-            if (removed) {
-                text = "Uff. Datamaskinen tok en brikke av deg... Det er din tur.";
-            }
 
-        } else {
-            text = "Venter på at datamaskinen skal gjøre neste trekk.";
-            if (removed) {
-                text = "Bra jobbet! Du tok en brikke. Det er datamaskinen sin tur.";
+        if(aiPlayer){
+            if (turn) {
+                text = "Venter på at du skal gjøre neste trekk.";
+                if (removed) {
+                    text = "Bra jobbet! Du tok en brikke.";
+                }
+
+            } else {
+                if (removed) {
+                    text = "Uff. Datamaskinen tok en brikke av deg.";
+                }
+            }
+        }
+
+        else{
+            if (turn) {
+                text = "Venter på at du skal gjøre neste trekk.";
+                if (removed) {
+                    text = "Uff. Datamaskinen tok en brikke av deg... Det er din tur.";
+                }
+
+            } else {
+                text = "Venter på at datamaskinen skal gjøre neste trekk.";
+
+                if (removed) {
+                    text = "Bra jobbet! Du tok en brikke. Det er datamaskinen sin tur.";
+                }
             }
         }
 
