@@ -35,6 +35,7 @@ public class MenuState extends State {
         Xplay = 400;
         Yplay = 340;
         Count = 20;
+        currentPlayer = player;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class MenuState extends State {
         int texturePosX = Xplay;
         int  texturePosY = Yplay;
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new SelectAIState(gsm));
+            gsm.set(new SelectAIState(gsm, currentPlayer));
         }
     }
 
