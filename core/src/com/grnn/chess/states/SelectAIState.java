@@ -3,6 +3,8 @@ package com.grnn.chess.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.grnn.chess.Player;
+
 import java.util.ArrayList;
 
 /**
@@ -18,12 +20,13 @@ public class SelectAIState extends State {
     private Texture emoticonEasy, emoticonEasy2, emoticonMedium, emoticonMedium2, emoticonHard, emoticonHard2;
     private int xPlay, yPlay, Xreg, Yreg, count;
     private ArrayList<Texture> test;
+    private Player humanPlayer;
 
     /**
      * Constructor for the AI State
      * @param gsm, the GameStateManager
      */
-    public SelectAIState(GameStateManager gsm){
+    public SelectAIState(GameStateManager gsm, Player player){
         super(gsm);
         background = new Texture("Graphics/Menu/AI_menu.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
@@ -49,6 +52,7 @@ public class SelectAIState extends State {
         test.add(emoticonMedium2);
         test.add(emoticonHard);
         test.add(emoticonHard2);
+        humanPlayer = player;
     }
 
     /**
@@ -62,14 +66,14 @@ public class SelectAIState extends State {
 
         // Buttons for play against AI
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm, true));
+            gsm.set(new PlayState(gsm, true, humanPlayer));
         }
         texturePosX = Xreg;
         texturePosY = Yreg;
 
         // Button for play with a friend
         if (x > texturePosX && y > texturePosY && x < playBtn4.getWidth()+texturePosX && y < playBtn4.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm,false));
+            gsm.set(new PlayState(gsm,false, humanPlayer ));
         }
     }
 
