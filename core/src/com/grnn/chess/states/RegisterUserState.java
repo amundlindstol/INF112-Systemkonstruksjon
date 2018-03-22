@@ -84,19 +84,19 @@ public class RegisterUserState extends State {
 
             // valid username and password?
             if (playerData.nameExists(username)) {
-                message.setText("Brukernavnet finnes allerede");
+                message.setText("Brukernavnet finnes allerede.");
                 return;
             } else if (username.length() == 0) {
-                message.setText("           Lag et brukernavn!");
+                message.setText("           Du må lage et brukernavn.");
                 return;
             } else if (password.length() == 0) {
                 message.setText("           Lag et passord!"); //TODO add ascii code æøå
                 return;
             } else if (username != checkUsr) {
-                message.setText("Brukernavnet kan ikke inneholde spesialtegn");
+                message.setText("Brukernavnet kan ikke inneholde spesialtegn.");
                 return;
             } else if (password != checkPwd) {
-                message.setText("Passordet kan ikke inneholde spesialtegn");
+                message.setText("Passordet kan ikke inneholde spesialtegn.");
                 return;
             }
             Player player = new Player(username, password);
