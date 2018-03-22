@@ -11,7 +11,10 @@ public class Pawn extends AbstractChessPiece {
 	private final int value = 1;
 	String letterRepresentation = "p";
 
-
+    /**
+     * Consturtur of pawn, will set image to "Pawn"
+     * @param isWhite
+     */
 	public Pawn(boolean isWhite) {
 		super(isWhite);
 		setImage("Pawn");
@@ -25,22 +28,17 @@ public class Pawn extends AbstractChessPiece {
 		Position pawnPos = getPosition(board);
 
 		if(isWhite){
-			if(!hasMoved){
-				if(board.getPieceAt(pawnPos.north(2))==null) {
+			if(board.getPieceAt(pawnPos.north())==null){
+				if(!hasMoved && board.getPieceAt(pawnPos.north(2))==null) {
 					validMoves.add(pawnPos.north(2));
 				}
-			}
-			if(board.getPieceAt(pawnPos.north())==null){
 				validMoves.add(pawnPos.north());
 			}
-
 		}else {
-			if(!hasMoved){
-				if(board.getPieceAt(pawnPos.south(2))==null) {
+			if(board.getPieceAt(pawnPos.south())==null){
+				if(!hasMoved && board.getPieceAt(pawnPos.south(2))==null) {
 					validMoves.add(pawnPos.south(2));
 				}
-			}
-			if(board.getPieceAt(pawnPos.south())==null){
 				validMoves.add(pawnPos.south());
 			}
 		}
@@ -52,7 +50,7 @@ public class Pawn extends AbstractChessPiece {
 		Position pawnPos = getPosition(board);
 		ArrayList<Position> captureMoves = new ArrayList<Position>();
 
-		if (getColor()){
+		if (isWhite()){
 			if(board.getPieceAt(pawnPos.east().north())!=null && !isSameColor(board.getPieceAt(pawnPos.east().north()))){
 				captureMoves.add(pawnPos.east().north());
 			}
@@ -73,11 +71,6 @@ public class Pawn extends AbstractChessPiece {
 		}
 		return captureMoves;
 	}
-
-	public String toString() {
-		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
-	}
-
 
 	public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos){
 		if (isWhite) {
@@ -104,6 +97,12 @@ public class Pawn extends AbstractChessPiece {
 		return value;
 	}
 
+    /**
+     * This method returns the position that a pawn can capture if enPassant is possible.
+     * @param board the board of the pawn.
+     * @param pawnPos the pawns position on the board.
+     * @return A possible position for the pawn to capture.
+     */
 	public Position enPassant(Board board, Position pawnPos){
 		ArrayList<Move> moveHistory = board.getMoveHistory();
 
@@ -115,12 +114,12 @@ public class Pawn extends AbstractChessPiece {
 			AbstractChessPiece conditionPiece = conditionMove.getPiece();
 
 			if (conditionToPos.getX() == pawnPos.getX() + 1 || conditionToPos.getX() == pawnPos.getX() - 1)
-				if (this.getColor() && pawnPos.getY() == 4 && this.getPosition(board).getY() == 4) {
-					if (!conditionPiece.getColor() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
+				if (this.isWhite() && pawnPos.getY() == 4) {
+					if (!conditionPiece.isWhite() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
 						return conditionToPos.north();
 					}
-				} else if (!this.getColor() && pawnPos.getY() ==3 && this.getPosition(board).getY() == 3){
-					if (conditionPiece.getColor() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
+				} else if (!this.isWhite() && pawnPos.getY() == 3) {
+					if (conditionPiece.isWhite() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
 						return conditionToPos.south();
 					}
 

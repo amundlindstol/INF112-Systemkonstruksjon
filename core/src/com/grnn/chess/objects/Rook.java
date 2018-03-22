@@ -11,10 +11,12 @@ public class Rook extends AbstractChessPiece {
 	private final int value = 5;
 	String letterRepresentation = "t";
 	protected String image = "ChessPieces/Rook";
+	private boolean hasMoved;
 
 	public Rook(boolean isWhite) {
 		super(isWhite);
 		setImage("Rook");
+		hasMoved = false;
 	}
 
 	public String toString() {
@@ -111,4 +113,8 @@ public class Rook extends AbstractChessPiece {
 	public int getValue() {
 		return value;
 	}
+
+    public boolean hasMoved() {
+        return hasMoved;
+    }
 }

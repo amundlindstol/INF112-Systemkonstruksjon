@@ -17,13 +17,19 @@ public class Board {
     private ArrayList<AbstractChessPiece> removedPieces;
     private ArrayList<Move> moveHistory;
 
+    private ArrayList<Position> positions;
+
     public Board() {
         moveHistory = new ArrayList<Move>();
         removedPieces = new ArrayList<AbstractChessPiece>();
+        positions = new ArrayList<Position>();
+
         for (int i = 0; i < size; i++) {
             grid.add(new ArrayList<AbstractChessPiece>(size));
-            for (int j = 0; j < size; j++)
+            for (int j = 0; j < size; j++) {
                 grid.get(i).add(null);
+                positions.add(new Position(j, i));
+            }
         }
     }
 
@@ -39,15 +45,33 @@ public class Board {
         AbstractChessPiece piece = getPieceAt(startPos);
 
         if (piece.getValidMoves(this).contains(endPos) || piece.getCaptureMoves(this).contains(endPos)) {
+
+            //if (isValidMove(startPos, endPos)) {
             setPiece(piece, endPos);
             setPiece(null, startPos);
             piece.move();
             moveHistory.add(new Move(endPos, startPos, piece));
             enPassant();
 
-        } else {
-            throw new IllegalMoveException("movePiece was called with illegal arguments");
+            //} else {
+            //    throw new IllegalMoveException("movePiece was called with illegal arguments");
+            //}
         }
+    }
+
+    private boolean isValidMove(Position startPos, Position endPos) {
+        AbstractChessPiece piece = getPieceAt(startPos);
+        boolean containsCastlingMove;
+        if(piece instanceof King) {
+            ArrayList<Position> castlingMoves = ((King) piece).getCastlingMoves(this, startPos);
+            containsCastlingMove = castlingMoves.contains(endPos);
+        } else {
+            containsCastlingMove = false;
+        }
+
+        return piece.getValidMoves(this).contains(endPos)
+                || piece.getCaptureMoves(this).contains(endPos)
+                || containsCastlingMove;
     }
 
     // TODO: AI is not always black
@@ -55,16 +79,16 @@ public class Board {
 
         ArrayList<Move> possibleMoves = new ArrayList<Move>();
 
-        for (int y = 6; y <= 7; y++) {
-            for (int x = 0; x < size(); x++) {
-                Position posPiece = new Position(x, y);
-                AbstractChessPiece piece = getPieceAt(posPiece);
+        for(Position position : positions){
+            AbstractChessPiece piece = this.getPieceAt(position);
+            if(piece!=null && !piece.isWhite()) {
                 ArrayList<Position> posList = piece.getValidMoves(this);
-
-                for (Position toMove : posList) {
-                    Move newMove = new Move(toMove, posPiece, piece);
-                    possibleMoves.add(newMove);
-                    System.out.println(newMove);
+                posList.addAll(piece.getCaptureMoves(this));
+                if (!posList.isEmpty()){
+                    for (Position toMove : posList) {
+                        Move newMove = new Move(toMove, position, piece);
+                        possibleMoves.add(newMove);
+                    }
                 }
             }
         }
@@ -120,15 +144,15 @@ public class Board {
 
     public void setPiece(AbstractChessPiece piece, int x, int y) {
         if (pawnCanPromote(piece, y)) {
-            piece = new Queen(piece.getColor());
+            piece = new Queen(piece.isWhite());
         }
         grid.get(y).set(x, piece);
     }
 
     private boolean pawnCanPromote(AbstractChessPiece piece, int y) {
         if (piece instanceof Pawn) {
-            if ((piece.getColor() && y == size() - 1)
-                    || (!piece.getColor() && y == 0)) {
+            if ((piece.isWhite() && y == size() - 1)
+                    || (!piece.isWhite() && y == 0)) {
                 return true;
             }
         }
@@ -202,18 +226,20 @@ public class Board {
             Position conditionFromPos = conditionMove.getFromPos();
             Position conditionToPos = conditionMove.getToPos();
             AbstractChessPiece conditionPiece = conditionMove.getPiece();
+            if(lastPiece.getClass() == Pawn.class && conditionPiece.getClass() == Pawn.class) {
+                if (conditionToPos.getX() == lastToPos.getX()) {
+                    if (lastPiece.isWhite() && lastFromPos.getY() == 4 && lastToPos.getY() == 5) {
+                        if (!conditionPiece.isWhite() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
+                            setPiece(null, conditionToPos);
+                        }
+                    } else if (lastFromPos.getY() == 3 && lastFromPos.getY() == 2) {
+                        if (conditionPiece.isWhite() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
+                            setPiece(null, conditionToPos);
+                        }
 
-            if (conditionToPos.getX() == lastToPos.getX())
-                if (lastPiece.getColor() && lastFromPos.getY() == 4 && lastToPos.getY() == 5) {
-                    if (!conditionPiece.getColor() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
-                        setPiece(null, conditionToPos);
                     }
-                } else {
-                    if (conditionPiece.getColor() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
-                        setPiece(null, conditionToPos);
-                    }
-
                 }
+            }
         }
     }
 }

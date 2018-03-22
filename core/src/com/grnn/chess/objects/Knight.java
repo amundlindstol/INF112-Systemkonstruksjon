@@ -68,7 +68,7 @@ public class Knight extends AbstractChessPiece {
     }
 
     private void addValidMove2West1South(Board board, Position posKnight, ArrayList<Position> validMoves) {
-        Position posToMoveTo = posKnight.west(2).north();
+        Position posToMoveTo = posKnight.west(2).south();
 
         if (canMoveToPos(board, posToMoveTo)) {
             validMoves.add(posToMoveTo);
