@@ -63,7 +63,7 @@ public class LoginUserState extends State {
         stage.addActor(message);
 
 
-        background = new Texture("Graphics/Menu/Menu_background.png");
+        background = new Texture("Graphics/Menu/MenuLogin.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
         confirmBtn = new Texture("Graphics/Menu/menu_button_venn.png");
 
