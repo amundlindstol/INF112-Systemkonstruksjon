@@ -60,7 +60,7 @@ public class PlayState extends State {
         fontText = new BitmapFont();
         fontText.setColor(Color.BLACK);
         fontCounter = new BitmapFont();
-        fontText.setColor(Color.WHITE);
+        fontCounter.setColor(Color.WHITE);
         removed = false;
         this.aiPlayer = aiPlayer;
         pieceCounter = 0;
