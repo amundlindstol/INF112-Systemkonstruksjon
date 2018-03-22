@@ -62,8 +62,8 @@ public class MainMenuState extends State {
         CountKing ++;
         sb.draw(background, 0,0);
         sb.draw(pieces, 0, 0);
-        sb.draw(loginBtn, Xplay, Yplay);
-        sb.draw(registerBtn, Xreg, Yreg);
+        sb.draw(loginBtn, Xplay, Yplay+10);
+        sb.draw(registerBtn, Xreg, Yreg-30);
 
         if(CountKing > 450){
             CountKing --;

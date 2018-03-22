@@ -21,7 +21,7 @@ public class RegisterUserState extends State {
 
     // Variables
     private Texture background, pieces;
-    private Texture confirmBtn;
+    private Texture confirmBtn, menuBtn;
     private TextField usernameField, passwordField;
     private Label message, usernameTxt, passwordTxt;
     private int xPos, yPos;
@@ -59,9 +59,10 @@ public class RegisterUserState extends State {
         stage.addActor(message);
 
 
-        background = new Texture("Graphics/Menu/Menu_background.png");
+        background = new Texture("Graphics/Menu/MenuRegister.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        confirmBtn = new Texture("Graphics/Menu/menu_button_venn.png");
+        confirmBtn = new Texture("Graphics/Menu/menu_button_ok_dark.png");
+        menuBtn = new Texture("Graphics/Menu/menu_button_menu_dark.png");
 
         xPos = 450;
         yPos = 225;
@@ -113,8 +114,9 @@ public class RegisterUserState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0,0);
-        sb.draw(pieces, 70, 0);
-        sb.draw(confirmBtn, xPos, yPos);
+        sb.draw(pieces, 0, 0);
+        sb.draw(confirmBtn, xPos + 115, yPos);
+        sb.draw(menuBtn, xPos-100, yPos);
         sb.end();
         stage.draw();
     }
