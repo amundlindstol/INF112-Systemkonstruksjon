@@ -41,6 +41,7 @@ public class PlayState extends State {
     private Boolean removed;
     private String text;
     private int pawnCounter, bishopCounter, kingCounter, queenCounter, rookCounter, knightCounter;
+    private int pawnCounterPlayer, bishopCounterPlayer, kingCounterPlayer, queenCounterPlayer, rookCounterPlayer, knightCounterPlayer;
 
 
     public PlayState(GameStateManager gsm, boolean aiPlayer) {
@@ -69,6 +70,12 @@ public class PlayState extends State {
         queenCounter = 0;
         knightCounter = 0;
         rookCounter = 0;
+        pawnCounterPlayer = 0;
+        bishopCounterPlayer = 0;
+        kingCounterPlayer = 0;
+        queenCounterPlayer = 0;
+        knightCounterPlayer = 0;
+        rookCounterPlayer = 0;
 
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
@@ -132,6 +139,18 @@ public class PlayState extends State {
 
         fontText.draw(batch, text, 645, 334);
         fontCounter.draw(batch, "" + pawnCounter, 668, 420);
+        fontCounter.draw(batch, "" + bishopCounter, 727, 420);
+        fontCounter.draw(batch, "" + kingCounter, 785, 420);
+        fontCounter.draw(batch, "" + queenCounter, 843, 420);
+        fontCounter.draw(batch, "" + knightCounter, 900, 420);
+        fontCounter.draw(batch, "" + rookCounter, 959, 420);
+
+        fontCounter.draw(batch, "" + pawnCounterPlayer, 668, 100);
+        fontCounter.draw(batch, "" + bishopCounterPlayer, 727, 100);
+        fontCounter.draw(batch, "" + kingCounterPlayer, 785, 100);
+        fontCounter.draw(batch, "" + queenCounterPlayer, 843, 100);
+        fontCounter.draw(batch, "" + knightCounterPlayer, 900, 100);
+        fontCounter.draw(batch, "" + rookCounterPlayer, 959, 100);
 
         for(int i=0; i<positions.size() ; i++) {
             Position piecePos = positions.get(i);
@@ -167,26 +186,49 @@ public class PlayState extends State {
 
     /**
      * Method to update the GUI's counter for removed pieces
+     * @param removedPiece, the piece that is removed
+     * @param player, boolean to tell which player
      */
-    public void updatePieceCounter(AbstractChessPiece removedPiece){
+    public void updatePieceCounter(AbstractChessPiece removedPiece, Boolean player){
 
-        if(removedPiece instanceof Pawn){
-            pawnCounter ++;
-        }
-        else if(removedPiece instanceof Bishop){
-            bishopCounter ++;
-        }
-        else if(removedPiece instanceof King){
-            kingCounter ++;
-        }
-        else if(removedPiece instanceof Queen){
-            queenCounter ++;
-        }
-        else if(removedPiece instanceof Rook){
-            rookCounter ++;
-        }
-        else if(removedPiece instanceof Knight){
-            knightCounter ++;
+        if(player){
+            if(removedPiece instanceof Pawn){
+                if(player)
+                    pawnCounterPlayer ++;
+                else
+                    pawnCounter ++;
+            }
+            else if(removedPiece instanceof Bishop){
+                if(player)
+                    bishopCounterPlayer ++;
+                else
+                    bishopCounter ++;
+            }
+            else if(removedPiece instanceof King){
+                if(player)
+                    kingCounterPlayer ++;
+                else
+                    kingCounter ++;
+            }
+            else if(removedPiece instanceof Queen){
+                if(player)
+                    queenCounterPlayer ++;
+                else
+                    queenCounter ++;
+            }
+            else if(removedPiece instanceof Rook){
+                if(player)
+                    rookCounterPlayer ++;
+                else{
+                    rookCounter ++;
+                }
+            }
+            else if(removedPiece instanceof Knight){
+                if(player)
+                    knightCounterPlayer ++;
+                else
+                    knightCounter ++;
+            }
         }
     }
 
@@ -221,7 +263,7 @@ public class PlayState extends State {
                     if (validMove) {
                         board.removePiece(potentialPiece);
                         removed = true;
-                        updatePieceCounter(potentialPiece);
+                        updatePieceCounter(potentialPiece, turn);
                         board.movePiece(selected, potentialPos);
                         reset();
                         turn = !turn;
