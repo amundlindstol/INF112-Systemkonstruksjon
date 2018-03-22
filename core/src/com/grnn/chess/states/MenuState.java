@@ -11,20 +11,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 public class MenuState extends State {
     private Texture background, pieces, kingBlack;
     private Texture playBtn;
-    private int Xplay, Yplay, Count, CountKing;
+    private int Xplay, Yplay, Count;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
         playBtn = new Texture("Graphics/Menu/menu_button.png");
-        kingBlack = new Texture("Graphics/Menu/KingBlack.png");
         //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
         // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
         Xplay = 400;
         Yplay = 340;
         Count = 20;
-        CountKing = -200;
     }
 
     @Override
@@ -50,7 +48,6 @@ public class MenuState extends State {
         sb.draw(background, 0,0);
 
         Count++;
-        CountKing++;
 
         // Animate button
         if(Count < 40 ) {
@@ -64,11 +61,6 @@ public class MenuState extends State {
             Count = 0;
         }
 
-        if(CountKing > 450){
-            CountKing--;
-        }
-
-        sb.draw(kingBlack, CountKing, Yplay-346);
         sb.draw(pieces, 70, 0);
         sb.draw(playBtn, Xplay, Yplay);
         sb.end();

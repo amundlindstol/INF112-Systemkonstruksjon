@@ -6,14 +6,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * @author Helge Mikael Landro, 21.03.2018
- * A class to represent the login menu.
+ * A class to represent the login menu. This is the first menu the player will see in the game.
  */
 public class LoginState extends State {
 
     // Variables
     private Texture background, pieces;
-    private Texture loginBtn, registerBtn;
-    private int Xplay, Yplay, Xreg, Yreg;
+    private Texture loginBtn, kingBlack;
+    private int Xplay, Yplay, CountKing;
 
     /**
      * Constructor for the Login State
@@ -24,9 +24,10 @@ public class LoginState extends State {
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
         loginBtn = new Texture("Graphics/Menu/menu_button_login.png");
-        registerBtn = new Texture("Graphics/Menu/menu_button_login.png");
+        kingBlack = new Texture("Graphics/Menu/KingBlack.png");
         Xplay = 400;
         Yplay = 340;
+        CountKing = -200;
     }
 
     @Override
@@ -48,8 +49,15 @@ public class LoginState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.begin();
+        CountKing ++;
         sb.draw(background, 0,0);
         sb.draw(pieces, 70, 0);
+
+        if(CountKing > 450){
+            CountKing --;
+        }
+
+        sb.draw(kingBlack, CountKing, Yplay-346);
         sb.draw(loginBtn, Xplay, Yplay);
         sb.end();
     }
@@ -59,6 +67,5 @@ public class LoginState extends State {
         background.dispose();
         pieces.dispose();
         loginBtn.dispose();
-        registerBtn.dispose();
     }
 }
