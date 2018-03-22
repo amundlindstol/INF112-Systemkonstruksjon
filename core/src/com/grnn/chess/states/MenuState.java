@@ -15,10 +15,10 @@ public class MenuState extends State {
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
-        background = new Texture("Menu/Menu_background.png");
-        pieces = new Texture("Menu/Menu_pieces.png");
-        playBtn = new Texture("Menu/menu_button.png");
-        kingBlack = new Texture("Menu/KingBlack.png");
+        background = new Texture("Graphics/Menu/Menu_background.png");
+        pieces = new Texture("Graphics/Menu/Menu_pieces.png");
+        playBtn = new Texture("Graphics/Menu/menu_button.png");
+        kingBlack = new Texture("Graphics/Menu/KingBlack.png");
         //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
         // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
         Xplay = 400;

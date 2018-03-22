@@ -25,18 +25,18 @@ public class SelectAIState extends State {
      */
     public SelectAIState(GameStateManager gsm){
         super(gsm);
-        background = new Texture("Menu/AI_menu.png");
-        pieces = new Texture("Menu/Menu_pieces.png");
-        playBtn = new Texture("Menu/menu_button_AI_easy.png");
-        playBtn2 = new Texture("Menu/menu_button_AI_medium.png");
-        playBtn3 = new Texture("Menu/menu_button_AI_hard.png");
-        playBtn4 = new Texture("Menu/menu_button_venn.png");
-        emoticonEasy = new Texture("Menu/Animations/Emoji_1/1.png");
-        emoticonEasy2 = new Texture("Menu/Animations/Emoji_1/2.png");
-        emoticonMedium = new Texture("Menu/Animations/Emoji_2/3.png");
-        emoticonMedium2 = new Texture("Menu/Animations/Emoji_2/4.png");
-        emoticonHard = new Texture("Menu/Animations/Emoji_3/5.png");
-        emoticonHard2 = new Texture("Menu/Animations/Emoji_3/6.png");
+        background = new Texture("Graphics/Menu/AI_menu.png");
+        pieces = new Texture("Graphics/Menu/Menu_pieces.png");
+        playBtn = new Texture("Graphics/Menu/menu_button_AI_easy.png");
+        playBtn2 = new Texture("Graphics/Menu/menu_button_AI_medium.png");
+        playBtn3 = new Texture("Graphics/Menu/menu_button_AI_hard.png");
+        playBtn4 = new Texture("Graphics/Menu/menu_button_venn.png");
+        emoticonEasy = new Texture("Graphics/Menu/Animations/Emoji_1/1.png");
+        emoticonEasy2 = new Texture("Graphics/Menu/Animations/Emoji_1/2.png");
+        emoticonMedium = new Texture("Graphics/Menu/Animations/Emoji_2/3.png");
+        emoticonMedium2 = new Texture("Graphics/Menu/Animations/Emoji_2/4.png");
+        emoticonHard = new Texture("Graphics/Menu/Animations/Emoji_3/5.png");
+        emoticonHard2 = new Texture("Graphics/Menu/Animations/Emoji_3/6.png");
         xPlay = 300;
         yPlay = 350;
         Xreg = xPlay + 290;

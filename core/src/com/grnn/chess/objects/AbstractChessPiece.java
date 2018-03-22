@@ -17,7 +17,7 @@ public abstract class AbstractChessPiece {
     //protected ArrayList<Position> validMoves;
     protected ArrayList<Position> captureMoves;
     protected String letterRepresentation = "";
-    protected String image = "ChessPieces/";
+    protected String image = "Graphics/ChessPieces/";
     protected final int value = 0; // Should value be set in the abstract class?
 
 

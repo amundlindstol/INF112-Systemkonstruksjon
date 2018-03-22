@@ -20,7 +20,7 @@ public class ChessForKids extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
 
-		bg = new Texture("sjakk2.png");
+		bg = new Texture("Graphics/GUI/ChessBoard.png");
 		board = new Board();
 		board.addPieces();
 

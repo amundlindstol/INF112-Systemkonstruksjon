@@ -47,8 +47,8 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm, boolean aiPlayer) {
         super(gsm);
-        bg = new Texture("GUI2.png");
-        bgBoard = new Texture("sjakk2.png");
+        bg = new Texture("Graphics/GUI/GUI.png");
+        bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
         board = new Board();
@@ -64,8 +64,8 @@ public class PlayState extends State {
         removed = false;
         this.aiPlayer = aiPlayer;
 
-        potentialTex = new Texture("ChessPieces/Potential.png");
-        captureTex = new Texture("ChessPieces/Capture.png");
+        potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
+        captureTex = new Texture("Graphics/ChessPieces/Capture.png");
 
         if(aiPlayer){
             ai = new AI();
