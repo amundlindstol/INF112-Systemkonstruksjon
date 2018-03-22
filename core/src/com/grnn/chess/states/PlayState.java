@@ -168,6 +168,10 @@ public class PlayState extends State {
                 if (selectedPiece != null && selectedPiece.isWhite() == turn) {
                     potentialMoves = selectedPiece.getValidMoves(board);
                     captureMoves = selectedPiece.getCaptureMoves(board);
+                    if(selectedPiece instanceof King) {
+                        System.out.println("adding castling moves");
+                        castlingMoves = ((King) selectedPiece).getCastlingMoves(board, selected);
+                    }
                 } else {
                     selected = null;
                 }
@@ -187,6 +191,9 @@ public class PlayState extends State {
                         reset();
                         potentialMoves = potentialPiece.getValidMoves(board);
                         captureMoves = potentialPiece.getCaptureMoves(board);
+                        if(potentialPiece instanceof King) {
+                            castlingMoves = ((King) potentialPiece).getCastlingMoves(board, potentialPos);
+                        }
                         selected = potentialPos;
                     } else {
                         reset();

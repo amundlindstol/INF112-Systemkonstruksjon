@@ -122,11 +122,11 @@ public class King extends AbstractChessPiece {
         AbstractChessPiece pieceEastCorner;
 
         if (king.isWhite) {
-            Position posEastCorner = new Position(7, 0);
+            Position posEastCorner = new Position(5, 0); //TODO: This is wrong, should be x = 7, y = 0;
             pieceEastCorner = board.getPieceAt(posEastCorner);
 
         } else {
-            Position posEastCorner = new Position(7, 7);
+            Position posEastCorner = new Position(5, 7);
             pieceEastCorner = board.getPieceAt(posEastCorner);
         }
 
