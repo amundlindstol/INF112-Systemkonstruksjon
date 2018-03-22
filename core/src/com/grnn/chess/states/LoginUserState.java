@@ -111,8 +111,8 @@ public class LoginUserState extends State {
         sb.begin();
         sb.draw(background, 0,0);
         sb.draw(pieces, 0, 0);
-        sb.draw(confirmBtn, xPos + 115, yPos);
-        sb.draw(menuBtn, xPos-100, yPos);
+        sb.draw(confirmBtn, xPos, yPos);
+       // sb.draw(menuBtn, xPos-100, yPos);
         sb.end();
         stage.draw();
     }
