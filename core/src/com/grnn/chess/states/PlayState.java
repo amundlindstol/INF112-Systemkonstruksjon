@@ -113,8 +113,8 @@ public class PlayState extends State {
                 }
 
             } else {
-                if (removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg. FAEN I HELVETE!!";
+                if(removed) {
+                    text = "Uff. Datamaskinen tok en brikke av deg.";
                 }
             }
         }
@@ -123,14 +123,14 @@ public class PlayState extends State {
             if (turn) {
                 text = "Venter på at du skal gjøre neste trekk.";
                 if (removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg. FAEN I HELVETE!!";
+                    text = "Uff. Du mistet en brikke. Det er din tur.";
                 }
 
             } else {
-                text = "Venter på at datamaskinen skal gjøre neste trekk.";
+                text = "Venter på at vennen din skal gjøre neste trekk.";
 
                 if (removed) {
-                    text = "Bra jobbet! Du tok en brikke. Det er datamaskinen sin tur.";
+                    text = "Bra jobbet! Du tok en brikke. Det er vennen din sin tur.";
                 }
             }
         }
