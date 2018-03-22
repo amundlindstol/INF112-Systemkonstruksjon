@@ -82,7 +82,7 @@ public class SelectAIState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0,0);
-        sb.draw(pieces, 70, 0);
+        sb.draw(pieces, 0, 0);
         sb.draw(playBtn, xPlay, yPlay);
         sb.draw(playBtn2, xPlay, yPlay - 70);
         sb.draw(playBtn3, xPlay, yPlay - 140);

@@ -61,7 +61,7 @@ public class MenuState extends State {
             Count = 0;
         }
 
-        sb.draw(pieces, 70, 0);
+        sb.draw(pieces, 0, 0);
         sb.draw(playBtn, Xplay, Yplay);
         sb.end();
     }

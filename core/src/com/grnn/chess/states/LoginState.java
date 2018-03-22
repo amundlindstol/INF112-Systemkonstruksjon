@@ -51,14 +51,14 @@ public class LoginState extends State {
         sb.begin();
         CountKing ++;
         sb.draw(background, 0,0);
-        sb.draw(pieces, 70, 0);
+        sb.draw(loginBtn, Xplay, Yplay);
 
         if(CountKing > 450){
             CountKing --;
         }
 
         sb.draw(kingBlack, CountKing, Yplay-346);
-        sb.draw(loginBtn, Xplay, Yplay);
+        sb.draw(pieces, 0, 0);
         sb.end();
     }
 
