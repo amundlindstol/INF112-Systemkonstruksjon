@@ -241,7 +241,7 @@ public class Board {
                         if (!conditionPiece.isWhite() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
                             setPiece(null, conditionToPos);
                         }
-                    } else if (lastFromPos.getY() == 3 && lastFromPos.getY() == 2) {
+                    } else if (lastFromPos.getY() == 3 && lastToPos.getY() == 2) {
                         if (conditionPiece.isWhite() && conditionFromPos.getY() == 1 && conditionToPos.getY() == 3) {
                             setPiece(null, conditionToPos);
                         }

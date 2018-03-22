@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Player;
@@ -101,7 +100,7 @@ public class RegisterUserState extends State {
             }
             Player player = new Player(username, password);
             playerData.addAccount(player);
-            gsm.set(new MenuState(gsm, player));
+            gsm.set(new StartGameState(gsm, player));
         }
     }
 

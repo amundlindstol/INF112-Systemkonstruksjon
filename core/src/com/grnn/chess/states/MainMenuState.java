@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * @author Helge Mikael Landro, 21.03.2018
- * A class to represent the login menu.
+ * A class to represent the main menu.
  * This is the initial state
  */
-public class LoginState extends State {
+public class MainMenuState extends State {
 
     // Variables
     private Texture background, pieces;
@@ -20,7 +20,7 @@ public class LoginState extends State {
      * Constructor for the Login State
      * @param gsm, the GameStateManager
      */
-    public LoginState(GameStateManager gsm) {
+    public MainMenuState(GameStateManager gsm) {
         super(gsm);
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
@@ -41,7 +41,7 @@ public class LoginState extends State {
         int texturePosX = Xplay;
         int texturePosY = Yplay;
         if (x > texturePosX && y > texturePosY && x < loginBtn.getWidth()+texturePosX && y < loginBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new LoginUserState(gsm)); //change to MenuState if u want to skip login
+            gsm.set(new LoginUserState(gsm)); //change to StartGameState if u want to skip login
         }
         texturePosX = Xreg;
         texturePosY = Yreg;

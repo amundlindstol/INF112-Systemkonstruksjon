@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * A class to represent the game menu.
  * The user can choose from three levels of difficulty for playing against an AI, or play against a friend
  */
-public class SelectAIState extends State {
+public class SelectPlayerState extends State {
 
     // Variables
     private Texture background, pieces;
@@ -23,10 +23,10 @@ public class SelectAIState extends State {
     private Player humanPlayer;
 
     /**
-     * Constructor for the AI State
+     * Constructor for the SelectPlayerState
      * @param gsm, the GameStateManager
      */
-    public SelectAIState(GameStateManager gsm, Player player){
+    public SelectPlayerState(GameStateManager gsm, Player player){
         super(gsm);
         background = new Texture("Graphics/Menu/AI_menu.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
