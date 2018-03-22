@@ -3,7 +3,9 @@ package com.grnn.chess.objects;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
+import javafx.geometry.Pos;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -83,4 +85,6 @@ public class King extends AbstractChessPiece {
 	public int getValue() {
 		return value;
 	}
+
+
 }

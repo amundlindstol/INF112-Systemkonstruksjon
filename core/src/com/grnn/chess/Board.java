@@ -38,7 +38,6 @@ public class Board {
     public void movePiece(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
 
-
         if (piece.getValidMoves(this).contains(endPos) || piece.getCaptureMoves(this).contains(endPos)) {
             setPiece(piece, endPos);
             setPiece(null, startPos);
