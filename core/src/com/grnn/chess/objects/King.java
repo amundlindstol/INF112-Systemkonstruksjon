@@ -27,18 +27,31 @@ public class King extends AbstractChessPiece {
     public ArrayList<Position> getValidMoves(Board board) {
         ArrayList<Position> validMoves = new ArrayList<Position>();
         Position kingPos = getPosition(board);
+        ArrayList<Position> neighbourSquares = getNeighbourSquares(board, kingPos);
+        for (Position pos : neighbourSquares){
+            if (!isSameColor(board.getPieceAt(pos)) && !willThisKingBePutInCheckByMoveTo(board, pos)) {
+                System.out.println("king will be not put in check by move to "+pos);
+                System.out.flush();
+                validMoves.add(pos);
+            }
+        }
+
+        //validMoves.addAll(getCastlingMoves(board, kingPos));
+
+        return validMoves;
+    }
+
+    private ArrayList<Position> getNeighbourSquares(Board board, Position kingPos){
+        ArrayList<Position> neighbourSquares = new ArrayList<Position>();
         int[][] offsets = { {1,0}, {0,1}, {-1,0}, {0,-1}, {1,1}, {-1,1}, {-1,-1}, {1,-1} };
         Position pos;
 
         for (int[] moves: offsets){
             pos = new Position(kingPos.getX()+moves[0], kingPos.getY()+moves[1]);
-            if (board.posIsWithinBoard(pos) && !isSameColor(board.getPieceAt(pos)) && !willThisKingBePutInCheckByMoveTo(board,pos))
-                validMoves.add(pos);
+            if (board.posIsWithinBoard(pos))
+                neighbourSquares.add(pos);
         }
-
-        validMoves.addAll(getCastlingMoves(board, kingPos));
-
-        return validMoves;
+        return neighbourSquares;
     }
 
     /**
@@ -149,41 +162,19 @@ public class King extends AbstractChessPiece {
         return pieceEastCorner != null && pieceEastCorner instanceof Rook && !((Rook) pieceEastCorner).hasMoved();
     }
 
-    public boolean willKingBePutInCheckByMoveTo(Board board, AbstractChessPiece king, Position pos) {
-        Position posToCheck = pos.north();
-        if (board.posIsWithinBoard(posToCheck)) {
-            if (king.getPosition(board).equals(posToCheck))
-                return true;
-        }
-        posToCheck = pos.south();
-        if (board.posIsWithinBoard(posToCheck)) {
-            if (king.getPosition(board).equals(posToCheck))
-                return true;
-        }
-        posToCheck = pos.west();
-        if (board.posIsWithinBoard(posToCheck)) {
-            if (king.getPosition(board).equals(posToCheck))
-                return true;
-        }
-        posToCheck = pos.east();
-        if (board.posIsWithinBoard(posToCheck)) {
-            if (king.getPosition(board).equals(posToCheck))
-                return true;
-        }
-        return false;
-    }
-
+    /**
+     * Checks whether or not this king will put himself in check by moving to pos
+     * @param board The board
+     * @param pos The position to check
+     * @return If the king will put himself in check by moving to pos
+     */
     public boolean willThisKingBePutInCheckByMoveTo(Board board, Position pos) {
        for (int i=0; i<board.size(); i++) {
            for (int j=0; j<board.size(); j++) {
                Position posOtherPiece = new Position(i,j);
                AbstractChessPiece otherPiece = board.getPieceAt(posOtherPiece);
                if (otherPiece!= null && !isSameColor(otherPiece)){
-                   if (!(otherPiece instanceof Pawn)) {
-                       if (otherPiece.getValidMoves(board).contains(pos))
-                           return true;
-                   }
-                   else {
+                   if (otherPiece instanceof Pawn) {
                        if(otherPiece.isWhite){
                            if(otherPiece.getPosition(board).north(1).east(1).equals(pos))
                                return true;
@@ -197,6 +188,14 @@ public class King extends AbstractChessPiece {
                                return true;
                        }
                    }
+                   else if (otherPiece instanceof King){
+                       if (getNeighbourSquares(board, pos).contains(otherPiece.getPosition(board)))
+                           return true;
+                   }
+                   else {
+                       if (otherPiece.getValidMoves(board).contains(pos))
+                           return true;
+                   }
                }
            }
        }
@@ -207,7 +206,7 @@ public class King extends AbstractChessPiece {
     public boolean hasNoLegalMoves(Board board){
         ArrayList<Position> validMoves = getValidMoves(board);
         for (Position p : validMoves) {
-            if (!willThisKingBePutInCheckByMoveTo(board, p))
+            //if (!willThisKingBePutInCheckByMoveTo(board, p))
                 return false;
         }
         return true;
