@@ -45,7 +45,7 @@ public class MenuState extends State {
         int texturePosX = Xplay;
         int  texturePosY = Yplay;
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new SelectAIState(gsm, currentPlayer));
+            gsm.set(new SelectPlayerState(gsm, currentPlayer));
         }
     }
 
