@@ -21,7 +21,7 @@ public class LoginUserState extends State {
 
     // Variables
     private Texture background, pieces;
-    private Texture confirmBtn;
+    private Texture confirmBtn, menuBtn;
     private TextField usernameField, passwordField;
     private Label message, usernameTxt, passwordTxt;
     private int xPos, yPos;
@@ -65,7 +65,8 @@ public class LoginUserState extends State {
 
         background = new Texture("Graphics/Menu/MenuLogin.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        confirmBtn = new Texture("Graphics/Menu/menu_button_venn.png");
+        confirmBtn = new Texture("Graphics/Menu/menu_button_ok_dark.png");
+        menuBtn = new Texture("Graphics/Menu/menu_button_menu_dark.png");
 
         xPos = 450;
         yPos = 225;
@@ -85,17 +86,17 @@ public class LoginUserState extends State {
             String checkUsr = username.replaceAll("[^A-Za-z0-9]", "");
             String checkPwd = password.replaceAll("[^A-Za-z0-9]", "");
             if (!playerData.nameExists(username)) {
-                message.setText("Brukernavnet finnes ikke!");
+                message.setText("Brukernavnet finnes ikke.");
                 return;
             } else if (password != checkPwd || username != checkUsr) {
-                message.setText("Spesialtegn kan ikke brukes");
+                message.setText("Spesialtegn kan ikke brukes.");
                 return;
             }
             Player player = playerData.getPlayer(username);
             if (password.equals(player.getPassword())) {
                 gsm.set(new StartGameState(gsm, player));
             } else {
-                message.setText("Feil brukernavn eller passord");
+                message.setText("Feil brukernavn eller passord.");
             }
         }
     }
@@ -110,7 +111,8 @@ public class LoginUserState extends State {
         sb.begin();
         sb.draw(background, 0,0);
         sb.draw(pieces, 0, 0);
-        sb.draw(confirmBtn, xPos, yPos);
+        sb.draw(confirmBtn, xPos + 115, yPos);
+        sb.draw(menuBtn, xPos-100, yPos);
         sb.end();
         stage.draw();
     }
