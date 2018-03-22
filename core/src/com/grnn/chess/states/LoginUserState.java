@@ -18,7 +18,7 @@ import com.grnn.chess.PlayerData;
  * @author Helge Mikael Landro, 21.03.2018
  */
 
-public class RegisterUserState extends State {
+public class LoginUserState extends State {
 
     // Variables
     private Texture background, pieces;
@@ -32,7 +32,7 @@ public class RegisterUserState extends State {
     private PolygonSpriteBatch batch;
 
 
-    public RegisterUserState(GameStateManager gsm) {
+    public LoginUserState(GameStateManager gsm) {
         super(gsm);
         // create skin
         batch = new PolygonSpriteBatch();
@@ -76,27 +76,19 @@ public class RegisterUserState extends State {
             String password = passwordField.getText();
             String checkUsr = username.replaceAll("[^A-Za-z0-9]", "");
             String checkPwd = password.replaceAll("[^A-Za-z0-9]", "");
-
-            // valid username and password?
-            if (playerData.nameExists(username)) {
-                message.setText("Brukernavnet finnes allerede");
+            if (!playerData.nameExists(username)) {
+                message.setText("Brukernavnet finnes ikke!");
                 return;
-            } else if (username.length() == 0) {
-                message.setText("           Lag et brukernavn!");
-                return;
-            } else if (password.length() == 0) {
-                message.setText("           Lag et passord!"); //TODO add ascii code æøå
-                return;
-            } else if (username != checkUsr) {
-                message.setText("Brukernavnet kan ikke inneholde spesialtegn");
-                return;
-            } else if (password != checkPwd) {
-                message.setText("Passordet kan ikke inneholde spesialtegn");
+            } else if (password != checkPwd || username != checkUsr) {
+                message.setText("Spesialtegn kan ikke brukes");
                 return;
             }
-            Player player = new Player(username, password);
-            playerData.addAccount(player);
-            gsm.set(new MenuState(gsm, player));
+            Player player = playerData.getPlayer(username);
+            if (password.equals(player.getPassword())) {
+                gsm.set(new MenuState(gsm, player));
+            } else {
+                message.setText("Feil brukernavn eller passord");
+            }
         }
     }
 
@@ -109,7 +101,7 @@ public class RegisterUserState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0,0);
-        sb.draw(pieces, 70, 0);
+        sb.draw(pieces, 0, 0);
         sb.draw(confirmBtn, xPos, yPos);
         sb.end();
         stage.draw();
@@ -117,9 +109,6 @@ public class RegisterUserState extends State {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        background.dispose();
-        pieces.dispose();
-        confirmBtn.dispose();
+
     }
 }
