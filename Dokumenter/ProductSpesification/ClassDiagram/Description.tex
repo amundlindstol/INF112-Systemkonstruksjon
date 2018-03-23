@@ -1,0 +1,14 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\title{Description of the project}
+\date{}
+\begin{document}
+	\maketitle
+\begin{itemize}
+\item The game runs from the Desktop Launcher. It sets up the GUI window and launches an application with a new object from the ChessForKids class.
+\item The ChessForKids class creates a new object of the GameStateManager class. 
+\item The GameStateManager holds a stack of State classes. The State class is an abstract class which provides the different States of the game, such as MainMenuState, PlayState, etc.
+\item The Board class represents the chess board. This holds the information of the chess pieces and the grid. The chess pieces comes from the abstract class AbstractChessPiece.It was natural to use an abstract class for this. All pieces have similar features that are shared, but each piece have a different set of rules for movement and behavior.
+\item The player interacts with the game with the mouse. The class TranslateToCellPos translates the coordinates from the mouse to cell positions on the board. The Position class is where all positions are stored.
+\end{itemize}
+\end{document}
