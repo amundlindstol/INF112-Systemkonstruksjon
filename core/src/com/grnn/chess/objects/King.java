@@ -24,14 +24,19 @@ public class King extends AbstractChessPiece {
         return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
     }
 
+    /**
+     * Returns a list of the kings neighbouring positions the king can move to without being put in check
+     * @param board The board
+     * @return List of positions the king can move to
+     */
     public ArrayList<Position> getValidMoves(Board board) {
+        System.out.println("check for isWhite "+isWhite + " at pos "+this.getPosition(board));
+        System.out.flush();
         ArrayList<Position> validMoves = new ArrayList<Position>();
         Position kingPos = getPosition(board);
         ArrayList<Position> neighbourSquares = getNeighbourSquares(board, kingPos);
         for (Position pos : neighbourSquares){
-            if (!isSameColor(board.getPieceAt(pos)) && !willThisKingBePutInCheckByMoveTo(board, pos)) {
-                System.out.println("king will be not put in check by move to "+pos);
-                System.out.flush();
+            if ((board.getPieceAt(pos)==null || !isSameColor(board.getPieceAt(pos))) && !willThisKingBePutInCheckByMoveTo(board, pos)) {
                 validMoves.add(pos);
             }
         }
@@ -41,6 +46,11 @@ public class King extends AbstractChessPiece {
         return validMoves;
     }
 
+    /**
+     * @param board The board
+     * @param kingPos Position of the king
+     * @return The squares adjacent to the king
+     */
     private ArrayList<Position> getNeighbourSquares(Board board, Position kingPos){
         ArrayList<Position> neighbourSquares = new ArrayList<Position>();
         int[][] offsets = { {1,0}, {0,1}, {-1,0}, {0,-1}, {1,1}, {-1,1}, {-1,-1}, {1,-1} };
@@ -66,8 +76,8 @@ public class King extends AbstractChessPiece {
         if (this.hasMoved)
             return validMoves;
 
-        validMoves.addAll(getCastlingMoveEast(board, kingPos));
-        validMoves.addAll(getCastlingMoveWest(board, kingPos));
+        //validMoves.addAll(getCastlingMoveEast(board, kingPos));
+        //validMoves.addAll(getCastlingMoveWest(board, kingPos));
         return validMoves;
     }
 
@@ -146,11 +156,11 @@ public class King extends AbstractChessPiece {
         AbstractChessPiece pieceEastCorner;
 
         if (king.isWhite) {
-            Position posEastCorner = new Position(5, 0); //TODO: This is wrong, should be x = 7, y = 0;
+            Position posEastCorner = new Position(7, 0); //TODO: This is wrong, should be x = 7, y = 0;
             pieceEastCorner = board.getPieceAt(posEastCorner);
 
         } else {
-            Position posEastCorner = new Position(5, 7);
+            Position posEastCorner = new Position(7, 7);
             pieceEastCorner = board.getPieceAt(posEastCorner);
         }
 
@@ -202,34 +212,26 @@ public class King extends AbstractChessPiece {
         return false;
     }
 
-
+    /**
+     * @param board The board
+     * @return True if the king has no valid moves
+     */
     public boolean hasNoLegalMoves(Board board){
         ArrayList<Position> validMoves = getValidMoves(board);
         for (Position p : validMoves) {
-            //if (!willThisKingBePutInCheckByMoveTo(board, p))
+            if (!willThisKingBePutInCheckByMoveTo(board, p))
                 return false;
         }
         return true;
     }
 
-/*
-    public boolean isInStalemate(Board board){
-        int[][] offsets = { {1,0}, {0,1}, {-1,0}, {0,-1}, {1,1}, {-1,1}, {-1,-1}, {1,-1} };
-        Position kingPos = board.getPosition(this);
-        Position pos;
-        for (int[] moves: offsets){
-            pos = new Position(kingPos+moves[0], kingPos+moves[1]);
-            if (board.posIsWithinBoard(pos) && !willThisKingBePutInCheckByMoveTo(board, pos))
->>>>>>> origin/DEV
-                return false;
-        }
-        return true;
-    }*/
-
+    /**
+     * @param board The board
+     * @return True if the king is InStalemate
+     */
     public boolean isInStalemate(Board board){
         return (hasNoLegalMoves(board) && !isInCheck);
     }
-
 
     public int getValue() {
         return value;
