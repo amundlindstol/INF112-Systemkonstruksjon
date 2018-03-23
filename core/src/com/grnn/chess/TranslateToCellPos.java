@@ -1,21 +1,15 @@
 package com.grnn.chess;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 
+
+/**
+ * class to translate mouse x,y to cellPosition x,y
+ * @author Amund Lindstøl, 21.03.18
+ */
 public class TranslateToCellPos {
     private int BOARD_PADDING = 40;
     private int CELL_DIM = 65;
-
-//    public TranslateToCellPos() {}
-//    /**
-//     * @board used to set optional cell dim
-//     * @param board
-//     */
-//    public TranslateToCellPos(Texture board) {
-//        if (board != null)
-//            CELL_DIM = (board.getWidth() - BOARD_PADDING*2)/8;
-//    }
 
     /**
      * @param mouseX position
@@ -33,9 +27,16 @@ public class TranslateToCellPos {
 
         if (x > 7) x = 7; //avoid pixel perfect bug
         if (y > 7) y = 7;
-        System.out.println(x + ", " + y);
         return new Position(x, y);
     }
+
+    public int[] toPixels(int gridX, int gridY){
+        int[] pos = new int[2];
+        pos[0] = BOARD_PADDING+CELL_DIM*gridX;
+        pos[1] = BOARD_PADDING+CELL_DIM*gridY;
+    return pos;
+    }
+
 
     private int translateY(int y) {
         return Math.abs(y-Gdx.graphics.getHeight()+BOARD_PADDING);

@@ -9,11 +9,14 @@ public class Game {
 
     static int currid = 1;
 
-    public Game(){
-        player1 = new Player("Spiller1");
-        player2 = new Player("Spiller2");
-        gameId = currid++;
+    public static void setCurrid(int id) {
+        currid = id;
+    }
 
+    public Game(){
+        player1 = new Player("Spiller1", "asd");
+        player2 = new Player("Spiller2", "asd");
+        gameId = ++currid;
     }
 
     private void startGame() {
@@ -27,6 +30,4 @@ public class Game {
     private Player announceWinner() {
         return null;
     }
-
-
 }

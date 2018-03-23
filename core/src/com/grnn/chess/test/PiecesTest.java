@@ -2,7 +2,9 @@ package com.grnn.chess.test;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
+import com.grnn.chess.exceptions.IllegalMoveException;
 import com.grnn.chess.objects.*;
+//import javafx.geometry.Pos;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +20,7 @@ public class PiecesTest {
 	@Before
 	public void setup() {
 		board = new Board();
-		board.addPieces();
+		board.initializeBoard();
 	}
 
 	@Test
@@ -29,22 +31,22 @@ public class PiecesTest {
 	}
 
 	//TODO: check that it only accepts valid moves
-	@Test
-	public void moveRookTest() {
-		Position startPosition = new Position(0, 0);
-		Position endPosition = new Position(3, 2);
-		movePieceTest(startPosition, endPosition);
-	}
-
-	public void movePieceTest(Position startPosition, Position endPosition) {
-
-		AbstractChessPiece piece = board.getPieceAt(startPosition);
-
-		board.movePiece(startPosition, endPosition);
-
-
-		assertThat(board.getPieceAt(endPosition), is(piece));
-	}
+//q	@Test
+//	public void moveRookTest() {
+//		Position startPosition = new Position(0, 0);
+//		Position endPosition = new Position(3, 2);
+//		movePieceTest(startPosition, endPosition);
+//	}
+//
+//	public void movePieceTest(Position startPosition, Position endPosition) {
+//
+//		AbstractChessPiece piece = board.getPieceAt(startPosition);
+//
+//		board.movePiece(startPosition, endPosition);
+//
+//
+//		assertThat(board.getPieceAt(endPosition), is(piece));
+//	}
 
 	@Test
 	public void rookValidMoveTest() {
@@ -143,5 +145,28 @@ public class PiecesTest {
 
 		assertFalse(r.getValidMoves(board).contains(new Position(6, 0)));
 		assertFalse(r.getValidMoves(board).contains(new Position(1, 0)));
+	}
+
+	@Test
+	public void unableToMovePieceOutsideBoardTest() {
+		Board board = new Board();
+
+		Position whiteKnightPos = new Position(1,0);
+		Position blackKnightPos = new Position(1,7);
+
+
+		Knight whiteKnight = new Knight(true);
+		Knight blackKnight = new Knight(false);
+
+		board.setPiece(whiteKnight, whiteKnightPos);
+		board.setPiece(blackKnight, blackKnightPos);
+
+		Position outsideBoardPos = new Position(-1, 0);
+		try {
+			board.movePiece(whiteKnightPos, outsideBoardPos);
+			fail();
+		} catch (IllegalMoveException e) {
+			// should throw this exception
+		}
 	}
 }

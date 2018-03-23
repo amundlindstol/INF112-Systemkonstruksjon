@@ -18,6 +18,7 @@ public class PositionTest {
 		assertThat(pos1, is(pos2));
 	}
 
+	@Test
 	public void positionNorthTest() {
 		Position pos1 = new Position(4, 1);
 		Position pos2 = new Position(4, 0).north(1);

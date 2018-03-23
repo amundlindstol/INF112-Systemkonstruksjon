@@ -1,16 +1,14 @@
 package com.grnn.chess;
 
 import com.grnn.chess.objects.AbstractChessPiece;
-import com.grnn.chess.Position;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Board board = new Board();
-        board.addPieces();
+        board.initializeBoard();
         Scanner input = new Scanner(System.in);
         System.out.println("welcome to chess3000, get ready to play!");
         System.out.println("Player one, give me your name: ");
@@ -56,7 +54,7 @@ public class Main {
         Position potential = new Position(x, y);
         AbstractChessPiece piece = board.getPieceAt(potential);
         if(piece == null) return false;
-        if(piece.getColor()!=turn) return false;
+        if(piece.isWhite()!=turn) return false;
 
         ArrayList<Position> vMoves = board.getPieceAt(potential).getValidMoves(board);
         removeNotValidMoves(vMoves);
