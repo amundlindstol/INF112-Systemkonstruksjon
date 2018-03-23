@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.*;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.objects.*;
+//import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,8 @@ public class PlayState extends State {
     Texture captureTex;
     ArrayList<Texture> pieceTexures;
     ArrayList<Position> positions;
+    boolean blackPutInCheck;
+    boolean whitePutInCheck;
     private Position selected;
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
@@ -111,7 +114,6 @@ public class PlayState extends State {
                 if (removed) {
                     text = "Bra jobbet! Du tok en brikke.";
                 }
-
             } else {
                 if(removed) {
                     text = "Uff. Datamaskinen tok en brikke av deg.";
@@ -247,6 +249,7 @@ public class PlayState extends State {
                     updatePieceCounter(victim, turn);
                 }
                 board.movePiece(aiMove.getFromPos(),aiMove.getToPos());
+                handleCheckChecking(turn);
                 turn = !turn;
             }
 
@@ -275,6 +278,7 @@ public class PlayState extends State {
                         removed = true;
                         updatePieceCounter(potentialPiece, turn);
                         board.movePiece(selected, potentialPos);
+                        handleCheckChecking(turn);
                         turn = !turn;
                         reset();
                     } else if (potentialPiece.isWhite() == turn) {
@@ -293,6 +297,7 @@ public class PlayState extends State {
                 } else if (potentialPiece == null && validMove) {
                     handleCastling(potentialPos);
                     board.movePiece(selected, potentialPos);
+                    handleCheckChecking(turn);
                     reset();
                     turn = !turn;
                     removed = false;
@@ -339,6 +344,17 @@ public class PlayState extends State {
             }
         }
         board.movePiece(rookOriginalPos, rookNewPos);
+    }
+
+    public void handleCheckChecking(boolean turn){
+        Position kingPos = board.getKingPos(!turn);
+        ((King) board.getPieceAt(kingPos)).isInCheck =((King) board.getPieceAt(kingPos)).willThisKingBePutInCheckByMoveTo(board, kingPos);
+        if (((King) board.getPieceAt(kingPos)).isInCheck) {
+            if (turn)
+                blackPutInCheck = true;
+            else whitePutInCheck = true;
+            System.out.println("SJAKK");
+        }
     }
 
     @Override

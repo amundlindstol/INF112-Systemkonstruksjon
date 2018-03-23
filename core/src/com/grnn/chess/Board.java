@@ -60,6 +60,17 @@ public class Board {
         }
     }
 
+    public Position getKingPos(boolean kingIsWhite){
+        for (int i=0; i<size; i++){
+            for (int j=0; j<size; j++){
+                if (getPieceAt(new Position(i, j)) instanceof King && getPieceAt(new Position(i, j)).isWhite()==kingIsWhite){
+                    return new Position(i, j);
+                }
+            }
+        }
+        return null;
+    }
+
     private boolean isValidMove(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
         boolean containsCastlingMove;
