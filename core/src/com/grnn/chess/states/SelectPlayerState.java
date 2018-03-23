@@ -64,7 +64,17 @@ public class SelectPlayerState extends State {
         int texturePosX = xPlay;
         int  texturePosY = yPlay;
 
-        // Buttons for play against AI
+        // Button for play against AI lett
+        if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+            gsm.set(new PlayState(gsm, true, humanPlayer));
+        }
+        texturePosY = yPlay-70;
+        // Button for play against AI medium
+        if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+            gsm.set(new PlayState(gsm, true, humanPlayer));
+        }
+        texturePosY = yPlay-140;
+        // Button for play against AI vanskelig
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             gsm.set(new PlayState(gsm, true, humanPlayer));
         }
