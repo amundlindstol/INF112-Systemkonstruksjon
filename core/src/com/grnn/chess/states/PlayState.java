@@ -36,6 +36,7 @@ public class PlayState extends State {
     private Boolean turn;
     private Boolean aiPlayer;
     private AI ai;
+    private Boolean activegame;
     private BitmapFont fontText;
     private BitmapFont fontCounter;
     private Boolean removed;
@@ -80,6 +81,7 @@ public class PlayState extends State {
         rookCounterPlayer = 0;
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
+        activegame = true;
 
         if(aiPlayer){
             ai = new AI();
@@ -136,6 +138,17 @@ public class PlayState extends State {
                 }
             }
         }
+
+            if(kingCounter==1){
+                text = "Du vant "+ humanPlayer.name +", gratulerer!";
+                activegame = false;
+            }
+            else if(kingCounterPlayer ==1){
+                text = "Du vant " + humanPlayer.name + ", du må nok øve mer...";
+                activegame = false;
+            }
+
+
 
         fontText.draw(batch, text, 645, 334);
         fontCounter.draw(batch, "" + pawnCounter, 668, 418);
@@ -239,7 +252,7 @@ public class PlayState extends State {
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY());
-        if (x>40 && x< 560 && y>40 && y<560) {
+        if (x>40 && x< 560 && y>40 && y<560 && activegame) {
             //AI
             if(aiPlayer && !turn){
                 Move aiMove = ai.calculateBestMove(board);
@@ -348,12 +361,14 @@ public class PlayState extends State {
 
     public void handleCheckChecking(boolean turn){
         Position kingPos = board.getKingPos(!turn);
-        ((King) board.getPieceAt(kingPos)).isInCheck =((King) board.getPieceAt(kingPos)).willThisKingBePutInCheckByMoveTo(board, kingPos);
-        if (((King) board.getPieceAt(kingPos)).isInCheck) {
-            if (turn)
-                blackPutInCheck = true;
-            else whitePutInCheck = true;
-            System.out.println("SJAKK");
+        if (kingPos != null) {
+            ((King) board.getPieceAt(kingPos)).isInCheck = ((King) board.getPieceAt(kingPos)).willThisKingBePutInCheckByMoveTo(board, kingPos);
+            if (((King) board.getPieceAt(kingPos)).isInCheck) {
+                if (turn)
+                    blackPutInCheck = true;
+                else whitePutInCheck = true;
+                System.out.println("SJAKK");
+            }
         }
     }
 
