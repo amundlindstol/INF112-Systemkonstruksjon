@@ -270,7 +270,7 @@ public class Board {
      * @param pieceToBeMoved piece selected by player
      * @return A list of positions the piece can move to and still cover the king. Null if the piece isn't protecting the king.
     * */
-    public ArrayList<Position> piecesThatCouldPutTheKingInCheckIfSelectedPieceIsMoved(Position kingpos,  AbstractChessPiece pieceToBeMoved) {
+    public ArrayList<Position> positionsPieceCanMoveToAndStillCoverKing(Position kingpos,  AbstractChessPiece pieceToBeMoved) {
            Position poseOfOtherPiece = null;
            ArrayList<Position> posesThatCanBeMovedTo= new ArrayList<Position>();
            Position posToCheck = kingpos;
@@ -279,31 +279,34 @@ public class Board {
             Position pos;
             boolean foundPieceToBeMoved=false;
             outerloop:
-            for (int[] moves: offsets) { System.out.println("GOGOG "+pieceToBeMoved.getPosition(this));
+            for (int[] moves: offsets) {
                 posToCheck = new Position(kingpos.getX() + moves[0], kingpos.getY() + moves[1]);
-                while (posIsWithinBoard(posToCheck)) { System.out.println("HOHO ");
+                while (posIsWithinBoard(posToCheck)) {
                     if (getPieceAt(posToCheck) != null) {
                         if (getPieceAt(posToCheck).equals(pieceToBeMoved)) {//Checks if there are no pieces between the king and pieceToBeMoved
-                                foundPieceToBeMoved = true; System.out.println("FANT");
-                        } else if (foundPieceToBeMoved && !getPieceAt(posToCheck).isSameColor(pieceToBeMoved)  //Checks if piece behind piecetobemoved can put king in check
-                                && (!(getPieceAt(posToCheck) instanceof Pawn) && (!(getPieceAt(posToCheck) instanceof King))
-                        && (!(getPieceAt(posToCheck) instanceof Knight)))) {
-                            dir = moves;
-                            poseOfOtherPiece = (posToCheck); System.out.println("hihi"+poseOfOtherPiece.toString());
-                            break outerloop;
-                        }
-                        else {
+                            foundPieceToBeMoved = true;
+                        } else if (foundPieceToBeMoved && !getPieceAt(posToCheck).isSameColor(pieceToBeMoved) && (!dirIsHorizontal(moves) && (getPieceAt(posToCheck) instanceof Bishop) ||
+                                    dirIsHorizontal(moves) && (getPieceAt(posToCheck) instanceof Rook) || (getPieceAt(posToCheck) instanceof Queen))) {
+                                dir = moves;
+                                poseOfOtherPiece = (posToCheck);
+                                break outerloop;
+                        } else {
                             foundPieceToBeMoved = false;
                             break;
                         }
-                    } System.out.println("heheeh");
-                    posToCheck = new Position(posToCheck.getX()+moves[0], posToCheck.getY()+moves[1]);
+                    }
+                    posToCheck = new Position(posToCheck.getX() + moves[0], posToCheck.getY() + moves[1]);
                 }
             }
-            if (poseOfOtherPiece!=null)
-                return getPositionsBetween(kingpos,poseOfOtherPiece, dir, pieceToBeMoved.getPosition(this));
+            if (poseOfOtherPiece != null)
+                return getPositionsBetween(kingpos, poseOfOtherPiece, dir, pieceToBeMoved.getPosition(this));
             return null;
+    }
 
+    private boolean dirIsHorizontal(int[] dir){
+        if ((dir[0]+dir[1])%2==0)
+            return false;
+        return true;
     }
 
     /** Returns the squares between the king and the piece that will put the king in check if selected piece moves
@@ -323,7 +326,6 @@ public class Board {
             poses.add(posToCheck);
         }
         poses.remove(posPieceToBeMoved);
-        System.out.println("POSES "+poses);
         return poses;
     }
 
@@ -334,13 +336,11 @@ public class Board {
      * @return A list of positions the piece can legally move to
      * */
     public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> validMoves) {
-        ArrayList<Position> movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved = this.piecesThatCouldPutTheKingInCheckIfSelectedPieceIsMoved(this.getKingPos(piece.isWhite()), piece);
+        ArrayList<Position> movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved = this.positionsPieceCanMoveToAndStillCoverKing(this.getKingPos(piece.isWhite()), piece);
         if (movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved != null) {
             if (movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved.isEmpty())
                 return movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved;
-            for (int i=0; i<validMoves.size(); i++)
-                if (!movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved.contains(validMoves.get(i)))
-                    validMoves.remove(i);
+            validMoves.retainAll(movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved);
         }
         return validMoves;
     }
