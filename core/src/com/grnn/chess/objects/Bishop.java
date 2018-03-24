@@ -28,8 +28,8 @@ public class Bishop extends AbstractChessPiece {
 		validMoves.addAll(getValidMovesNorthEast(board));
 		validMoves.addAll(getValidMovesSouthWest(board));
 		validMoves.addAll(getValidMovesSouthEast(board));
+		return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
 
-		return validMoves;
 	}
 
 	private ArrayList<Position> getValidMovesSouthEast(Board board) {

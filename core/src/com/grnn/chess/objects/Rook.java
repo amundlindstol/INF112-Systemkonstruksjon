@@ -63,7 +63,7 @@ public class Rook extends AbstractChessPiece {
             else break;
         } while (board.getPieceAt(rookPos.south(i++))==null);
 
-		return validMoves;//(ArrayList<Position>) Arrays.asList(board.getPosition(this));
+        return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
 	}
 
 
