@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.*;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.objects.*;
-//import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 
@@ -110,45 +109,7 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
 
-        if(aiPlayer){
-            if (turn) {
-                text = "Venter på at du skal gjøre neste trekk.";
-                if (removed) {
-                    text = "Bra jobbet! Du tok en brikke.";
-                }
-            } else {
-                if(removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg.";
-                }
-            }
-        }
-
-        else{
-            if (turn) {
-                text = "Venter på at du skal gjøre neste trekk.";
-                if (removed) {
-                    text = "Uff. Du mistet en brikke. Det er din tur.";
-                }
-
-            } else {
-                text = "Venter på at vennen din skal gjøre neste trekk.";
-
-                if (removed) {
-                    text = "Bra jobbet! Du tok en brikke. Det er vennen din sin tur.";
-                }
-            }
-        }
-
-            if(kingCounter==1){
-                text = "Du vant "+ humanPlayer.name +", gratulerer!";
-                activegame = false;
-            }
-            else if(kingCounterPlayer ==1){
-                text = "Du vant " + humanPlayer.name + ", du må nok øve mer...";
-                activegame = false;
-            }
-
-
+        displayText();
 
         fontText.draw(batch, text, 645, 334);
         fontCounter.draw(batch, "" + pawnCounter, 668, 418);
@@ -200,6 +161,45 @@ public class PlayState extends State {
                     oldTexture.dispose();
                 }
             }
+        }
+    }
+
+    /**
+     * displays text...
+     */
+    private void displayText() {
+        if(aiPlayer) {
+            if (turn) {
+                text = "Venter på at du skal gjøre neste trekk.";
+                if (removed) {
+                    text = "Bra jobbet! Du tok en brikke.";
+                }
+            } else {
+                if(removed) {
+                    text = "Uff. Datamaskinen tok en brikke av deg.";
+                }
+            }
+        } else {
+            if (turn) {
+                text = "Venter på at du skal gjøre neste trekk.";
+                if (removed) {
+                    text = "Uff. Du mistet en brikke. Det er din tur.";
+                }
+
+            } else {
+                text = "Venter på at vennen din skal gjøre neste trekk.";
+                if (removed) {
+                    text = "Bra jobbet! Du tok en brikke. Det er vennen din sin tur.";
+                }
+            }
+        }
+
+        if(kingCounter == 1) {
+            text = "Du vant "+ humanPlayer.name +", gratulerer!";
+            activegame = false;
+        } else if(kingCounterPlayer == 1) {
+            text = "Du vant ikke, du må nok øve mer...";
+            activegame = false;
         }
     }
 
@@ -319,8 +319,7 @@ public class PlayState extends State {
                     removed = false;
                 }
             }
-        }
-        else if (Gdx.input.justTouched()) {
+        } else if (Gdx.input.justTouched()) {
             Gdx.app.exit();
         }
     }

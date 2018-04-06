@@ -2,22 +2,25 @@ package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Player;
 
 /**
  * @author Amund 15.03.18
  */
 public class StartGameState extends State {
-    private Texture background, pieces, kingBlack;
-    private Texture playBtn;
-    private int Xplay, Yplay, Count;
+    private Texture background, pieces;
+    private TextButton playBtn;
+    private int xPos, yPos, Count;
     private Player currentPlayer;
 
-    public StartGameState(GameStateManager gsm) { //TODO this constructor should be deleted when never used
-        super(gsm);
-        new StartGameState(gsm, new Player("delete", "me"));
-    }
+    private Skin skin;
+    private Stage stage;
 
     /**
      * main menu when logged in
@@ -26,14 +29,19 @@ public class StartGameState extends State {
      */
     public StartGameState(GameStateManager gsm, Player player) {
         super(gsm);
+        // init stage and listener
+        stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
+        Gdx.input.setInputProcessor(stage);
+        skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
+
         this.currentPlayer = player;
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        playBtn = new Texture("Graphics/Menu/Buttons/menu_button.png");
-        //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
-        // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
-        Xplay = 400;
-        Yplay = 340;
+        playBtn = new TextButton("Spill", skin);
+        stage.addActor(playBtn);
+
+        xPos = (int) (Gdx.graphics.getWidth()/2 - playBtn.getWidth()/2 - 20);
+        yPos = 340;
         Count = 20;
         currentPlayer = player;
     }
@@ -42,8 +50,8 @@ public class StartGameState extends State {
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
-        int texturePosX = Xplay;
-        int  texturePosY = Yplay;
+        int texturePosX = xPos;
+        int  texturePosY = yPos;
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             gsm.set(new SelectPlayerState(gsm, currentPlayer));
         }
@@ -56,33 +64,34 @@ public class StartGameState extends State {
 
     @Override
     public void render(SpriteBatch sb) {
-//        sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(background, 0,0);
 
-        Count++;
+        //animate button
+        animate();
 
-        // Animate button
-        if(Count < 40 ) {
-            Xplay++;
-            sb.draw(playBtn, Xplay, Yplay);
+        sb.draw(pieces, 0, 0);
+        sb.end();
+        stage.draw();
+    }
+
+    private void animate() {
+        Count++;
+        if (Count <= 40 ) {
+            playBtn.setPosition(++xPos, yPos);
         }
-        else if (Count < 80){
-            Xplay--;
+        else if (Count <= 80){
+            playBtn.setPosition(--xPos, yPos);
         }
         else {
             Count = 0;
         }
-
-        sb.draw(pieces, 0, 0);
-        sb.draw(playBtn, Xplay, Yplay);
-        sb.end();
     }
 
     @Override
     public void dispose() {
         background.dispose();
-        playBtn.dispose();
+        stage.dispose();
         System.out.println("Menu State Disposed");
     }
 }

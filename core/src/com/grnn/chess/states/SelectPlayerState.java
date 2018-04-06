@@ -2,7 +2,12 @@ package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Player;
 
 import java.util.ArrayList;
@@ -14,11 +19,13 @@ import java.util.ArrayList;
  */
 public class SelectPlayerState extends State {
 
+    private final Stage stage;
+    private final Skin skin;
     // Variables
     private Texture background, pieces;
-    private Texture playBtn, playBtn2, playBtn3, playBtn4;
+    private TextButton playBtn, playBtn2, playBtn3, playBtn4;
     private Texture emoticonEasy, emoticonEasy2, emoticonMedium, emoticonMedium2, emoticonHard, emoticonHard2;
-    private int xPlay, yPlay, Xreg, Yreg, count;
+    private int xPlay, yPlay, count;
     private ArrayList<Texture> test;
     private Player humanPlayer;
 
@@ -28,23 +35,42 @@ public class SelectPlayerState extends State {
      */
     public SelectPlayerState(GameStateManager gsm, Player player){
         super(gsm);
-        background = new Texture("Graphics/Menu/AI_menu.png");
+        // init stage and listener
+        stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
+        Gdx.input.setInputProcessor(stage);
+        skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
+        background = new Texture("Graphics/Menu/AI_menu_larger.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        playBtn = new Texture("Graphics/Menu/Buttons/menu_button_AI_easy.png");
-        playBtn2 = new Texture("Graphics/Menu/Buttons/menu_button_AI_medium.png");
-        playBtn3 = new Texture("Graphics/Menu/Buttons/menu_button_AI_hard.png");
-        playBtn4 = new Texture("Graphics/Menu/Buttons/menu_button_venn.png");
+        xPlay = 230;
+        yPlay = 350;
+        count = 0;
+
+        //buttons
+        playBtn = new TextButton("lett", skin);
+        playBtn2 = new TextButton("middels", skin);
+        playBtn3 = new TextButton("vanskelig", skin);
+        playBtn4 = new TextButton("ok", skin);
+        playBtn3.setSize(playBtn3.getWidth(), 50);
+        playBtn.setSize(playBtn3.getWidth(), 50);
+        playBtn2.setSize(playBtn3.getWidth(), 50);
+        playBtn4.setSize(playBtn3.getWidth()-70, 50);
+        playBtn.setPosition(xPlay, yPlay);
+        playBtn2.setPosition(xPlay, yPlay-70);
+        playBtn3.setPosition(xPlay, yPlay-140);
+        playBtn4.setPosition(xPlay+380, yPlay);
+
+        stage.addActor(playBtn);
+        stage.addActor(playBtn2);
+        stage.addActor(playBtn3);
+        stage.addActor(playBtn4);
+
+        // emoticons
         emoticonEasy = new Texture("Graphics/Menu/Animations/Emoji_1/1.png");
         emoticonEasy2 = new Texture("Graphics/Menu/Animations/Emoji_1/2.png");
         emoticonMedium = new Texture("Graphics/Menu/Animations/Emoji_2/3.png");
         emoticonMedium2 = new Texture("Graphics/Menu/Animations/Emoji_2/4.png");
         emoticonHard = new Texture("Graphics/Menu/Animations/Emoji_3/5.png");
         emoticonHard2 = new Texture("Graphics/Menu/Animations/Emoji_3/6.png");
-        xPlay = 300;
-        yPlay = 350;
-        Xreg = xPlay + 290;
-        Yreg = yPlay;
-        count = 0;
         test = new ArrayList<Texture>();
         test.add(emoticonEasy);
         test.add(emoticonEasy2);
@@ -59,30 +85,20 @@ public class SelectPlayerState extends State {
      * Method to handle inputs from the mouse
      */
     public void handleInput() {
-        int x = Math.abs(Gdx.input.getX());
-        int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
-        int texturePosX = xPlay;
-        int  texturePosY = yPlay;
-
         // Button for play against AI lett
-        if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+        if (playBtn.isPressed()) {
             gsm.set(new PlayState(gsm, true, humanPlayer));
         }
-        texturePosY = yPlay-70;
         // Button for play against AI medium
-        if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+        if (playBtn2.isPressed()) {
             gsm.set(new PlayState(gsm, true, humanPlayer));
         }
-        texturePosY = yPlay-140;
         // Button for play against AI vanskelig
-        if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+        if (playBtn3.isPressed()) {
             gsm.set(new PlayState(gsm, true, humanPlayer));
         }
-        texturePosX = Xreg;
-        texturePosY = Yreg;
-
         // Button for play with a friend
-        if (x > texturePosX && y > texturePosY && x < playBtn4.getWidth()+texturePosX && y < playBtn4.getHeight()+texturePosY && Gdx.input.justTouched()) {
+        if (playBtn4.isPressed()) {
             gsm.set(new PlayState(gsm,false, humanPlayer ));
         }
     }
@@ -97,14 +113,16 @@ public class SelectPlayerState extends State {
         sb.begin();
         sb.draw(background, 0,0);
         sb.draw(pieces, 0, 0);
-        sb.draw(playBtn, xPlay, yPlay);
-        sb.draw(playBtn2, xPlay, yPlay - 70);
-        sb.draw(playBtn3, xPlay, yPlay - 140);
-        sb.draw(playBtn4, xPlay+290, yPlay );
+        sb.end();
+        stage.draw();
 
         count++;
-
         // Draw emoticons
+        renderEmoticons(sb);
+    }
+
+    private void renderEmoticons(SpriteBatch sb) {
+        sb.begin();
         if(count  < 15 ) {
             sb.draw(test.get(0), xPlay-30, yPlay);
             sb.draw(test.get(4), xPlay-17, yPlay-88);
@@ -124,15 +142,12 @@ public class SelectPlayerState extends State {
     @Override
     public void dispose() {
         background.dispose();
-        playBtn.dispose();
-        playBtn2.dispose();
-        playBtn3.dispose();
+        pieces.dispose();
         emoticonEasy.dispose();
         emoticonEasy2.dispose();
         emoticonMedium.dispose();
         emoticonMedium2.dispose();
         emoticonHard.dispose();
         emoticonHard2.dispose();
-        System.out.println("SelectAI State Disposed");
     }
 }
