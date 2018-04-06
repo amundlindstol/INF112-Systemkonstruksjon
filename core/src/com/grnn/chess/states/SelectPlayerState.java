@@ -129,6 +129,10 @@ public class SelectPlayerState extends State {
         playBtn3.dispose();
         emoticonEasy.dispose();
         emoticonEasy2.dispose();
+        emoticonMedium.dispose();
+        emoticonMedium2.dispose();
+        emoticonHard.dispose();
+        emoticonHard2.dispose();
         System.out.println("SelectAI State Disposed");
     }
 }
