@@ -1,4 +1,5 @@
 ## Java
+/core/assets/data/
 
 *.class
 *.war

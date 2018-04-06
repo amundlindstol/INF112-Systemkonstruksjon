@@ -29,7 +29,7 @@ public class StartGameState extends State {
         this.currentPlayer = player;
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        playBtn = new Texture("Graphics/Menu/menu_button.png");
+        playBtn = new Texture("Graphics/Menu/Buttons/menu_button.png");
         //Xplay = Gdx.graphics.getWidth()/2-playBtn.getWidth()/2;
         // Yplay = Gdx.graphics.getHeight()/2-playBtn.getHeight()/2;
         Xplay = 400;

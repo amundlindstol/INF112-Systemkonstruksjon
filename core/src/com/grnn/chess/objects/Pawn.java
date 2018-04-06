@@ -42,7 +42,7 @@ public class Pawn extends AbstractChessPiece {
 				validMoves.add(pawnPos.south());
 			}
 		}
-		return validMoves;
+		return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
 	}
 
 	@Override

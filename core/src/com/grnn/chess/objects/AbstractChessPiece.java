@@ -20,13 +20,6 @@ public abstract class AbstractChessPiece {
     protected String image = "Graphics/ChessPieces/";
     protected final int value = 0; // Should value be set in the abstract class?
 
-
-    //private Direction askedToGo;
-
-    /*public Position getPosition(){
-
-    }*/
-
     /**
      * Contructur of an AbstractChessPiece
      * @param isWhite

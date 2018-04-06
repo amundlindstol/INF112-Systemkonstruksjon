@@ -30,10 +30,10 @@ public class SelectPlayerState extends State {
         super(gsm);
         background = new Texture("Graphics/Menu/AI_menu.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        playBtn = new Texture("Graphics/Menu/menu_button_AI_easy.png");
-        playBtn2 = new Texture("Graphics/Menu/menu_button_AI_medium.png");
-        playBtn3 = new Texture("Graphics/Menu/menu_button_AI_hard.png");
-        playBtn4 = new Texture("Graphics/Menu/menu_button_venn.png");
+        playBtn = new Texture("Graphics/Menu/Buttons/menu_button_AI_easy.png");
+        playBtn2 = new Texture("Graphics/Menu/Buttons/menu_button_AI_medium.png");
+        playBtn3 = new Texture("Graphics/Menu/Buttons/menu_button_AI_hard.png");
+        playBtn4 = new Texture("Graphics/Menu/Buttons/menu_button_venn.png");
         emoticonEasy = new Texture("Graphics/Menu/Animations/Emoji_1/1.png");
         emoticonEasy2 = new Texture("Graphics/Menu/Animations/Emoji_1/2.png");
         emoticonMedium = new Texture("Graphics/Menu/Animations/Emoji_2/3.png");
@@ -64,7 +64,17 @@ public class SelectPlayerState extends State {
         int texturePosX = xPlay;
         int  texturePosY = yPlay;
 
-        // Buttons for play against AI
+        // Button for play against AI lett
+        if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+            gsm.set(new PlayState(gsm, true, humanPlayer));
+        }
+        texturePosY = yPlay-70;
+        // Button for play against AI medium
+        if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+            gsm.set(new PlayState(gsm, true, humanPlayer));
+        }
+        texturePosY = yPlay-140;
+        // Button for play against AI vanskelig
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             gsm.set(new PlayState(gsm, true, humanPlayer));
         }

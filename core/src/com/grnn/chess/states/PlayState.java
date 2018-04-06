@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.*;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.objects.*;
+//import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,8 @@ public class PlayState extends State {
     Texture captureTex;
     ArrayList<Texture> pieceTexures;
     ArrayList<Position> positions;
+    boolean blackPutInCheck;
+    boolean whitePutInCheck;
     private Position selected;
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
@@ -33,6 +36,7 @@ public class PlayState extends State {
     private Boolean turn;
     private Boolean aiPlayer;
     private AI ai;
+    private Boolean activegame;
     private BitmapFont fontText;
     private BitmapFont fontCounter;
     private Boolean removed;
@@ -77,6 +81,7 @@ public class PlayState extends State {
         rookCounterPlayer = 0;
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
+        activegame = true;
 
         if(aiPlayer){
             ai = new AI();
@@ -111,10 +116,9 @@ public class PlayState extends State {
                 if (removed) {
                     text = "Bra jobbet! Du tok en brikke.";
                 }
-
             } else {
-                if (removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg. FAEN I HELVETE!!";
+                if(removed) {
+                    text = "Uff. Datamaskinen tok en brikke av deg.";
                 }
             }
         }
@@ -123,36 +127,47 @@ public class PlayState extends State {
             if (turn) {
                 text = "Venter på at du skal gjøre neste trekk.";
                 if (removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg. FAEN I HELVETE!!";
+                    text = "Uff. Du mistet en brikke. Det er din tur.";
                 }
 
             } else {
-                text = "Venter på at datamaskinen skal gjøre neste trekk.";
+                text = "Venter på at vennen din skal gjøre neste trekk.";
 
                 if (removed) {
-                    text = "Bra jobbet! Du tok en brikke. Det er datamaskinen sin tur.";
+                    text = "Bra jobbet! Du tok en brikke. Det er vennen din sin tur.";
                 }
             }
         }
 
-        fontText.draw(batch, text, 645, 334);
-        fontCounter.draw(batch, "" + pawnCounter, 668, 420);
-        fontCounter.draw(batch, "" + bishopCounter, 727, 420);
-        fontCounter.draw(batch, "" + knightCounter, 785, 420);
-        fontCounter.draw(batch, "" + rookCounter, 843, 420);
-        fontCounter.draw(batch, "" + queenCounter, 900, 420);
-        fontCounter.draw(batch, "" + kingCounter, 959, 420);
+            if(kingCounter==1){
+                text = "Du vant "+ humanPlayer.name +", gratulerer!";
+                activegame = false;
+            }
+            else if(kingCounterPlayer ==1){
+                text = "Du vant " + humanPlayer.name + ", du må nok øve mer...";
+                activegame = false;
+            }
 
-        fontCounter.draw(batch, "" + pawnCounterPlayer, 668, 100);
-        fontCounter.draw(batch, "" + bishopCounterPlayer, 727, 100);
-        fontCounter.draw(batch, "" + knightCounterPlayer, 785, 100);
-        fontCounter.draw(batch, "" + rookCounterPlayer, 843, 100);
-        fontCounter.draw(batch, "" + queenCounterPlayer, 900, 100);
-        fontCounter.draw(batch, "" + kingCounterPlayer, 959, 100);
+
+
+        fontText.draw(batch, text, 645, 334);
+        fontCounter.draw(batch, "" + pawnCounter, 668, 418);
+        fontCounter.draw(batch, "" + bishopCounter, 739, 418);
+        fontCounter.draw(batch, "" + knightCounter, 810, 418);
+        fontCounter.draw(batch, "" + rookCounter, 883, 418);
+        fontCounter.draw(batch, "" + queenCounter, 960, 418);
+        fontCounter.draw(batch, "" + kingCounter, 1037, 418);
+
+        fontCounter.draw(batch, "" + pawnCounterPlayer, 668, 105);
+        fontCounter.draw(batch, "" + bishopCounterPlayer, 739, 105);
+        fontCounter.draw(batch, "" + knightCounterPlayer, 810, 105);
+        fontCounter.draw(batch, "" + rookCounterPlayer, 882, 105);
+        fontCounter.draw(batch, "" + queenCounterPlayer, 959, 105);
+        fontCounter.draw(batch, "" + kingCounterPlayer, 1037, 105);
 
         // Player names
-        fontCounter.draw(batch, "" + humanPlayer.getName() , 700, 250);
-        fontCounter.draw(batch, "" + "Datamaskin" , 700, 560);
+        fontCounter.draw(batch, "" + humanPlayer.getName() , 726, 241);
+        fontCounter.draw(batch, "" + "Datamaskin" , 723, 555);
 
 
 
@@ -195,59 +210,59 @@ public class PlayState extends State {
      */
     public void updatePieceCounter(AbstractChessPiece removedPiece, Boolean player){
 
-        if(player){
-            if(removedPiece instanceof Pawn){
-                if(player)
-                    pawnCounterPlayer ++;
-                else
-                    pawnCounter ++;
+        if(removedPiece instanceof Pawn){
+            if(!player)
+                pawnCounterPlayer ++;
+            else
+                pawnCounter ++;
+        }
+        else if(removedPiece instanceof Bishop){
+            if(!player)
+                bishopCounterPlayer ++;
+            else
+                bishopCounter ++;
+        }
+        else if(removedPiece instanceof King){
+            if(!player)
+                kingCounterPlayer ++;
+            else
+                kingCounter ++;
+        }
+        else if(removedPiece instanceof Queen){
+            if(!player)
+                queenCounterPlayer ++;
+            else
+                queenCounter ++;
+        }
+        else if(removedPiece instanceof Rook){
+            if(!player)
+                rookCounterPlayer ++;
+            else{
+                rookCounter ++;
             }
-            else if(removedPiece instanceof Bishop){
-                if(player)
-                    bishopCounterPlayer ++;
-                else
-                    bishopCounter ++;
-            }
-            else if(removedPiece instanceof King){
-                if(player)
-                    kingCounterPlayer ++;
-                else
-                    kingCounter ++;
-            }
-            else if(removedPiece instanceof Queen){
-                if(player)
-                    queenCounterPlayer ++;
-                else
-                    queenCounter ++;
-            }
-            else if(removedPiece instanceof Rook){
-                if(player)
-                    rookCounterPlayer ++;
-                else{
-                    rookCounter ++;
-                }
-            }
-            else if(removedPiece instanceof Knight){
-                if(player)
-                    knightCounterPlayer ++;
-                else
-                    knightCounter ++;
-            }
+        }
+        else if(removedPiece instanceof Knight){
+            if(!player)
+                knightCounterPlayer ++;
+            else
+                knightCounter ++;
         }
     }
 
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY());
-        if (x>40 && x< 560 && y>40 && y<560) {
+        if (x>40 && x< 560 && y>40 && y<560 && activegame) {
             //AI
             if(aiPlayer && !turn){
                 Move aiMove = ai.calculateBestMove(board);
                 AbstractChessPiece victim = board.getPieceAt(aiMove.getToPos());
                 if(victim !=null) {
                     board.removePiece(victim);
+                    updatePieceCounter(victim, turn);
                 }
                 board.movePiece(aiMove.getFromPos(),aiMove.getToPos());
+                handleCheckChecking(turn);
                 turn = !turn;
             }
 
@@ -276,8 +291,9 @@ public class PlayState extends State {
                         removed = true;
                         updatePieceCounter(potentialPiece, turn);
                         board.movePiece(selected, potentialPos);
-                        reset();
+                        handleCheckChecking(turn);
                         turn = !turn;
+                        reset();
                     } else if (potentialPiece.isWhite() == turn) {
                         reset();
                         potentialMoves = potentialPiece.getValidMoves(board);
@@ -294,6 +310,7 @@ public class PlayState extends State {
                 } else if (potentialPiece == null && validMove) {
                     handleCastling(potentialPos);
                     board.movePiece(selected, potentialPos);
+                    handleCheckChecking(turn);
                     reset();
                     turn = !turn;
                     removed = false;
@@ -340,6 +357,19 @@ public class PlayState extends State {
             }
         }
         board.movePiece(rookOriginalPos, rookNewPos);
+    }
+
+    public void handleCheckChecking(boolean turn){
+        Position kingPos = board.getKingPos(!turn);
+        if (kingPos != null) {
+            ((King) board.getPieceAt(kingPos)).isInCheck = ((King) board.getPieceAt(kingPos)).willThisKingBePutInCheckByMoveTo(board, kingPos);
+            if (((King) board.getPieceAt(kingPos)).isInCheck) {
+                if (turn)
+                    blackPutInCheck = true;
+                else whitePutInCheck = true;
+                System.out.println("SJAKK");
+            }
+        }
     }
 
     @Override

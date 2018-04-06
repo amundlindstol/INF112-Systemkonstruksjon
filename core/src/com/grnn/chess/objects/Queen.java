@@ -22,12 +22,14 @@ public class Queen extends AbstractChessPiece{
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 
 		Position queenPos = getPosition(board);
-		System.out.println(queenPos.getX()+","+queenPos.getY()+" "+this.isWhite);
+		System.out.println(queenPos.getX() + "," + queenPos.getY() + " " + this.isWhite);
 		validMoves.addAll(getValidVerticalAndHorizontalMoves(board, queenPos));
-		validMoves.addAll(getValidDiagonalMoves(board,queenPos));
-		return validMoves;
+		validMoves.addAll(getValidDiagonalMoves(board, queenPos));
 
+
+		return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
 	}
+
 	public ArrayList<Position> getValidVerticalAndHorizontalMoves(Board board, Position queenPos){	//Get the position of the rook
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 		int i=1;

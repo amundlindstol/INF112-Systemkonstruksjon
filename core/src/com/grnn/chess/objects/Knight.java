@@ -32,7 +32,7 @@ public class Knight extends AbstractChessPiece {
         addValidMove2South1West(board, posKnight, validMoves);
         addValidMove2South1East(board, posKnight, validMoves);
 
-        return validMoves;
+        return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
     }
 
     private void addValidMove2South1East(Board board, Position posKnight, ArrayList<Position> validMoves) {
@@ -113,4 +113,5 @@ public class Knight extends AbstractChessPiece {
     public int getValue() {
         return value;
     }
+
 }

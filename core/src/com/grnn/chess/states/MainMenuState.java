@@ -24,8 +24,8 @@ public class MainMenuState extends State {
         super(gsm);
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        loginBtn = new Texture("Graphics/Menu/menu_button_login.png");
-        registerBtn = new Texture("Graphics/Menu/menu_button_reg.png");
+        loginBtn = new Texture("Graphics/Menu/Buttons/menu_button_login.png");
+        registerBtn = new Texture("Graphics/Menu/Buttons/menu_button_reg.png");
         kingBlack = new Texture("Graphics/Menu/KingBlack.png");
         Xplay = 400;
         Yplay = 340;
@@ -62,8 +62,8 @@ public class MainMenuState extends State {
         CountKing ++;
         sb.draw(background, 0,0);
         sb.draw(pieces, 0, 0);
-        sb.draw(loginBtn, Xplay, Yplay);
-        sb.draw(registerBtn, Xreg, Yreg);
+        sb.draw(loginBtn, Xplay, Yplay+10);
+        sb.draw(registerBtn, Xreg, Yreg-30);
 
         if(CountKing > 450){
             CountKing --;

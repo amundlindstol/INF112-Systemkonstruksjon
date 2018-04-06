@@ -21,7 +21,7 @@ public class RegisterUserState extends State {
 
     // Variables
     private Texture background, pieces;
-    private Texture confirmBtn;
+    private Texture confirmBtn, menuBtn;
     private TextField usernameField, passwordField;
     private Label message, usernameTxt, passwordTxt;
     private int xPos, yPos;
@@ -59,9 +59,10 @@ public class RegisterUserState extends State {
         stage.addActor(message);
 
 
-        background = new Texture("Graphics/Menu/Menu_background.png");
+        background = new Texture("Graphics/Menu/MenuRegister.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        confirmBtn = new Texture("Graphics/Menu/menu_button_venn.png");
+        confirmBtn = new Texture("Graphics/Menu/Buttons/menu_button_ok_dark.png");
+        menuBtn = new Texture("Graphics/Menu/Buttons/menu_button_menu_dark.png");
 
         xPos = 450;
         yPos = 225;
@@ -72,7 +73,7 @@ public class RegisterUserState extends State {
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
-        int texturePosX = xPos;
+        int texturePosX = xPos + 115;
         int texturePosY = yPos;
         if (x > texturePosX && y > texturePosY && x < confirmBtn.getWidth()+texturePosX && y < confirmBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
             PlayerData playerData = new PlayerData();
@@ -83,24 +84,29 @@ public class RegisterUserState extends State {
 
             // valid username and password?
             if (playerData.nameExists(username)) {
-                message.setText("Brukernavnet finnes allerede");
+                message.setText("Brukernavnet finnes allerede.");
                 return;
             } else if (username.length() == 0) {
-                message.setText("           Lag et brukernavn!");
+                message.setText("           Oppgi et brukernavn.");
                 return;
             } else if (password.length() == 0) {
-                message.setText("           Lag et passord!"); //TODO add ascii code æøå
+                message.setText("           Lag et passord."); //TODO add ascii code æøå
                 return;
             } else if (username != checkUsr) {
-                message.setText("Brukernavnet kan ikke inneholde spesialtegn");
+                message.setText("Brukernavnet kan ikke inneholde spesialtegn.");
                 return;
             } else if (password != checkPwd) {
-                message.setText("Passordet kan ikke inneholde spesialtegn");
+                message.setText("Passordet kan ikke inneholde spesialtegn.");
                 return;
             }
             Player player = new Player(username, password);
             playerData.addAccount(player);
             gsm.set(new StartGameState(gsm, player));
+        }
+        texturePosX = xPos -100;
+        texturePosY = yPos;
+        if (x > texturePosX && y > texturePosY && x < menuBtn.getWidth()+texturePosX && y < menuBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+            gsm.set(new MainMenuState(gsm));
         }
     }
 
@@ -113,8 +119,9 @@ public class RegisterUserState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0,0);
-        sb.draw(pieces, 70, 0);
-        sb.draw(confirmBtn, xPos, yPos);
+        sb.draw(pieces, 0, 0);
+        sb.draw(confirmBtn, xPos + 115, yPos);
+        sb.draw(menuBtn, xPos-100, yPos);
         sb.end();
         stage.draw();
     }
