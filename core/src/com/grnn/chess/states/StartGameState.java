@@ -48,11 +48,7 @@ public class StartGameState extends State {
 
     @Override
     public void handleInput() {
-        int x = Math.abs(Gdx.input.getX());
-        int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
-        int texturePosX = xPos;
-        int  texturePosY = yPos;
-        if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+        if (playBtn.isPressed()) {
             gsm.set(new SelectPlayerState(gsm, currentPlayer));
         }
     }
