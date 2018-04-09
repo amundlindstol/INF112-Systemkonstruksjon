@@ -1,3 +1,0 @@
--- i intelliJ
-trykk på file > open
-naviger til prosjektet og dobbeltklikk på 112inf.ipr
