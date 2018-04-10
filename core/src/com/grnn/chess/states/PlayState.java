@@ -19,31 +19,33 @@ import java.util.ArrayList;
 public class PlayState extends State {
 
     // Variables
+    Game game;
     Board board;
+
     Texture bg;
     Texture bgBoard;
     Texture potentialTex;
     Texture captureTex;
     ArrayList<Texture> pieceTexures;
     ArrayList<Position> positions;
-    boolean blackPutInCheck;
-    boolean whitePutInCheck;
-    private Position selected;
+
+
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
     private ArrayList<Position> castlingMoves;
     private TranslateToCellPos translator;
-    private Boolean turn;
+
     private Boolean aiPlayer;
     private AI ai;
     private Boolean activegame;
     private BitmapFont fontText;
     private BitmapFont fontCounter;
-    private Boolean removed;
+
     private String text;
     private Player humanPlayer;
-    private int pawnCounter, bishopCounter, kingCounter, queenCounter, rookCounter, knightCounter;
-    private int pawnCounterPlayer, bishopCounterPlayer, kingCounterPlayer, queenCounterPlayer, rookCounterPlayer, knightCounterPlayer;
+
+    private int[]removedPieces;
+
 
 
     public PlayState(GameStateManager gsm, boolean aiPlayer, Player player) {
@@ -52,33 +54,23 @@ public class PlayState extends State {
         bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
-        board = new Board();
-        board.initializeBoard();
-        selected = null;
+        game = new Game();
+        board = game.getBoard();
+        potentialMoves = game.getValidMoves();
+        captureMoves = game.getCaptureMoves();
+        text = game.getText();
+        removedPieces = game.getRemovedPieces();
+
         humanPlayer = player;
-        potentialMoves = new ArrayList<Position>();
-        captureMoves = new ArrayList<Position>();
-        castlingMoves = new ArrayList<Position>();
+
         translator = new TranslateToCellPos();
-        turn = true;
+
         fontText = new BitmapFont();
         fontText.setColor(Color.BLACK);
         fontCounter = new BitmapFont();
         fontCounter.setColor(Color.WHITE);
-        removed = false;
+
         this.aiPlayer = aiPlayer;
-        pawnCounter = 0;
-        bishopCounter = 0;
-        kingCounter = 0;
-        queenCounter = 0;
-        knightCounter = 0;
-        rookCounter = 0;
-        pawnCounterPlayer = 0;
-        bishopCounterPlayer = 0;
-        kingCounterPlayer = 0;
-        queenCounterPlayer = 0;
-        knightCounterPlayer = 0;
-        rookCounterPlayer = 0;
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
@@ -99,7 +91,14 @@ public class PlayState extends State {
     }
 
     @Override
-    public void update(float dt) {handleInput();}
+    public void update(float dt) {
+        handleInput();
+        board = game.getBoard();
+        potentialMoves = game.getValidMoves();
+        captureMoves = game.getCaptureMoves();
+        text = game.getText();
+        removedPieces = game.getRemovedPieces();
+    }
 
     @Override
     public void render(SpriteBatch batch) {
@@ -110,60 +109,29 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
 
-        if(aiPlayer){
-            if (turn) {
-                text = "Venter på at du skal gjøre neste trekk.";
-                if (removed) {
-                    text = "Bra jobbet! Du tok en brikke.";
-                }
-            } else {
-                if(removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg.";
-                }
-            }
+        if(removedPieces[2]==1){
+            text = "Du vant "+ humanPlayer.name +", gratulerer!";
+            activegame = false;
         }
-
-        else{
-            if (turn) {
-                text = "Venter på at du skal gjøre neste trekk.";
-                if (removed) {
-                    text = "Uff. Du mistet en brikke. Det er din tur.";
-                }
-
-            } else {
-                text = "Venter på at vennen din skal gjøre neste trekk.";
-
-                if (removed) {
-                    text = "Bra jobbet! Du tok en brikke. Det er vennen din sin tur.";
-                }
-            }
+        else if(removedPieces[8]==1){
+            text = "Du vant " + humanPlayer.name + ", du må nok øve mer...";
+            activegame = false;
         }
-
-            if(kingCounter==1){
-                text = "Du vant "+ humanPlayer.name +", gratulerer!";
-                activegame = false;
-            }
-            else if(kingCounterPlayer ==1){
-                text = "Du vant " + humanPlayer.name + ", du må nok øve mer...";
-                activegame = false;
-            }
-
-
 
         fontText.draw(batch, text, 645, 334);
-        fontCounter.draw(batch, "" + pawnCounter, 668, 418);
-        fontCounter.draw(batch, "" + bishopCounter, 739, 418);
-        fontCounter.draw(batch, "" + knightCounter, 810, 418);
-        fontCounter.draw(batch, "" + rookCounter, 883, 418);
-        fontCounter.draw(batch, "" + queenCounter, 960, 418);
-        fontCounter.draw(batch, "" + kingCounter, 1037, 418);
+        fontCounter.draw(batch, "" + removedPieces[0], 668, 418);
+        fontCounter.draw(batch, "" + removedPieces[1], 739, 418);
+        fontCounter.draw(batch, "" + removedPieces[2], 810, 418);
+        fontCounter.draw(batch, "" + removedPieces[3], 883, 418);
+        fontCounter.draw(batch, "" + removedPieces[4], 960, 418);
+        fontCounter.draw(batch, "" + removedPieces[5], 1037, 418);
 
-        fontCounter.draw(batch, "" + pawnCounterPlayer, 668, 105);
-        fontCounter.draw(batch, "" + bishopCounterPlayer, 739, 105);
-        fontCounter.draw(batch, "" + knightCounterPlayer, 810, 105);
-        fontCounter.draw(batch, "" + rookCounterPlayer, 882, 105);
-        fontCounter.draw(batch, "" + queenCounterPlayer, 959, 105);
-        fontCounter.draw(batch, "" + kingCounterPlayer, 1037, 105);
+        fontCounter.draw(batch, "" + removedPieces[6], 668, 105);
+        fontCounter.draw(batch, "" + removedPieces[7], 739, 105);
+        fontCounter.draw(batch, "" + removedPieces[8], 810, 105);
+        fontCounter.draw(batch, "" + removedPieces[9], 882, 105);
+        fontCounter.draw(batch, "" + removedPieces[10], 959, 105);
+        fontCounter.draw(batch, "" + removedPieces[11], 1037, 105);
 
         // Player names
         fontCounter.draw(batch, "" + humanPlayer.getName() , 726, 241);
@@ -180,8 +148,9 @@ public class PlayState extends State {
                 batch.draw(pieceTex, translator.toPixels(piecePos.getX(), piecePos.getY())[0], translator.toPixels(piecePos.getX(), piecePos.getY())[1]);
             }
         }
-
+        //System.out.println(potentialMoves.toString());
         if (!potentialMoves.isEmpty()) {
+            System.out.println("Potentialmoves is not empty");
             for (Position potPos : potentialMoves) {
                 int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
                 batch.draw(potentialTex, pos[0], pos[1]);
@@ -203,172 +172,31 @@ public class PlayState extends State {
         }
     }
 
-    /**
-     * Method to update the GUI's counter for removed pieces
-     * @param removedPiece, the piece that is removed
-     * @param player, boolean to tell which player
-     */
-    public void updatePieceCounter(AbstractChessPiece removedPiece, Boolean player){
 
-        if(removedPiece instanceof Pawn){
-            if(!player)
-                pawnCounterPlayer ++;
-            else
-                pawnCounter ++;
-        }
-        else if(removedPiece instanceof Bishop){
-            if(!player)
-                bishopCounterPlayer ++;
-            else
-                bishopCounter ++;
-        }
-        else if(removedPiece instanceof King){
-            if(!player)
-                kingCounterPlayer ++;
-            else
-                kingCounter ++;
-        }
-        else if(removedPiece instanceof Queen){
-            if(!player)
-                queenCounterPlayer ++;
-            else
-                queenCounter ++;
-        }
-        else if(removedPiece instanceof Rook){
-            if(!player)
-                rookCounterPlayer ++;
-            else{
-                rookCounter ++;
-            }
-        }
-        else if(removedPiece instanceof Knight){
-            if(!player)
-                knightCounterPlayer ++;
-            else
-                knightCounter ++;
-        }
-    }
 
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY());
+        Boolean notSelected = game.pieceHasNotBeenSelected();
         if (x>40 && x< 560 && y>40 && y<560 && activegame) {
-            //AI
-            if(aiPlayer && !turn){
-                Move aiMove = ai.calculateBestMove(board);
-                AbstractChessPiece victim = board.getPieceAt(aiMove.getToPos());
-                if(victim !=null) {
-                    board.removePiece(victim);
-                    updatePieceCounter(victim, turn);
-                }
-                board.movePiece(aiMove.getFromPos(),aiMove.getToPos());
-                handleCheckChecking(turn);
-                turn = !turn;
-            }
 
+            //AI
+            //game.aiMove();
+            //System.out.println(game.pieceHasNotBeenSelected());
             //first selected piece
-            if (Gdx.input.justTouched() && selected == null) {
-                selected = translator.toCellPos(x, y);
-                AbstractChessPiece selectedPiece = board.getPieceAt(selected);
-                if (selectedPiece != null && selectedPiece.isWhite() == turn) {
-                    potentialMoves = selectedPiece.getValidMoves(board);
-                    captureMoves = selectedPiece.getCaptureMoves(board);
-                    if(selectedPiece instanceof King) {
-                        castlingMoves = ((King) selectedPiece).getCastlingMoves(board, selected);
-                    }
-                } else {
-                    selected = null;
-                }
+            if (Gdx.input.justTouched() && notSelected) {
+                Position selected = translator.toCellPos(x, y);
+                game.selectFirstPiece(selected);
             }
             //second selected piece
-            if (Gdx.input.justTouched() && selected != null) {
+            else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
+                System.out.println("moving");
                 Position potentialPos = translator.toCellPos(x, y);
-                AbstractChessPiece potentialPiece = board.getPieceAt(potentialPos);
-                Boolean validMove = potentialMoves.contains(potentialPos) || captureMoves.contains(potentialPos) || castlingMoves.contains(potentialPos);
-                if (potentialPiece != null) {
-                    if (validMove) {
-                        board.removePiece(potentialPiece);
-                        removed = true;
-                        updatePieceCounter(potentialPiece, turn);
-                        board.movePiece(selected, potentialPos);
-                        handleCheckChecking(turn);
-                        turn = !turn;
-                        reset();
-                    } else if (potentialPiece.isWhite() == turn) {
-                        reset();
-                        potentialMoves = potentialPiece.getValidMoves(board);
-                        captureMoves = potentialPiece.getCaptureMoves(board);
-                        if(potentialPiece instanceof King) {
-                            castlingMoves = ((King) potentialPiece).getCastlingMoves(board, potentialPos);
-                        }
-                        selected = potentialPos;
-                        removed = false;
-                    } else {
-                        removed = false;
-                        reset();
-                    }
-                } else if (potentialPiece == null && validMove) {
-                    handleCastling(potentialPos);
-                    board.movePiece(selected, potentialPos);
-                    handleCheckChecking(turn);
-                    reset();
-                    turn = !turn;
-                    removed = false;
-                } else {
-                    reset();
-                    removed = false;
-                }
+                game.moveFirstSelectedPieceTo(potentialPos);
             }
         }
         else if (Gdx.input.justTouched()) {
             Gdx.app.exit();
-        }
-    }
-
-    /**
-     * Moves the rook if the king does castling.
-     *
-     * @param potentialPos The position the king is trying to move to.
-     */
-
-    private void handleCastling(Position potentialPos) {
-        if (!castlingMoves.contains(potentialPos))
-            return;
-
-        AbstractChessPiece potentialPiece = board.getPieceAt(selected);
-        Position rookOriginalPos = null;
-        Position rookNewPos = null;
-
-        if (potentialPiece.isWhite()) {
-            if (potentialPos.equals(new Position(2, 0))) {
-                rookOriginalPos = new Position(0, 0);
-                rookNewPos = new Position(3, 0);
-            } else if (potentialPos.equals(new Position(6, 0))) {
-                rookOriginalPos = new Position(7, 0);
-                rookNewPos = new Position(5, 0);
-            }
-        } else {
-            if (potentialPos.equals(new Position(2, 7))) {
-                rookOriginalPos = new Position(0, 7);
-                rookNewPos = new Position(3, 7);
-            } else if (potentialPos.equals(new Position(6, 7))) {
-                rookOriginalPos = new Position(7, 7);
-                rookNewPos = new Position(5, 7);
-            }
-        }
-        board.movePiece(rookOriginalPos, rookNewPos);
-    }
-
-    public void handleCheckChecking(boolean turn){
-        Position kingPos = board.getKingPos(!turn);
-        if (kingPos != null) {
-            ((King) board.getPieceAt(kingPos)).isInCheck = ((King) board.getPieceAt(kingPos)).willThisKingBePutInCheckByMoveTo(board, kingPos);
-            if (((King) board.getPieceAt(kingPos)).isInCheck) {
-                if (turn)
-                    blackPutInCheck = true;
-                else whitePutInCheck = true;
-                System.out.println("SJAKK");
-            }
         }
     }
 
@@ -384,10 +212,4 @@ public class PlayState extends State {
         System.out.println("PlayState Disposed");
     }
 
-
-    public void reset() {
-        selected = null;
-        potentialMoves = new ArrayList<Position>();
-        captureMoves = new ArrayList<Position>();
-    }
 }
