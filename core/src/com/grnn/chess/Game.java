@@ -34,8 +34,15 @@ public class Game {
         currid = id;
     }
 
-    public Game(){
-        player1 = new Player("Spiller1", "asd");
+    public Game(int aiLevel, Player player1, Player player2){
+        if(player1!=null) {
+            this.player1 = player1;
+        }
+        if(player2!=null) {
+            this.player2 = player2;
+        } else {
+            aiPlayer = new AI(aiLevel);
+        }
         player2 = new Player("Spiller2", "asd");
         gameId = ++currid;
 
@@ -79,13 +86,6 @@ public class Game {
         return captureMoves;
     }
 
-    private void startGame(boolean aiPlayer) {
-        // initialize Ai player
-        if(aiPlayer) this.aiPlayer = new AI();
-
-
-
-    }
 
 
     public void aiMove(){
@@ -109,11 +109,9 @@ public class Game {
      */
     public void selectFirstPiece(Position selectedPosition){
         firstPiece = board.getPieceAt(selectedPosition);
-        System.out.println("SelectedFirstPiece");
         if(firstPiece != null && firstPiece.isWhite() == turn){
             validMoves = firstPiece.getValidMoves(board);
             captureMoves = firstPiece.getCaptureMoves(board);
-            System.out.println("Updated moves");
             if(firstPiece instanceof King){
                 castlingMoves = ((King) firstPiece).getCastlingMoves(board,selectedPosition);
             }

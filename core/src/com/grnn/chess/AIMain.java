@@ -14,7 +14,7 @@ public class AIMain {
         System.out.println("welcome to chess3000, get ready to play!");
         System.out.println("Player one, give me your name: ");
         String player1 = input.nextLine();
-        AI ai = new AI();
+        AI ai = new AI(0);
         Move bestMove = ai.calculateBestMove(board);
         System.out.println("Doing move " + bestMove);
 

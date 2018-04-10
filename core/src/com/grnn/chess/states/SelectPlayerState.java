@@ -66,24 +66,24 @@ public class SelectPlayerState extends State {
 
         // Button for play against AI lett
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm, true, humanPlayer));
+            gsm.set(new PlayState(gsm, 1, humanPlayer,null));
         }
         texturePosY = yPlay-70;
         // Button for play against AI medium
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm, true, humanPlayer));
+            gsm.set(new PlayState(gsm, 2, humanPlayer, null));
         }
         texturePosY = yPlay-140;
         // Button for play against AI vanskelig
         if (x > texturePosX && y > texturePosY && x < playBtn.getWidth()+texturePosX && y < playBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm, true, humanPlayer));
+            gsm.set(new PlayState(gsm, 3, humanPlayer,null));
         }
         texturePosX = Xreg;
         texturePosY = Yreg;
 
         // Button for play with a friend
         if (x > texturePosX && y > texturePosY && x < playBtn4.getWidth()+texturePosX && y < playBtn4.getHeight()+texturePosY && Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm,false, humanPlayer ));
+            gsm.set(new PlayState(gsm,0, humanPlayer,new Player("Spiller2","asd")));
         }
     }
 

@@ -35,33 +35,39 @@ public class PlayState extends State {
     private ArrayList<Position> castlingMoves;
     private TranslateToCellPos translator;
 
-    private Boolean aiPlayer;
-    private AI ai;
     private Boolean activegame;
     private BitmapFont fontText;
     private BitmapFont fontCounter;
 
     private String text;
-    private Player humanPlayer;
+    private String player1Name;
+    private String player2Name;
 
     private int[]removedPieces;
 
 
 
-    public PlayState(GameStateManager gsm, boolean aiPlayer, Player player) {
+    public PlayState(GameStateManager gsm, int aiPlayer, Player player1, Player player2) {
         super(gsm);
+        //textures
         bg = new Texture("Graphics/GUI/GUI.png");
         bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
-        game = new Game();
+
+        //game
+        game = new Game(aiPlayer,player1,player2);
         board = game.getBoard();
         potentialMoves = game.getValidMoves();
         captureMoves = game.getCaptureMoves();
         text = game.getText();
         removedPieces = game.getRemovedPieces();
-
-        humanPlayer = player;
+        player1Name = player1.name;
+        if(player2!=null) {
+            player2Name = player2.name;
+        }else{
+            player2Name = "Datamaskin";
+        }
 
         translator = new TranslateToCellPos();
 
@@ -70,14 +76,10 @@ public class PlayState extends State {
         fontCounter = new BitmapFont();
         fontCounter.setColor(Color.WHITE);
 
-        this.aiPlayer = aiPlayer;
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
-        if(aiPlayer){
-            ai = new AI();
-        }
 
         for( int y = 40, yi = 0; y<560; y+=65, yi++){
             for(int x=40, xi= 0; x<560; x+=65, xi++){
@@ -110,11 +112,11 @@ public class PlayState extends State {
         batch.draw(bgBoard, 0, 0);
 
         if(removedPieces[2]==1){
-            text = "Du vant "+ humanPlayer.name +", gratulerer!";
+            text = "Du vant "+ player1Name +", gratulerer!";
             activegame = false;
         }
         else if(removedPieces[8]==1){
-            text = "Du vant " + humanPlayer.name + ", du må nok øve mer...";
+            text = "Du vant " + player1Name + ", du må nok øve mer...";
             activegame = false;
         }
 
@@ -134,8 +136,8 @@ public class PlayState extends State {
         fontCounter.draw(batch, "" + removedPieces[11], 1037, 105);
 
         // Player names
-        fontCounter.draw(batch, "" + humanPlayer.getName() , 726, 241);
-        fontCounter.draw(batch, "" + "Datamaskin" , 723, 555);
+        fontCounter.draw(batch, "" + player1Name , 726, 241);
+        fontCounter.draw(batch, "" + player2Name , 723, 555);
 
 
 
@@ -148,9 +150,7 @@ public class PlayState extends State {
                 batch.draw(pieceTex, translator.toPixels(piecePos.getX(), piecePos.getY())[0], translator.toPixels(piecePos.getX(), piecePos.getY())[1]);
             }
         }
-        //System.out.println(potentialMoves.toString());
         if (!potentialMoves.isEmpty()) {
-            System.out.println("Potentialmoves is not empty");
             for (Position potPos : potentialMoves) {
                 int[] pos = translator.toPixels(potPos.getX(), potPos.getY());
                 batch.draw(potentialTex, pos[0], pos[1]);
@@ -181,8 +181,7 @@ public class PlayState extends State {
         if (x>40 && x< 560 && y>40 && y<560 && activegame) {
 
             //AI
-            //game.aiMove();
-            //System.out.println(game.pieceHasNotBeenSelected());
+            game.aiMove();
             //first selected piece
             if (Gdx.input.justTouched() && notSelected) {
                 Position selected = translator.toCellPos(x, y);
@@ -190,7 +189,6 @@ public class PlayState extends State {
             }
             //second selected piece
             else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
-                System.out.println("moving");
                 Position potentialPos = translator.toCellPos(x, y);
                 game.moveFirstSelectedPieceTo(potentialPos);
             }

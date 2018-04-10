@@ -10,7 +10,7 @@ public class MiniMax {
 
 
     public void constructTree() {
-        Game game = new Game();
+        Game game = new Game(0,null,null);
         root = new Node(game);
         List<Move> listOfPossibleMoves ;
     }
