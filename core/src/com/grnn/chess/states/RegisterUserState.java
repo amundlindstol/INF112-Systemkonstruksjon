@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Player;
@@ -21,23 +22,21 @@ public class RegisterUserState extends State {
 
     // Variables
     private Texture background, pieces;
-    private Texture confirmBtn, menuBtn;
+    private TextButton confirmBtn, menuBtn;
     private TextField usernameField, passwordField;
     private Label message, usernameTxt, passwordTxt;
     private int xPos, yPos;
 
     private Skin skin;
     private Stage stage;
-    private PolygonSpriteBatch batch;
-
 
     public RegisterUserState(GameStateManager gsm) {
         super(gsm);
         // create skin
-        batch = new PolygonSpriteBatch();
-        stage = new Stage(new ScreenViewport(), batch);
+        stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
+
         usernameField = new TextField("", skin);
         passwordField = new TextField("", skin);
         usernameTxt = new Label("Bruker", skin);
@@ -46,36 +45,40 @@ public class RegisterUserState extends State {
         yPos = (int) (Gdx.graphics.getHeight()/2 + usernameField.getHeight());
         usernameTxt.setPosition(xPos - usernameTxt.getWidth()/2 - usernameField.getWidth()/2, yPos+usernameTxt.getHeight()/2);
         usernameField.setPosition(xPos, yPos);
-        passwordTxt.setPosition(xPos - passwordTxt.getWidth()/2 - passwordField.getWidth()/2, yPos-usernameField.getHeight()+passwordTxt.getHeight()/2);
+        passwordTxt.setPosition(xPos - passwordTxt.getWidth()/2 - passwordField.getWidth()/2, yPos-usernameField.getHeight() + passwordTxt.getHeight()/2);
         passwordField.setPosition(xPos, (int)(yPos-usernameField.getHeight()));
+
+        //buttons
+        xPos = Gdx.graphics.getWidth()/2;
+        yPos = Gdx.graphics.getHeight()/2;
+        menuBtn = new TextButton("meny", skin);
+        confirmBtn = new TextButton("login", skin);
+        menuBtn.setSize((float) (menuBtn.getWidth()/1.1), (float) (menuBtn.getHeight()/1.5));
+        confirmBtn.setSize(menuBtn.getWidth(), menuBtn.getHeight());
+        menuBtn.setPosition((float) (xPos - menuBtn.getWidth()*1.08), yPos - menuBtn.getHeight() - 25);
+        confirmBtn.setPosition(xPos, yPos - confirmBtn.getHeight() - 25);
+
+        //add textfield to display errors, help etc.
+        message = new Label("                     ", skin);
+        message.setPosition(xPos-message.getWidth(), (float) (yPos - usernameField.getHeight()/2));
+
+        stage.addActor(message);
         stage.addActor(usernameTxt);
         stage.addActor(passwordTxt);
         stage.addActor(usernameField);
         stage.addActor(passwordField);
-
-        //add textfield to display errors, help etc.
-        message = new Label("                             ", skin);
-        message.setPosition(xPos-message.getWidth()/2, (float) (yPos - usernameField.getHeight()*1.5));
-        stage.addActor(message);
+        stage.addActor(menuBtn);
+        stage.addActor(confirmBtn);
 
 
         background = new Texture("Graphics/Menu/MenuRegister.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        confirmBtn = new Texture("Graphics/Menu/Buttons/menu_button_ok_dark.png");
-        menuBtn = new Texture("Graphics/Menu/Buttons/menu_button_menu_dark.png");
-
-        xPos = 450;
-        yPos = 225;
     }
 
 
     @Override
     public void handleInput() {
-        int x = Math.abs(Gdx.input.getX());
-        int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
-        int texturePosX = xPos + 115;
-        int texturePosY = yPos;
-        if (x > texturePosX && y > texturePosY && x < confirmBtn.getWidth()+texturePosX && y < confirmBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+        if (confirmBtn.isPressed()) {
             PlayerData playerData = new PlayerData();
             String username = usernameField.getText();
             String password = passwordField.getText();
@@ -87,25 +90,22 @@ public class RegisterUserState extends State {
                 message.setText("Brukernavnet finnes allerede.");
                 return;
             } else if (username.length() == 0) {
-                message.setText("           Oppgi et brukernavn.");
+                message.setText("    Oppgi et brukernavn.");
                 return;
             } else if (password.length() == 0) {
-                message.setText("           Lag et passord."); //TODO add ascii code æøå
+                message.setText("      Lag et passord."); //TODO add ascii code æøå
                 return;
-            } else if (username != checkUsr) {
-                message.setText("Brukernavnet kan ikke inneholde spesialtegn.");
-                return;
-            } else if (password != checkPwd) {
-                message.setText("Passordet kan ikke inneholde spesialtegn.");
+            } else if (username != checkUsr || password != checkPwd) {
+                message.setText("Spesialtegn kan ikke brukes.");
                 return;
             }
+
             Player player = new Player(username, password);
             playerData.addAccount(player);
             gsm.set(new StartGameState(gsm, player));
         }
-        texturePosX = xPos -100;
-        texturePosY = yPos;
-        if (x > texturePosX && y > texturePosY && x < menuBtn.getWidth()+texturePosX && y < menuBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+
+        if (menuBtn.isPressed()) {
             gsm.set(new MainMenuState(gsm));
         }
     }
@@ -120,8 +120,6 @@ public class RegisterUserState extends State {
         sb.begin();
         sb.draw(background, 0,0);
         sb.draw(pieces, 0, 0);
-        sb.draw(confirmBtn, xPos + 115, yPos);
-        sb.draw(menuBtn, xPos-100, yPos);
         sb.end();
         stage.draw();
     }
@@ -131,6 +129,5 @@ public class RegisterUserState extends State {
         stage.dispose();
         background.dispose();
         pieces.dispose();
-        confirmBtn.dispose();
     }
 }

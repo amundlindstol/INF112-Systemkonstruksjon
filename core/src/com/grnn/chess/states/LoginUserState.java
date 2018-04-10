@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Player;
 import com.grnn.chess.PlayerData;
@@ -21,14 +19,13 @@ public class LoginUserState extends State {
 
     // Variables
     private Texture background, pieces;
-    private Texture confirmBtn, menuBtn;
     private TextField usernameField, passwordField;
+    private TextButton menuButton, loginButton;
     private Label message, usernameTxt, passwordTxt;
     private int xPos, yPos;
 
     private Skin skin;
     private Stage stage;
-    private PolygonSpriteBatch batch;
 
     /**
      * Constructor for the state
@@ -36,14 +33,14 @@ public class LoginUserState extends State {
      */
     public LoginUserState(GameStateManager gsm) {
         super(gsm);
-        // create skin
-        batch = new PolygonSpriteBatch();
-        stage = new Stage(new ScreenViewport(), batch);
+        // init stage and listener
+        stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
+
+        //textfields
         usernameField = new TextField("", skin);
         passwordField = new TextField("", skin);
-        passwordField.setPasswordMode(true);
         usernameTxt = new Label("Bruker", skin);
         passwordTxt = new Label("Passord", skin);
         xPos = (int) (Gdx.graphics.getWidth()/2 - usernameField.getWidth()/2);
@@ -52,34 +49,39 @@ public class LoginUserState extends State {
         usernameField.setPosition(xPos, yPos);
         passwordTxt.setPosition(xPos - passwordTxt.getWidth()/2 - passwordField.getWidth()/2, yPos-usernameField.getHeight()+passwordTxt.getHeight()/2);
         passwordField.setPosition(xPos, (int)(yPos-usernameField.getHeight()));
+
+        //buttons
+        xPos = Gdx.graphics.getWidth()/2;
+        yPos = Gdx.graphics.getHeight()/2;
+        menuButton = new TextButton("meny", skin);
+        loginButton = new TextButton("login", skin);
+        menuButton.setSize((float) (menuButton.getWidth()/1.1), (float) (menuButton.getHeight()/1.5));
+        loginButton.setSize(menuButton.getWidth(), menuButton.getHeight());
+        menuButton.setPosition((float) (xPos - menuButton.getWidth()*1.08), yPos - menuButton.getHeight() - 25);
+        loginButton.setPosition(xPos, yPos - loginButton.getHeight() - 25);
+
+
+        //add textfield to display errors, help etc.
+        message = new Label("                     ", skin);
+        message.setPosition(xPos-message.getWidth(), (float) (yPos - usernameField.getHeight()/2));
+
+        passwordField.setPasswordMode(true);
+        stage.addActor(message);
         stage.addActor(usernameTxt);
         stage.addActor(passwordTxt);
         stage.addActor(usernameField);
         stage.addActor(passwordField);
-
-        //add textfield to display errors, help etc.
-        message = new Label("                             ", skin);
-        message.setPosition(xPos-message.getWidth()/2, (float) (yPos - usernameField.getHeight()*1.5));
-        stage.addActor(message);
-
-
+        stage.addActor(menuButton);
+        stage.addActor(loginButton);
         background = new Texture("Graphics/Menu/MenuLogin.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-        confirmBtn = new Texture("Graphics/Menu/Buttons/menu_button_ok_dark.png");
-        menuBtn = new Texture("Graphics/Menu/Buttons/menu_button_menu_dark.png");
-
-        xPos = 450;
-        yPos = 225;
     }
 
 
     @Override
     public void handleInput() {
-        int x = Math.abs(Gdx.input.getX());
-        int y = Math.abs(Gdx.input.getY()-Gdx.graphics.getHeight());
-        int texturePosX = xPos +115;
-        int texturePosY = yPos;
-        if (x > texturePosX && y > texturePosY && x < confirmBtn.getWidth()+texturePosX && y < confirmBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+
+        if (loginButton.isPressed()) {
             PlayerData playerData = new PlayerData();
             String username = usernameField.getText();
             String password = passwordField.getText();
@@ -100,9 +102,7 @@ public class LoginUserState extends State {
             }
         }
 
-        texturePosX = xPos -100;
-        texturePosY = yPos;
-        if (x > texturePosX && y > texturePosY && x < menuBtn.getWidth()+texturePosX && y < menuBtn.getHeight()+texturePosY && Gdx.input.justTouched()) {
+        if (menuButton.isPressed()) {
             gsm.set(new MainMenuState(gsm));
         }
     }
@@ -117,14 +117,14 @@ public class LoginUserState extends State {
         sb.begin();
         sb.draw(background, 0,0);
         sb.draw(pieces, 0, 0);
-        sb.draw(confirmBtn, xPos+115, yPos);
-        sb.draw(menuBtn, xPos-100, yPos);
         sb.end();
         stage.draw();
     }
 
     @Override
     public void dispose() {
-
+        background.dispose();
+        pieces.dispose();
+        stage.dispose();
     }
 }
