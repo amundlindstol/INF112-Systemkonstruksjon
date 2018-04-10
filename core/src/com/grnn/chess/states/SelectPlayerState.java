@@ -87,19 +87,19 @@ public class SelectPlayerState extends State {
     public void handleInput() {
         // Button for play against AI lett
         if (playBtn.isPressed()) {
-            gsm.set(new PlayState(gsm, true, humanPlayer));
+            gsm.set(new PlayState(gsm, 1, humanPlayer, null));
         }
         // Button for play against AI medium
         if (playBtn2.isPressed()) {
-            gsm.set(new PlayState(gsm, true, humanPlayer));
+            gsm.set(new PlayState(gsm, 2, humanPlayer, null));
         }
         // Button for play against AI vanskelig
         if (playBtn3.isPressed()) {
-            gsm.set(new PlayState(gsm, true, humanPlayer));
+            gsm.set(new PlayState(gsm, 3, humanPlayer, null));
         }
         // Button for play with a friend
         if (playBtn4.isPressed()) {
-            gsm.set(new PlayState(gsm,false, humanPlayer ));
+            gsm.set(new PlayState(gsm,0, humanPlayer, new Player("spiller2", "2")));
         }
     }
 
