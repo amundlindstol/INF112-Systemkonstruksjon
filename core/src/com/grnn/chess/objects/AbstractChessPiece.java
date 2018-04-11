@@ -12,6 +12,7 @@ import java.util.List;
  */
 public abstract class AbstractChessPiece {
 	protected boolean hasMoved = false;
+    protected boolean isMoving = false;
     protected boolean isWhite;
     protected boolean validMove;
     //protected ArrayList<Position> validMoves;
@@ -97,6 +98,20 @@ public abstract class AbstractChessPiece {
     public void move() {
     	hasMoved = true;
 	}
+
+    /**
+     * is piece startMoving? used to animate movement
+     */
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void startMoving() {
+        isMoving = true;
+    }
+    public void stopMoving() {
+        isMoving = false;
+    }
 
     /**
      * Returns stringrepresentation of the piece
