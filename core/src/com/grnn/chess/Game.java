@@ -86,6 +86,10 @@ public class Game {
     }
     public boolean isAi() {return aiPlayer != null ? true : false;}
 
+    /**
+     * ai's move method
+     * @return "best" move for ai
+     */
     public Move aiMove(){
         if(aiPlayer!=null && !turn){
             aiMove = aiPlayer.calculateBestMove(board);
@@ -109,20 +113,6 @@ public class Game {
     public Move getAiMove() {
         if (aiMove == null) aiMove = aiPlayer.calculateBestMove(board);
         return aiMove;
-    }
-
-    public void aiMoveOrig(){
-        if(aiPlayer!=null && !turn){
-            Move aiMove = aiPlayer.calculateBestMove(board);
-            AbstractChessPiece victim = board.getPieceAt(aiMove.getToPos());
-            if(victim !=null){
-                board.removePiece(victim);
-                updatePieceCounter(victim);
-            }
-            board.movePiece(aiMove.getFromPos(),aiMove.getToPos());
-            handleCheckChecking();
-            turn = !turn;
-        }
     }
 
     /**
