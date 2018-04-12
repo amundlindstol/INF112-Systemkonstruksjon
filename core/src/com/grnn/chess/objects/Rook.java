@@ -24,7 +24,11 @@ public class Rook extends AbstractChessPiece {
 	}
 
 	//TODO: actually implement this
-	public ArrayList<Position> getValidMoves(Board board) {
+    public ArrayList<Position> getValidMoves(Board board) {
+        return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
+    }
+
+    public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 
 		//Get the position of the rook
@@ -63,7 +67,7 @@ public class Rook extends AbstractChessPiece {
             else break;
         } while (board.getPieceAt(rookPos.south(i++))==null);
 
-        return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
+        return validMoves;
 	}
 
 

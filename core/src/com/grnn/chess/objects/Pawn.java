@@ -22,6 +22,10 @@ public class Pawn extends AbstractChessPiece {
 
 	@Override
 	public ArrayList<Position> getValidMoves(Board board) {
+		return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
+	}
+
+	public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 
 		//Get the position of the pawn
@@ -42,7 +46,7 @@ public class Pawn extends AbstractChessPiece {
 				validMoves.add(pawnPos.south());
 			}
 		}
-		return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
+		return validMoves;
 	}
 
 	@Override
