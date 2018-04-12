@@ -14,11 +14,16 @@ public class Knight extends AbstractChessPiece {
         setImage("Knight");
     }
     
+    @Override
+    public ArrayList<Position> getValidMoves(Board board) {
+        return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
+    }
+    
     /** Finds all the legal moves of a knight
      * @param board The board that the piece is on
      * @return List of valid moves a knight can make
      */
-    public ArrayList<Position> getValidMoves(Board board) {
+    public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board) {
         System.out.println("check for isWhite "+isWhite + " at pos "+this.getPosition(board));
         System.out.flush();
         ArrayList<Position> validMoves = new ArrayList<Position>();
