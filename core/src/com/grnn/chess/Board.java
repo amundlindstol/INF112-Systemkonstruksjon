@@ -336,15 +336,17 @@ public class Board {
      * @return A list of positions the piece can legally move to
      * */
     public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> possibleMoves) {
-        AbstractChessPiece pi = piece;
+        System.out.println("possible moves 1 "+possibleMoves);
         for (int i=0; i<possibleMoves.size(); i++){
             Board boardCopy = copyBoard(this);
             Position p = piece.getPosition(this);
-            //boardCopy.setPiece(pi, possibleMoves.get(i));
-            if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite())))
-              possibleMoves.remove(i);
-            //boardCopy=null;
+            boardCopy.setPiece(piece, possibleMoves.get(i));
+            boardCopy.setPiece(null, p);
+            if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite()))){
+                System.out.println(possibleMoves.get(i)); possibleMoves.remove(i); i--;
+            }
         }
+        System.out.println("possible moves 2 "+possibleMoves);
         return possibleMoves;
     }
 
@@ -354,12 +356,11 @@ public class Board {
         for (int i=0; i<size; i++){
             for (int j=0; j<size; j++){
                 Position pos = new Position(i, j);
-                AbstractChessPiece piece = board.getPieceAt(pos);
-                boardCopy.setPiece(piece, pos);
-
+                AbstractChessPiece p = board.getPieceAt(pos);
+                boardCopy.setPiece(p, pos);
             }
         }
-        return board;
+        return boardCopy;
     }
 
 }

@@ -212,7 +212,7 @@ public class PlayState extends State {
                 generateAnimationPath(piecePos, prevMove);
             pieceIsMoving = true;
             animationIndex = 0;
-            //TODO add sound
+            game.playSound("movePiece.wav");
         }
         return pos;
     }
@@ -272,6 +272,7 @@ public class PlayState extends State {
             //first selected piece
             Position selected = null;
             if (Gdx.input.justTouched() && notSelected) {
+                game.playSound("selectPiece.wav");
                 selected = translator.toCellPos(x, y);
                 game.selectFirstPiece(selected);
             }
@@ -295,5 +296,4 @@ public class PlayState extends State {
         captureTex.dispose();
         System.out.println("PlayState Disposed");
     }
-
 }

@@ -3,7 +3,7 @@ package com.grnn.chess.objects;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -34,8 +34,6 @@ public class King extends AbstractChessPiece {
      * @return List of positions the king can move to
      */
     public ArrayList<Position> getValidMoves(Board board) {
-        System.out.println("check for isWhite "+isWhite + " at pos "+this.getPosition(board));
-        System.out.flush();
         ArrayList<Position> validMoves = new ArrayList<Position>();
         Position kingPos = getPosition(board);
         ArrayList<Position> neighbourSquares = getNeighbourSquares(board, kingPos);
@@ -207,8 +205,9 @@ public class King extends AbstractChessPiece {
                            return true;
                    }
                    else {
-                       if (otherPiece.getValidMovesIgnoringCheck(board).contains(pos))
+                       if (otherPiece.getPossibleMovesIgnoringCheck(board).contains(pos)){
                            return true;
+                       }
                    }
                }
            }

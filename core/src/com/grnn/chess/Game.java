@@ -3,6 +3,12 @@ package com.grnn.chess;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.objects.*;
 
+import javax.sound.sampled.*;
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Game {
@@ -299,5 +305,21 @@ public class Game {
             }
         }
         return text;
+    }
+
+    public static synchronized void playSound(final String url) {
+        try {
+            File f = new File("Sound/"+url);
+            Clip clip = AudioSystem.getClip();
+            AudioInputStream ais = AudioSystem.getAudioInputStream( f );
+            clip.open(ais);
+            clip.start();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
     }
 }
