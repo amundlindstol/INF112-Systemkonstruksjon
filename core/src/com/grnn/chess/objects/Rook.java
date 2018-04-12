@@ -16,8 +16,11 @@ public class Rook extends AbstractChessPiece {
 	public Rook(boolean isWhite) {
 		super(isWhite);
 		setImage("Rook");
-		hasMoved = false;
 	}
+
+    public void move(){
+        hasMoved = true;
+    }
 
 	public String toString() {
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();

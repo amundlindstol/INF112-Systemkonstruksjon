@@ -60,16 +60,8 @@ public class Player {
 
     public boolean checkPassword(String password) { return this.password == password; }
 
-    public void updateStatictics(Player otherPlayer, int score){
-        int k;
-        if(gamesPlayed.size() < 30){
-            k = 40;
-        }else if(rating < 2400){
-            k = 20;
-        }else {
-            k = 40;
-        }
-        rating = rating+k;
+    public void setRating(int newRating){
+        rating = newRating;
     }
 
 }

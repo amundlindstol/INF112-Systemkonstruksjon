@@ -155,9 +155,9 @@ public class Game {
                     reset();
                 }
         } else if(potentialPiece == null && validMove){
-            handlingCasting();
 //            board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
+            handlingCasting(secondPosition);
             handleCheckChecking();
             reset();
             turn = !turn;
@@ -202,15 +202,15 @@ public class Game {
      * Moves the rook if the king does castling.
      *
      */
-    private void handlingCasting(){
-        if(potentialPiece==null)return;
-        Position potentialPos = board.getPosition(potentialPiece);
+    private void handlingCasting(Position secondPos){
+        if(potentialPiece!=null)return;
+        Position potentialPos = secondPos;
         if(!castlingMoves.contains(potentialPos)) return;
 
         Position rookOriginalPos = null;
         Position rookNewPos = null;
 
-        if (potentialPiece.isWhite()){
+        if (firstPiece.isWhite()){
             if(potentialPos.equals(new Position(2,0))){
                 rookOriginalPos = new Position(0, 0);
                 rookNewPos = new Position(3, 0);
