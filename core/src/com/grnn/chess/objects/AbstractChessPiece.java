@@ -61,6 +61,10 @@ public abstract class AbstractChessPiece {
         return new ArrayList<Position>();
     }
 
+    public ArrayList<Position> getValidMovesIgnoringCheck(Board board) {
+        return new ArrayList<Position>();
+    }
+
     /**
      * Finds the valid moves for this piece where the piece can capture the opponents piece.
      * @param board The board that the piece is on

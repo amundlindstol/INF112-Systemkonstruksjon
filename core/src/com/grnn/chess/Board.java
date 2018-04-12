@@ -332,16 +332,34 @@ public class Board {
     /** Returns the intersection of the piece's valid moves and, if the piece is covering the king, the positions it can
      * move to and still cover him
      * @param piece Piece to be moved
-     * @param validMoves The piece's valid moves (without considering if a move will put the king in check)
+     * @param possibleMoves The piece's valid moves (without considering if a move will put the king in check)
      * @return A list of positions the piece can legally move to
      * */
-    public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> validMoves) {
-        ArrayList<Position> movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved = this.positionsPieceCanMoveToAndStillCoverKing(this.getKingPos(piece.isWhite()), piece);
-        if (movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved != null) {
-            if (movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved.isEmpty())
-                return movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved;
-            validMoves.retainAll(movesBetweenKingAndPiecesThatCouldPutKingInCheckIfThisIsMoved);
+    public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> possibleMoves) {
+        AbstractChessPiece pi = piece;
+        for (int i=0; i<possibleMoves.size(); i++){
+            Board boardCopy = copyBoard(this);
+            Position p = piece.getPosition(this);
+            //boardCopy.setPiece(pi, possibleMoves.get(i));
+            if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite())))
+              possibleMoves.remove(i);
+            //boardCopy=null;
         }
-        return validMoves;
+        return possibleMoves;
     }
+
+    public Board copyBoard(Board board){
+        Board boardCopy = new Board();
+
+        for (int i=0; i<size; i++){
+            for (int j=0; j<size; j++){
+                Position pos = new Position(i, j);
+                AbstractChessPiece piece = board.getPieceAt(pos);
+                boardCopy.setPiece(piece, pos);
+
+            }
+        }
+        return board;
+    }
+
 }

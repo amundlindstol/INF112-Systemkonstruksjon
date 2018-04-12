@@ -3,6 +3,7 @@ package com.grnn.chess.objects;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
+import javafx.geometry.Pos;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -203,7 +204,7 @@ public class King extends AbstractChessPiece {
                            return true;
                    }
                    else {
-                       if (otherPiece.getValidMoves(board).contains(pos))
+                       if (otherPiece.getValidMovesIgnoringCheck(board).contains(pos))
                            return true;
                    }
                }
