@@ -314,7 +314,6 @@ public class Game {
             AudioInputStream ais = AudioSystem.getAudioInputStream( f );
             clip.open(ais);
             clip.start();
-            System.err.println("playSound() failed\n");
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (IOException e) {
