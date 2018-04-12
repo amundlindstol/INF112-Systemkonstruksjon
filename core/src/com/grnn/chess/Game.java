@@ -1,9 +1,7 @@
 package com.grnn.chess;
 
-import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.objects.*;
-import com.grnn.chess.states.SelectPlayerState;
 
 import java.util.ArrayList;
 
@@ -19,6 +17,7 @@ public class Game {
     private ArrayList<Position> captureMoves;
     private ArrayList<Position> castlingMoves;
     private AbstractChessPiece potentialPiece;
+    private Move aiMove;
 
     private boolean removed;
     private int[] removedPieces;
@@ -59,7 +58,7 @@ public class Game {
         whitePutInCheck = false;
 
         removedPieces = new int[12];
-        for(Integer count : removedPieces){
+        for(Integer count : removedPieces){ //TODO what even is this
             count = 0;
         }
     }
@@ -85,21 +84,35 @@ public class Game {
     public ArrayList<Position> getCaptureMoves() {
         return captureMoves;
     }
+    public boolean isAi() {return aiPlayer != null ? true : false;}
 
-
-
-    public void aiMove(){
+    /**
+     * ai's move method
+     * @return "best" move for ai
+     */
+    public Move aiMove(){
         if(aiPlayer!=null && !turn){
-            Move aiMove = aiPlayer.calculateBestMove(board);
+            aiMove = aiPlayer.calculateBestMove(board);
             AbstractChessPiece victim = board.getPieceAt(aiMove.getToPos());
             if(victim !=null){
                 board.removePiece(victim);
                 updatePieceCounter(victim);
             }
-            board.movePiece(aiMove.getFromPos(),aiMove.getToPos());
+            aiMove.getPiece().startMoving();
             handleCheckChecking();
             turn = !turn;
+            return aiMove;
         }
+        return null;
+    }
+
+    /**
+     * used once, do not use this method
+     * @return aiMove
+     */
+    public Move getAiMove() {
+        if (aiMove == null) aiMove = aiPlayer.calculateBestMove(board);
+        return aiMove;
     }
 
     /**
@@ -128,7 +141,8 @@ public class Game {
                     board.removePiece(potentialPiece);
                     removed = true;
                     updatePieceCounter(potentialPiece);
-                    board.movePiece(board.getPosition(firstPiece), secondPosition);
+//                    board.movePiece(board.getPosition(firstPiece), secondPosition);
+                    firstPiece.startMoving();
                     handleCheckChecking();
                     turn = !turn;
                     reset();
@@ -142,7 +156,8 @@ public class Game {
                 }
         } else if(potentialPiece == null && validMove){
             handlingCasting();
-            board.movePiece(board.getPosition(firstPiece),secondPosition);
+//            board.movePiece(board.getPosition(firstPiece), secondPosition);
+            firstPiece.startMoving();
             handleCheckChecking();
             reset();
             turn = !turn;
