@@ -24,8 +24,6 @@ public class Knight extends AbstractChessPiece {
      * @return List of valid moves a knight can make
      */
     public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board) {
-        System.out.println("check for isWhite "+isWhite + " at pos "+this.getPosition(board));
-        System.out.flush();
         ArrayList<Position> validMoves = new ArrayList<Position>();
         Position knightPos = getPosition(board);
         AbstractChessPiece knight = board.getPieceAt(knightPos);
