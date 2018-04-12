@@ -166,8 +166,6 @@ public class Game {
             reset();
             removed = false;
         }
-        validMoves.clear();
-        captureMoves.clear();
     }
 
     private void reset(){
