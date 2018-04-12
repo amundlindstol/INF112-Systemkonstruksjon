@@ -16,7 +16,10 @@ public class Knight extends AbstractChessPiece {
 
     @Override
     public ArrayList<Position> getValidMoves(Board board) {
+        return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
+    }
 
+    public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
         ArrayList<Position> validMoves = new ArrayList<Position>();
 
         // Position of knight
@@ -32,7 +35,7 @@ public class Knight extends AbstractChessPiece {
         addValidMove2South1West(board, posKnight, validMoves);
         addValidMove2South1East(board, posKnight, validMoves);
 
-        return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
+        return validMoves;
     }
 
     private void addValidMove2South1East(Board board, Position posKnight, ArrayList<Position> validMoves) {

@@ -203,7 +203,7 @@ public class King extends AbstractChessPiece {
                            return true;
                    }
                    else {
-                       if (otherPiece.getValidMoves(board).contains(pos))
+                       if (otherPiece.getValidMovesIgnoringCheck(board).contains(pos))
                            return true;
                    }
                }
