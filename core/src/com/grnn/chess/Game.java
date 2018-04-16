@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class Game {
+public class    Game {
 
     private Board board;
     private Player player1;
@@ -243,32 +243,32 @@ public class Game {
      */
     private void updatePieceCounter(AbstractChessPiece removedPiece){
         if(removedPiece instanceof Pawn){
-            if(!turn)
+            if(turn)
                 removedPieces[0]++;
             else
                 removedPieces[6]++;
         }else if(removedPiece instanceof Bishop){
-            if(!turn)
+            if(turn)
                 removedPieces[1]++;
             else
                 removedPieces[7]++;
         }else if(removedPiece instanceof King){
-            if(!turn)
+            if(turn)
                 removedPieces[2]++;
             else
                 removedPieces[8]++;
-        }else if(removedPiece instanceof Queen){
-            if(!turn)
+        }else if(removedPiece instanceof Rook){
+            if(turn)
                 removedPieces[3]++;
             else
                 removedPieces[9]++;
-        }else if(removedPiece instanceof Rook){
-            if(!turn)
+        }else if(removedPiece instanceof Queen){
+            if(turn)
                 removedPieces[4]++;
             else
                 removedPieces[10]++;
         }else if(removedPiece instanceof Knight){
-            if(!turn)
+            if(turn)
                 removedPieces[5]++;
             else
                 removedPieces[11]++;
