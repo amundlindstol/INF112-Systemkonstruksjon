@@ -315,7 +315,7 @@ public class Game {
             Clip clip = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream( f );
             clip.open(ais);
-            clip.start();
+            clip.start(); // TODO: Uncomment code.
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (IOException e) {
