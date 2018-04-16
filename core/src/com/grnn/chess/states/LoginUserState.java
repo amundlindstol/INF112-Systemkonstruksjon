@@ -77,7 +77,6 @@ public class LoginUserState extends State {
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
     }
 
-
     @Override
     public void handleInput() {
 
