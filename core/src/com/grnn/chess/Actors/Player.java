@@ -1,13 +1,14 @@
-package com.grnn.chess;
+package com.grnn.chess.Actors;
 
 import com.grnn.chess.Game;
 
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements IActor{
 
-    public String name;
     public String level;
+    private boolean isWhite;
+    public String name;
 
     public int getNoOfWins() {
         return noOfWins;
@@ -26,7 +27,7 @@ public class Player {
     private int noOfWins, noOfLose, noOfDraws;
     public ArrayList<Game> gamesPlayed;
 
-    public Player(String name, String password){
+    public Player(String name, String password, boolean isWhite){
         this.name = name;
         this.password = password;
         gamesPlayed = new ArrayList<Game>();
@@ -34,6 +35,7 @@ public class Player {
         noOfLose = 0;
         noOfDraws = 0;
         rating = 1200;
+        this.isWhite = isWhite;
     }
 
     public Player(String name, String password, int wins, int losses, int draws, int rating){
@@ -64,4 +66,8 @@ public class Player {
         rating = newRating;
     }
 
+    @Override
+    public boolean isWhite() {
+        return isWhite;
+    }
 }

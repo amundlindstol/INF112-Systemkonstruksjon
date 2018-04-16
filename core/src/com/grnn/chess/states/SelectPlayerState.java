@@ -8,7 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.grnn.chess.Player;
+import com.grnn.chess.Actors.AI.AI;
+import com.grnn.chess.Actors.Player;
 
 import java.util.ArrayList;
 
@@ -84,22 +85,22 @@ public class SelectPlayerState extends State {
     /**
      * Method to handle inputs from the mouse
      */
-    public void handleInput() {
+    public void handleInput() { // TODO: change isWhite for AI?
         // Button for play against AI lett
         if (playBtn.isPressed()) {
-            gsm.set(new PlayState(gsm, 1, humanPlayer, null));
+            gsm.set(new PlayState(gsm, 1, humanPlayer, new AI(1, true)));
         }
         // Button for play against AI medium
         if (playBtn2.isPressed()) {
-            gsm.set(new PlayState(gsm, 2, humanPlayer, null));
+            gsm.set(new PlayState(gsm, 2, humanPlayer, new AI(2, true)));
         }
         // Button for play against AI vanskelig
         if (playBtn3.isPressed()) {
-            gsm.set(new PlayState(gsm, 3, humanPlayer, null));
+            gsm.set(new PlayState(gsm, 3, humanPlayer, new AI(1, true)));
         }
         // Button for play with a friend
         if (playBtn4.isPressed()) {
-            gsm.set(new PlayState(gsm,0, humanPlayer, new Player("spiller2", "2")));
+            gsm.set(new PlayState(gsm,0, humanPlayer, new Player("spiller2", "2", true)));  //TODO: should isWhite be initialized here?
         }
     }
 

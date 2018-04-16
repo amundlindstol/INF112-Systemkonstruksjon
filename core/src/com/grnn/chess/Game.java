@@ -1,21 +1,20 @@
 package com.grnn.chess;
 
-import com.grnn.chess.AI.AI;
+import com.grnn.chess.Actors.AI.AI;
+import com.grnn.chess.Actors.IActor;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
 
 import javax.sound.sampled.*;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class Game {
 
     private Board board;
-    private Player player1;
-    private Player player2;
+    private IActor player1;
+    private IActor player2;
     private AI aiPlayer;
     private boolean turn;
     private AbstractChessPiece firstPiece;
@@ -39,16 +38,15 @@ public class Game {
         currid = id;
     }
 
-    public Game(int aiLevel, Player player1, Player player2){
-        if(player1!=null) {
-            this.player1 = player1;
+    public Game(int aiLevel, IActor player1, IActor player2){
+        if(gameHasIllegalArguments(player1, player2)) {
+            throw new IllegalArgumentException("Player not initialized");
         }
-        if(player2!=null) {
-            this.player2 = player2;
-        } else {
-            aiPlayer = new AI(aiLevel);
-        }
-        player2 = new Player("Spiller2", "asd");
+
+        this.player1 = player1;
+        this.player2 = player2;
+
+        player2 = new Player("Spiller2", "asd", !player1.isWhite());
         gameId = ++currid;
 
         board = new Board();
@@ -67,6 +65,10 @@ public class Game {
         for(Integer count : removedPieces){ //TODO what even is this
             count = 0;
         }
+    }
+
+    private boolean gameHasIllegalArguments(IActor player1, IActor player2) { // TODO: check if the two players are different colors
+        return player1 == null || player2 == null; // || player1.isWhite() == player2.isWhite();
     }
 
     public Board getBoard(){
@@ -90,7 +92,7 @@ public class Game {
     public ArrayList<Position> getCaptureMoves() {
         return captureMoves;
     }
-    public boolean isAi() {return aiPlayer != null ? true : false;}
+    public boolean isAi() {return aiPlayer != null;}
 
     /**
      * ai's move method

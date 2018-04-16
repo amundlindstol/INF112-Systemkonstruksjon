@@ -1,22 +1,20 @@
-package com.grnn.chess.AI;
+package com.grnn.chess.Actors.AI;
 
+import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Board;
-import com.grnn.chess.Game;
 import com.grnn.chess.Move;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
-public class AI {
+public class AI implements IActor{
     // TODO: AI isn't always black
 
-    int level;
-    boolean isWhite;
+    private int level;
+    private boolean isWhite;
 
     public AI(int level, boolean isWhite){
         this.level = level;
-        this.isWhite = isWhite;
     }
     // TODO: Not doing random move
 
@@ -31,4 +29,8 @@ public class AI {
         return moves.get((int)(Math.random() * (moves.size() - 1)));
     }
 
+    @Override
+    public boolean isWhite() {
+        return isWhite;
+    }
 }

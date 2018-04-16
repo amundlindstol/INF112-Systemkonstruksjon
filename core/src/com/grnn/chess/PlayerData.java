@@ -2,6 +2,7 @@ package com.grnn.chess;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.grnn.chess.Actors.Player;
 
 import java.util.ArrayList;
 
@@ -32,8 +33,8 @@ public class PlayerData {
 	 * Adds test players Simon and Håkon
 	 */
 	public void addTestAccounts() {
-		Player test1 = new Player("Håkon", "123456");
-		Player test2 = new Player("Simon", "123456");
+		Player test1 = new Player("Håkon", "123456", true);
+		Player test2 = new Player("Simon", "123456", false);
 		addAccount(test1);
 		addAccount(test2);
 	}
