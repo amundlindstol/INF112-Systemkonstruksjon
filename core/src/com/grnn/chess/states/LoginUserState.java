@@ -27,11 +27,13 @@ public class LoginUserState extends State {
     private Skin skin;
     private Stage stage;
 
+    private PlayerData playerData;
+
     /**
      * Constructor for the state
      * @param gsm, GameStateManager
      */
-    public LoginUserState(GameStateManager gsm) {
+    public LoginUserState(GameStateManager gsm,PlayerData playerData) {
         super(gsm);
         // init stage and listener
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
@@ -75,6 +77,10 @@ public class LoginUserState extends State {
         stage.addActor(loginButton);
         background = new Texture("Graphics/Menu/MenuLogin.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
+
+        //Playerdata
+        this.playerData = playerData;
+
     }
 
 
@@ -82,7 +88,6 @@ public class LoginUserState extends State {
     public void handleInput() {
 
         if (loginButton.isPressed()) {
-            PlayerData playerData = new PlayerData();
             String username = usernameField.getText();
             String password = passwordField.getText();
             String checkUsr = username.replaceAll("[^A-Za-z0-9]", "");
