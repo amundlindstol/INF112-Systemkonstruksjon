@@ -18,7 +18,12 @@ public class Queen extends AbstractChessPiece{
 		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
 	}
 
+
 	public ArrayList<Position> getValidMoves(Board board) {
+		return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
+	}
+
+	public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 
 		Position queenPos = getPosition(board);
@@ -27,7 +32,7 @@ public class Queen extends AbstractChessPiece{
 		validMoves.addAll(getValidDiagonalMoves(board, queenPos));
 
 
-		return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
+		return validMoves;
 	}
 
 	public ArrayList<Position> getValidVerticalAndHorizontalMoves(Board board, Position queenPos){	//Get the position of the rook

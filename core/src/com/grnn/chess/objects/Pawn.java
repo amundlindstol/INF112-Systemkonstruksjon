@@ -20,51 +20,59 @@ public class Pawn extends AbstractChessPiece {
 		setImage("Pawn");
 	}
 
+	public String toString() {
+		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
+	}
+
 	@Override
 	public ArrayList<Position> getValidMoves(Board board) {
-		ArrayList<Position> validMoves = new ArrayList<Position>();
+		return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
+	}
 
+	public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
+		ArrayList<Position> validMoves = new ArrayList<Position>();
 		//Get the position of the pawn
 		Position pawnPos = getPosition(board);
-
 		if(isWhite){
-			if(board.getPieceAt(pawnPos.north())==null){
-				if(!hasMoved && board.getPieceAt(pawnPos.north(2))==null) {
+			if(board.getPieceAt(pawnPos.north())==null) {
+				if (!hasMoved && board.getPieceAt(pawnPos.north(2)) == null) {
 					validMoves.add(pawnPos.north(2));
 				}
 				validMoves.add(pawnPos.north());
 			}
+			if(board.getPieceAt(pawnPos.east().north())!=null && !isSameColor(board.getPieceAt(pawnPos.east().north()))){
+				validMoves.add(pawnPos.east().north());
+			}
+			if(board.getPieceAt(pawnPos.west().north())!=null && !isSameColor(board.getPieceAt(pawnPos.west().north()))){
+				validMoves.add(pawnPos.west().north());
+			}
+
 		}else {
-			if(board.getPieceAt(pawnPos.south())==null){
-				if(!hasMoved && board.getPieceAt(pawnPos.south(2))==null) {
+			if(board.getPieceAt(pawnPos.south())==null) {
+				if (!hasMoved && board.getPieceAt(pawnPos.south(2)) == null) {
 					validMoves.add(pawnPos.south(2));
 				}
 				validMoves.add(pawnPos.south());
 			}
+			if(board.getPieceAt(pawnPos.east().south())!=null && !isSameColor(board.getPieceAt(pawnPos.east().south()))){
+				validMoves.add(pawnPos.east().south());
+			}
+			if(board.getPieceAt(pawnPos.west().south())!=null && !isSameColor(board.getPieceAt(pawnPos.west().south()))) {
+				validMoves.add(pawnPos.west().south());
+			}
 		}
-		return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
+		return validMoves;
 	}
 
 	@Override
 	public ArrayList<Position> getCaptureMoves(Board board) {
 		Position pawnPos = getPosition(board);
 		ArrayList<Position> captureMoves = new ArrayList<Position>();
+		ArrayList<Position> validMoves = getValidMoves(board);
+		for (Position pos : validMoves)
+			if (board.getPieceAt(pos)!= null)
+				captureMoves.add(pos);
 
-		if (isWhite()){
-			if(board.getPieceAt(pawnPos.east().north())!=null && !isSameColor(board.getPieceAt(pawnPos.east().north()))){
-				captureMoves.add(pawnPos.east().north());
-			}
-			if(board.getPieceAt(pawnPos.west().north())!=null && !isSameColor(board.getPieceAt(pawnPos.west().north()))){
-				captureMoves.add(pawnPos.west().north());
-			}
-		} else {
-			if(board.getPieceAt(pawnPos.east().south())!=null && !isSameColor(board.getPieceAt(pawnPos.east().south()))){
-				captureMoves.add(pawnPos.east().south());
-			}
-			if(board.getPieceAt(pawnPos.west().south())!=null && !isSameColor(board.getPieceAt(pawnPos.west().south()))){
-				captureMoves.add(pawnPos.west().south());
-			}
-		}
 		Position enPass = enPassant(board,pawnPos);
 		if (enPass != null) {
 			captureMoves.add(enPass);

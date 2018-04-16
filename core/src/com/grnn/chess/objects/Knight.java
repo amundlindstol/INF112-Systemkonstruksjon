@@ -13,97 +13,50 @@ public class Knight extends AbstractChessPiece {
         super(isWhite);
         setImage("Knight");
     }
-
+    
     @Override
     public ArrayList<Position> getValidMoves(Board board) {
-
+        return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
+    }
+    
+    /** Finds all the legal moves of a knight
+     * @param board The board that the piece is on
+     * @return List of valid moves a knight can make
+     */
+    public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board) {
         ArrayList<Position> validMoves = new ArrayList<Position>();
-
-        // Position of knight
-        Position posKnight = getPosition(board);
-
-        // add valid positions.
-        addValidMove2North1East(board, posKnight, validMoves);
-        addValidMove2West1North(board, posKnight, validMoves);
-        addValidMove2North1West(board, posKnight, validMoves);
-        addValidMove2West1South(board, posKnight, validMoves);
-        addValidMove2East1North(board, posKnight, validMoves);
-        addValidMove2East1South(board, posKnight, validMoves);
-        addValidMove2South1West(board, posKnight, validMoves);
-        addValidMove2South1East(board, posKnight, validMoves);
-
-        return board.removeMovesThatWillPutOwnKingInCheck(this, validMoves);
-    }
-
-    private void addValidMove2South1East(Board board, Position posKnight, ArrayList<Position> validMoves) {
-        Position posToMoveTo = posKnight.south(2).east();
-
-        if (canMoveToPos(board, posToMoveTo)) {
-            validMoves.add(posToMoveTo);
+        Position knightPos = getPosition(board);
+        AbstractChessPiece knight = board.getPieceAt(knightPos);
+        King king = new King(knight.isWhite);
+        ArrayList<Position> neighbourSquares = getKnightSquares(board, knightPos);
+        for (Position pos : neighbourSquares){
+            if (board.getPieceAt(pos) == null
+                    && board.posIsWithinBoard(pos)
+                    || (board.getPieceAt(pos) != null
+                    && !isSameColor(board.getPieceAt(pos)))) {
+                validMoves.add(pos);
+            }
         }
+        return validMoves; //)board.removeIllegalMoves(board, validMoves, this, king);
     }
+    
+    /** Finds all possible squares a knight can move to within the board
+     * @param board The board
+     * @param knightPos Position of a knight
+     * @return A list of all possible squares a knight can move to
+     */
+    private ArrayList<Position> getKnightSquares (Board board, Position knightPos) {
+        ArrayList<Position> knightSquares = new ArrayList<Position>();
+        int [][] offSet = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
+        Position pos;
 
-    private void addValidMove2South1West(Board board, Position posKnight, ArrayList<Position> validMoves) {
-        Position posToMoveTo = posKnight.south(2).west();
-
-        if (canMoveToPos(board, posToMoveTo)) {
-            validMoves.add(posToMoveTo);
+        for (int[] moves : offSet) {
+            pos = new Position(knightPos.getX()+moves[0], knightPos.getY()+moves[1]);
+            if (board.posIsWithinBoard(pos))
+                knightSquares.add(pos);
         }
-    }
 
-    private void addValidMove2East1South(Board board, Position posKnight, ArrayList<Position> validMoves) {
-        Position posToMoveTo = posKnight.east(2).south();
-
-        if (canMoveToPos(board, posToMoveTo)) {
-            validMoves.add(posToMoveTo);
-        }
-    }
-
-    private void addValidMove2East1North(Board board, Position posKnight, ArrayList<Position> validMoves) {
-        Position posToMoveTo = posKnight.east(2).north();
-
-        if (canMoveToPos(board, posToMoveTo)) {
-            validMoves.add(posToMoveTo);
-        }
-    }
-
-    private void addValidMove2West1South(Board board, Position posKnight, ArrayList<Position> validMoves) {
-        Position posToMoveTo = posKnight.west(2).south();
-
-        if (canMoveToPos(board, posToMoveTo)) {
-            validMoves.add(posToMoveTo);
-        }
-    }
-
-    private void addValidMove2West1North(Board board, Position posKnight, ArrayList<Position> validMoves) {
-        Position posToMoveTo = posKnight.west(2).north();
-
-        if (canMoveToPos(board, posToMoveTo)) {
-            validMoves.add(posToMoveTo);
-        }
-    }
-
-    private void addValidMove2North1East(Board board, Position posKnight, ArrayList<Position> validMoves) {
-        Position posToMoveTo = posKnight.north(2).east();
-
-        if (canMoveToPos(board, posToMoveTo)) {
-            validMoves.add(posToMoveTo);
-        }
-    }
-
-    private void addValidMove2North1West(Board board, Position posKnight, ArrayList<Position> validMoves) {
-        Position posToMoveTo = posKnight.north(2).west();
-
-        if (canMoveToPos(board, posToMoveTo)) {
-            validMoves.add(posToMoveTo);
-        }
-    }
-
-    private boolean canMoveToPos(Board board, Position posToMoveTo) {
-        return board.getPieceAt(posToMoveTo) == null
-                && board.posIsWithinBoard(posToMoveTo)
-                || (board.getPieceAt(posToMoveTo) != null
-                && !isSameColor(board.getPieceAt(posToMoveTo)));
+        return knightSquares;
     }
 
     public String toString() {
@@ -113,5 +66,4 @@ public class Knight extends AbstractChessPiece {
     public int getValue() {
         return value;
     }
-
 }

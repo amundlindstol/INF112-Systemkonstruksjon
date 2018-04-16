@@ -3,6 +3,12 @@ package com.grnn.chess;
 import com.grnn.chess.AI.AI;
 import com.grnn.chess.objects.*;
 
+import javax.sound.sampled.*;
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Game {
@@ -155,9 +161,9 @@ public class Game {
                     reset();
                 }
         } else if(potentialPiece == null && validMove){
-            handlingCasting();
 //            board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
+            handlingCasting(secondPosition);
             handleCheckChecking();
             reset();
             turn = !turn;
@@ -166,8 +172,6 @@ public class Game {
             reset();
             removed = false;
         }
-        validMoves.clear();
-        captureMoves.clear();
     }
 
     private void reset(){
@@ -204,15 +208,15 @@ public class Game {
      * Moves the rook if the king does castling.
      *
      */
-    private void handlingCasting(){
-        if(potentialPiece==null)return;
-        Position potentialPos = board.getPosition(potentialPiece);
+    private void handlingCasting(Position secondPos){
+        if(potentialPiece!=null)return;
+        Position potentialPos = secondPos;
         if(!castlingMoves.contains(potentialPos)) return;
 
         Position rookOriginalPos = null;
         Position rookNewPos = null;
 
-        if (potentialPiece.isWhite()){
+        if (firstPiece.isWhite()){
             if(potentialPos.equals(new Position(2,0))){
                 rookOriginalPos = new Position(0, 0);
                 rookNewPos = new Position(3, 0);
@@ -301,5 +305,21 @@ public class Game {
             }
         }
         return text;
+    }
+
+    public static synchronized void playSound(final String url) {
+        try {
+            File f = new File("Sound/"+url);
+            Clip clip = AudioSystem.getClip();
+            AudioInputStream ais = AudioSystem.getAudioInputStream( f );
+            clip.open(ais);
+            clip.start();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
     }
 }

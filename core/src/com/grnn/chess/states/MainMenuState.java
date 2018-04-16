@@ -63,6 +63,7 @@ public class MainMenuState extends State {
         }
         if (registerBtn.isPressed()) {
             gsm.set(new RegisterUserState(gsm));
+//            gsm.set(new PlayState(gsm, 1,new Player("s", "s"), null)); //skip to game
         }
     }
 
