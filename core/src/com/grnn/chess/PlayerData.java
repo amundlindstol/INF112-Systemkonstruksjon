@@ -93,7 +93,7 @@ public class PlayerData {
 	private boolean connectToDatabase(){
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			DriverManager.setLoginTimeout(5);
+			DriverManager.setLoginTimeout(1);
 			conn = DriverManager.getConnection("jdbc:mysql://grnn.cj7trxamf8oy.us-east-2.rds.amazonaws.com:3306/Sjakk", "grnn", "grnnsjakk");
 			offline = false;
 			return true;
