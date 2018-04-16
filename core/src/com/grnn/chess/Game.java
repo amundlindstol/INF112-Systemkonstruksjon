@@ -149,6 +149,10 @@ public class    Game {
                     board.removePiece(potentialPiece);
                     removed = true;
                     updatePieceCounter(potentialPiece);
+
+                    if(turn) playSound("takePiece.wav");
+
+                    else playSound("lostPiece.wav");
 //                    board.movePiece(board.getPosition(firstPiece), secondPosition);
                     firstPiece.startMoving();
                     handleCheckChecking();

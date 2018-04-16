@@ -51,8 +51,8 @@ public class PlayerData {
 	}
 
 	private void addOfflinePlayers(){
-		Player player1 = new Player("Player1","");
-		Player player2 = new Player("Player2","");
+		Player player1 = new Player("Player1","", true);
+		Player player2 = new Player("Player2","", false);
 		accounts.add(player1);
 		accounts.add(player2);
 	}
