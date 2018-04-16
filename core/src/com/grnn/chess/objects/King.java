@@ -3,7 +3,7 @@ package com.grnn.chess.objects;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -17,8 +17,11 @@ public class King extends AbstractChessPiece {
 
     public King(boolean w) {
         super(w);
-        hasMoved = false;
         setImage("King");
+    }
+
+    public void move(){
+        hasMoved = true;
     }
 
     public String toString() {
@@ -31,8 +34,6 @@ public class King extends AbstractChessPiece {
      * @return List of positions the king can move to
      */
     public ArrayList<Position> getValidMoves(Board board) {
-        System.out.println("check for isWhite "+isWhite + " at pos "+this.getPosition(board));
-        System.out.flush();
         ArrayList<Position> validMoves = new ArrayList<Position>();
         Position kingPos = getPosition(board);
         ArrayList<Position> neighbourSquares = getNeighbourSquares(board, kingPos);
@@ -42,7 +43,7 @@ public class King extends AbstractChessPiece {
             }
         }
 
-        //validMoves.addAll(getCastlingMoves(board, kingPos));
+        validMoves.addAll(getCastlingMoves(board, kingPos));
 
         return validMoves;
     }
@@ -77,8 +78,8 @@ public class King extends AbstractChessPiece {
         if (this.hasMoved)
             return validMoves;
 
-        //validMoves.addAll(getCastlingMoveEast(board, kingPos));
-        //validMoves.addAll(getCastlingMoveWest(board, kingPos));
+        validMoves.addAll(getCastlingMoveEast(board, kingPos));
+        validMoves.addAll(getCastlingMoveWest(board, kingPos));
         return validMoves;
     }
 
@@ -101,7 +102,7 @@ public class King extends AbstractChessPiece {
             pieceWestCorner = board.getPieceAt(posWestCorner);
         }
 
-        for (Position posToCheck = kingPos.west(); posToCheck.getX() > 0; posToCheck.west()) {
+        for (Position posToCheck = kingPos.west(); posToCheck.getX() > 0; posToCheck = posToCheck.west()) {
             if (board.getPieceAt(posToCheck) != null)
                 return false;
         }
@@ -204,8 +205,9 @@ public class King extends AbstractChessPiece {
                            return true;
                    }
                    else {
-                       if (otherPiece.getValidMovesIgnoringCheck(board).contains(pos))
+                       if (otherPiece.getPossibleMovesIgnoringCheck(board).contains(pos)){
                            return true;
+                       }
                    }
                }
            }

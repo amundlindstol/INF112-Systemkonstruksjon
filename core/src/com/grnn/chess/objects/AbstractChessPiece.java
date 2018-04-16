@@ -61,7 +61,7 @@ public abstract class AbstractChessPiece {
         return new ArrayList<Position>();
     }
 
-    public ArrayList<Position> getValidMovesIgnoringCheck(Board board) {
+    public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board) {
         return new ArrayList<Position>();
     }
 
@@ -70,7 +70,7 @@ public abstract class AbstractChessPiece {
      * @param board The board that the piece is on
      * @return A list of positions that the piece can capture the opponents piece on
      */
-    public ArrayList<Position> getCaptureMoves(Board board) {
+    public ArrayList<Position> getCaptureMoves(Board board) { System.out.println("get capture!");
 
         List<Position> captureMoves = new ArrayList<Position>();
         List<Position> validMoves = getValidMoves(board);
@@ -81,7 +81,8 @@ public abstract class AbstractChessPiece {
                 captureMoves.add(position);
             }
         }
-
+        System.out.print("Valid moves: "+validMoves);
+        System.out.print("Capture moves: "+captureMoves);
         return (ArrayList<Position>) captureMoves;
     }
 
