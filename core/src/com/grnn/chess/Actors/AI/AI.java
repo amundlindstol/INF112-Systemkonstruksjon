@@ -15,6 +15,7 @@ public class AI implements IActor{
 
     public AI(int level, boolean isWhite){
         this.level = level;
+        this.isWhite = isWhite;
     }
     // TODO: Not doing random move
 
@@ -32,5 +33,9 @@ public class AI implements IActor{
     @Override
     public boolean isWhite() {
         return isWhite;
+    }
+
+    private int evaluateMove(Move moveToCalculate) {
+        return 0; // TODO: implement
     }
 }
