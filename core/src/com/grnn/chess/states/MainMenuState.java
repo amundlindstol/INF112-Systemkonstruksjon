@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.grnn.chess.Player;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.PlayerData;
 
 /**
@@ -71,7 +71,7 @@ public class MainMenuState extends State {
     public void handleInput() {
         if(playerData.isOffline()){
             if(loginBtn.isPressed()){
-                gsm.set(new SelectPlayerState(gsm,new Player("Player1","")));
+                gsm.set(new SelectPlayerState(gsm,new Player("Player1","", true)));
             }
         }else {
             if (loginBtn.isPressed()) {

@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.*;
+import com.grnn.chess.Actors.IActor;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
 //import javafx.geometry.Pos;
 
@@ -50,8 +52,14 @@ public class PlayState extends State {
 
     private int[]removedPieces;
 
-
-    public PlayState(GameStateManager gsm, int aiPlayer, Player player1, Player player2) {
+    /**
+     *
+     * @param gsm
+     * @param aiPlayer
+     * @param player1 Should always be player
+     * @param player2 Either AI or Player
+     */
+    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2) {
         super(gsm);
         //textures
         bg = new Texture("Graphics/GUI/GUI.png");
@@ -59,6 +67,9 @@ public class PlayState extends State {
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
 
+        if(!(player1 instanceof Player)) {
+            throw new IllegalArgumentException("player1 should always be of class Player");
+        }
         //game
         game = new Game(aiPlayer,player1,player2);
         board = game.getBoard();
@@ -66,9 +77,9 @@ public class PlayState extends State {
         captureMoves = game.getCaptureMoves();
         text = game.getText();
         removedPieces = game.getRemovedPieces();
-        player1Name = player1.name;
-        if(player2!=null) {
-            player2Name = player2.name;
+        player1Name = ((Player) player1).name;
+        if(player2 instanceof Player) {
+            player2Name = ((Player) player2).name;
         }else{
             player2Name = "Datamaskin";
         }

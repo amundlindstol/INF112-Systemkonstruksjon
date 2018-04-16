@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.grnn.chess.Player;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.PlayerData;
 
 /**
@@ -82,7 +82,6 @@ public class LoginUserState extends State {
         this.playerData = playerData;
 
     }
-
 
     @Override
     public void handleInput() {

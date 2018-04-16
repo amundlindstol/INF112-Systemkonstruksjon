@@ -5,10 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.grnn.chess.Player;
+import com.grnn.chess.Actors.AI.AI;
+import com.grnn.chess.Actors.Player;
 
 import java.util.ArrayList;
 
@@ -28,6 +31,13 @@ public class SelectPlayerState extends State {
     private int xPlay, yPlay, count;
     private ArrayList<Texture> test;
     private Player humanPlayer;
+
+    // variables for player2 input fields
+    private TextField usernameField, passwordField;
+    private TextButton menuButton, loginButton;
+    private Label message, usernameTxt, passwordTxt;
+    private int xPos, yPos;
+
 
     /**
      * Constructor for the SelectPlayerState
@@ -57,8 +67,25 @@ public class SelectPlayerState extends State {
         playBtn.setPosition(xPlay, yPlay);
         playBtn2.setPosition(xPlay, yPlay-70);
         playBtn3.setPosition(xPlay, yPlay-140);
-        playBtn4.setPosition(xPlay+380, yPlay);
+        playBtn4.setPosition(xPlay+375, yPlay - 140);
 
+        // input fields of player 2
+        usernameField = new TextField("", skin);
+        passwordField = new TextField("", skin);
+        usernameTxt = new Label("Bruker", skin);
+        passwordTxt = new Label("Passord", skin);
+        xPos = (int) (Gdx.graphics.getWidth()/2 - usernameField.getWidth()/2 + 200);
+        yPos = (int) (Gdx.graphics.getHeight()/2 + usernameField.getHeight());
+        usernameTxt.setPosition(xPos - usernameTxt.getWidth()/2 - usernameField.getWidth()/2 + 70, yPos+usernameTxt.getHeight()/2 - 15);
+        usernameField.setPosition(xPos + 70, yPos - 15);
+        passwordTxt.setPosition(xPos - passwordTxt.getWidth()/2 - passwordField.getWidth()/2 + 70, yPos-usernameField.getHeight()+passwordTxt.getHeight()/2 - 15);
+        passwordField.setPosition(xPos + 70, (int)(yPos-usernameField.getHeight()) - 15);
+
+
+        stage.addActor(usernameTxt);
+        stage.addActor(passwordTxt);
+        stage.addActor(usernameField);
+        stage.addActor(passwordField);
         stage.addActor(playBtn);
         stage.addActor(playBtn2);
         stage.addActor(playBtn3);
@@ -84,22 +111,22 @@ public class SelectPlayerState extends State {
     /**
      * Method to handle inputs from the mouse
      */
-    public void handleInput() {
+    public void handleInput() { // TODO: change isWhite for AI?
         // Button for play against AI lett
         if (playBtn.isPressed()) {
-            gsm.set(new PlayState(gsm, 1, humanPlayer, null));
+            gsm.set(new PlayState(gsm, 1, humanPlayer, new AI(1, true)));
         }
         // Button for play against AI medium
         if (playBtn2.isPressed()) {
-            gsm.set(new PlayState(gsm, 2, humanPlayer, null));
+            gsm.set(new PlayState(gsm, 2, humanPlayer, new AI(2, true)));
         }
         // Button for play against AI vanskelig
         if (playBtn3.isPressed()) {
-            gsm.set(new PlayState(gsm, 3, humanPlayer, null));
+            gsm.set(new PlayState(gsm, 3, humanPlayer, new AI(1, true)));
         }
         // Button for play with a friend
         if (playBtn4.isPressed()) {
-            gsm.set(new PlayState(gsm,0, humanPlayer, new Player("spiller2", "2")));
+            gsm.set(new PlayState(gsm,0, humanPlayer, new Player("spiller2", "2", true)));  //TODO: should isWhite be initialized here?
         }
     }
 

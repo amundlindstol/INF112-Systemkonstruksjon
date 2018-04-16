@@ -1,4 +1,4 @@
-package com.grnn.chess.AI;
+package com.grnn.chess.Actors.AI;
 
 import com.grnn.chess.Game;
 

@@ -2,6 +2,7 @@ package com.grnn.chess;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.grnn.chess.Actors.Player;
 
 
 import java.sql.*;
@@ -50,8 +51,8 @@ public class PlayerData {
 	}
 
 	private void addOfflinePlayers(){
-		Player player1 = new Player("Player1","");
-		Player player2 = new Player("Player2","");
+		Player player1 = new Player("Player1","", true);
+		Player player2 = new Player("Player2","", false);
 		accounts.add(player1);
 		accounts.add(player2);
 	}
@@ -108,8 +109,8 @@ public class PlayerData {
 	 * Adds test players Simon and Håkon
 	 */
 	public void addTestAccounts() {
-		Player test1 = new Player("Håkon", "123456");
-		Player test2 = new Player("Simon", "123456");
+		Player test1 = new Player("Håkon", "123456", true);
+		Player test2 = new Player("Simon", "123456", false);
 		addAccount(test1);
 		addAccount(test2);
 	}
