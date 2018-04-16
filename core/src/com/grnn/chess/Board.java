@@ -91,14 +91,15 @@ public class Board {
     /**
      * Gets possible moves the AI can do.
      * @return possible moves the AI can do.
+     * @param isWhite
      */
-    public ArrayList<Move> getPossibleAIMoves() { //Aka get black's moves
+    public ArrayList<Move> getPossibleAIMoves(boolean isWhite) { //Aka get black's moves
 
         ArrayList<Move> possibleMoves = new ArrayList<Move>();
 
         for(Position position : positions){
             AbstractChessPiece piece = this.getPieceAt(position);
-            if(piece!=null && !piece.isWhite()) {
+            if(piece!=null && isWhite == piece.isWhite()) {
                 ArrayList<Position> posList = piece.getValidMoves(this);
                 posList.addAll(piece.getCaptureMoves(this));
                 if (!posList.isEmpty()){

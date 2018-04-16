@@ -12,9 +12,11 @@ public class AI {
     // TODO: AI isn't always black
 
     int level;
+    boolean isWhite;
 
-    public AI(int level){
+    public AI(int level, boolean isWhite){
         this.level = level;
+        this.isWhite = isWhite;
     }
     // TODO: Not doing random move
 
@@ -24,7 +26,7 @@ public class AI {
      * @return The best move
      */
     public Move calculateBestMove(Board board) {
-        ArrayList<Move> moves = board.getPossibleAIMoves();
+        ArrayList<Move> moves = board.getPossibleAIMoves(isWhite);
         if(moves.isEmpty()) return null;
         return moves.get((int)(Math.random() * (moves.size() - 1)));
     }
