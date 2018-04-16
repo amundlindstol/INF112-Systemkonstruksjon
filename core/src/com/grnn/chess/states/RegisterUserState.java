@@ -30,12 +30,16 @@ public class RegisterUserState extends State {
     private Skin skin;
     private Stage stage;
 
-    public RegisterUserState(GameStateManager gsm) {
+    private PlayerData playerData;
+
+    public RegisterUserState(GameStateManager gsm,PlayerData playerData) {
         super(gsm);
         // create skin
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
+
+        this.playerData = playerData;
 
         usernameField = new TextField("", skin);
         passwordField = new TextField("", skin);
@@ -79,7 +83,6 @@ public class RegisterUserState extends State {
     @Override
     public void handleInput() {
         if (confirmBtn.isPressed()) {
-            PlayerData playerData = new PlayerData();
             String username = usernameField.getText();
             String password = passwordField.getText();
             String checkUsr = username.replaceAll("[^A-Za-z0-9]", "");
@@ -101,7 +104,7 @@ public class RegisterUserState extends State {
             }
 
             Player player = new Player(username, password, true); //TODO: should isWhite be initialized here?
-            playerData.addAccount(player);
+            playerData.addAccountToDatabase(player);
             gsm.set(new StartGameState(gsm, player));
         }
 

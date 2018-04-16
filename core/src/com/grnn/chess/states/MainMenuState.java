@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.grnn.chess.Actors.Player;
+import com.grnn.chess.PlayerData;
 
 /**
  * @author Helge Mikael Landro, 21.03.2018
@@ -26,6 +28,8 @@ public class MainMenuState extends State {
     private Stage stage;
     private Skin skin;
 
+    private PlayerData playerData;
+
     /**
      * Constructor for the Login State
      * @param gsm, the GameStateManager
@@ -39,17 +43,25 @@ public class MainMenuState extends State {
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
         kingBlack = new Texture("Graphics/Menu/KingBlack.png");
-        registerBtn = new TextButton("registrer", skin);
-        loginBtn = new TextButton("login", skin);
-        loginBtn.setSize(registerBtn.getWidth(), registerBtn.getHeight());
+        playerData = new PlayerData(1);
+        xPos = Gdx.graphics.getWidth() / 2;
+        yPos = Gdx.graphics.getHeight() / 2;
+        if(playerData.isOffline()) {
+            loginBtn = new TextButton("offline", skin);
 
-        xPos = Gdx.graphics.getWidth()/2;
-        yPos = Gdx.graphics.getHeight()/2;
-        loginBtn.setPosition(xPos - loginBtn.getWidth()/2-20, yPos+registerBtn.getHeight());
-        registerBtn.setPosition(xPos - loginBtn.getWidth()/2-20, yPos);
+        }else{
+            registerBtn = new TextButton("registrer", skin);
+            loginBtn = new TextButton("login", skin);
 
+
+            registerBtn.setPosition(xPos - registerBtn.getWidth() / 2 - 20, yPos);
+
+            stage.addActor(registerBtn);
+        }
+        loginBtn.setPosition(xPos - loginBtn.getWidth() / 2 - 20, yPos + loginBtn.getHeight());
+
+        loginBtn.setSize(loginBtn.getWidth(), loginBtn.getHeight());
         stage.addActor(loginBtn);
-        stage.addActor(registerBtn);
 
         countKingX = -200;
         countKingY = -1;
@@ -57,12 +69,17 @@ public class MainMenuState extends State {
 
     @Override
     public void handleInput() {
-        if (loginBtn.isPressed()) {
-            gsm.set(new LoginUserState(gsm)); //change to StartGameState if u want to skip login
-        }
-        if (registerBtn.isPressed()) {
-            gsm.set(new RegisterUserState(gsm));
-//            gsm.set(new PlayState(gsm, 1,new Player("s", "s"), null)); //skip to game
+        if(playerData.isOffline()){
+            if(loginBtn.isPressed()){
+                gsm.set(new SelectPlayerState(gsm,new Player("Player1","", true)));
+            }
+        }else {
+            if (loginBtn.isPressed()) {
+                gsm.set(new LoginUserState(gsm,playerData)); //change to StartGameState if u want to skip login
+            }
+            if (registerBtn.isPressed()) {
+                gsm.set(new RegisterUserState(gsm,playerData));
+            }
         }
     }
 

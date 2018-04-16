@@ -14,6 +14,8 @@ import static org.junit.Assert.*;
 /**
  * Created by hakon on 05.03.2018.
  */
+
+
 public class PiecesTest {
 	Board board;
 
