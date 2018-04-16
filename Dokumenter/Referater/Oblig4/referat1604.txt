@@ -1,0 +1,30 @@
+Rapport 16.04.2018
+
+Attending: 
+
+	- $imon Riple "Lord Riple"
+	- Håkon Osland
+	- Magnus 
+        - Eivind Dagsland Halleraker
+   	- Helge Mikael Landro (Referent)
+
+
+What did we do?
+- We continued the work for implementing the database for the game
+- We started to create the solution to log in the second player
+- New sounds were added to the game
+- Bug fixes
+
+
+Until next meeting:
+- Implement Stockfish AI
+- Complete the implementation of the database
+
+
+
+
+
+
+
+
+
