@@ -15,6 +15,7 @@ import com.grnn.chess.Actors.Player;
 import com.grnn.chess.PlayerData;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * @author Helge Mikael Landro, 19.03.2018
@@ -33,6 +34,7 @@ public class SelectPlayerState extends State {
     private ArrayList<Texture> test;
     private Player player1;
     private PlayerData playerData;
+    private boolean player1isWhite;
 
     // variables for player2 input fields
     private TextField usernameField, passwordField;
@@ -58,6 +60,9 @@ public class SelectPlayerState extends State {
         count = 0;
         this.playerData = playerData;
         player1 = player;
+
+        Random random = new Random();
+        player1isWhite = random.nextBoolean();
 
         //buttons
         playBtn = new TextButton("lett", skin);
@@ -126,24 +131,31 @@ public class SelectPlayerState extends State {
     public void handleInput() { // TODO: change isWhite for AI?
         // Button for play against AI lett
         if (playBtn.isPressed()) {
+            player1.setIsWhite(true);
             gsm.set(new PlayState(gsm, 1, player1, new AI(1, true)));
         }
         // Button for play against AI medium
         if (playBtn2.isPressed()) {
+            player1.setIsWhite(true);
             gsm.set(new PlayState(gsm, 2, player1, new AI(2, true)));
         }
         // Button for play against AI vanskelig
         if (playBtn3.isPressed()) {
+            player1.setIsWhite(true);
             gsm.set(new PlayState(gsm, 3, player1, new AI(1, true)));
         }
+
+
         if(playerData.isOffline()) {
             // Button for play with a friend
             if (playBtn4.isPressed()) {
+                player1.setIsWhite(player1isWhite);
                 gsm.set(new PlayState(gsm, 0, player1, new Player("Spiller2", "2", true)));  //TODO: should isWhite be initialized here?
             }
         }
         if(!playerData.isOffline()){
             if (playBtn4.isPressed()) {
+                player1.setIsWhite(player1isWhite);
                 String username = usernameField.getText();
                 String password = passwordField.getText();
                 String checkUsr = username.replaceAll("[^A-Za-z0-9]", "");
