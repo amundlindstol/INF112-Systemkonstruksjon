@@ -71,7 +71,7 @@ public class MainMenuState extends State {
     public void handleInput() {
         if(playerData.isOffline()){
             if(loginBtn.isPressed()){
-                gsm.set(new SelectPlayerState(gsm,new Player("Player1","", true)));
+                gsm.set(new SelectPlayerState(gsm,new Player("Player1","", true),playerData));
             }
         }else {
             if (loginBtn.isPressed()) {

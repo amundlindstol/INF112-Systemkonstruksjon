@@ -100,7 +100,7 @@ public class LoginUserState extends State {
             }
             Player player = playerData.getPlayer(username);
             if (password.equals(player.getPassword())) {
-                gsm.set(new StartGameState(gsm, player));
+                gsm.set(new StartGameState(gsm, player,playerData));
             } else {
                 message.setText("Feil brukernavn eller passord.");
             }

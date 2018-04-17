@@ -105,7 +105,7 @@ public class RegisterUserState extends State {
 
             Player player = new Player(username, password, true); //TODO: should isWhite be initialized here?
             playerData.addAccountToDatabase(player);
-            gsm.set(new StartGameState(gsm, player));
+            gsm.set(new StartGameState(gsm, player,playerData));
         }
 
         if (menuBtn.isPressed()) {
