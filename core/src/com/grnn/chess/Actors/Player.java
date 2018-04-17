@@ -44,7 +44,7 @@ public class Player implements IActor{
         gamesPlayed = new ArrayList<Game>();
         noOfWins = wins;
         noOfLose = losses;
-        noOfDraws = rating;
+        noOfDraws = draws;
         this.rating = rating;
     }
 

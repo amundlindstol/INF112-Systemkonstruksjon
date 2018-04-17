@@ -174,7 +174,7 @@ public class    Game {
         } else if(potentialPiece == null && validMove){
 //            board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
-            handlingCasting(secondPosition);
+            //handlingCasting(secondPosition);
             handleCheckChecking();
             reset();
             turn = !turn;
@@ -191,8 +191,23 @@ public class    Game {
         captureMoves.clear();
         castlingMoves.clear();
     }
-    private void endGame(int res) {
-        return;
+    private void endGame(Result res, Result res2) {
+        if(isAi())
+            return;
+        Player player = ((Player) player1);
+        Player opponent = ((Player) player2);
+        System.out.println("old: " + player.getRating() + "  " + opponent.getRating());
+
+        EloRatingSystem elo = new EloRatingSystem(player);
+        EloRatingSystem elo2 = new EloRatingSystem(opponent);
+
+        int newElo = elo.getNewRating(res, opponent.getRating());
+        int newElo2 = elo2.getNewRating(res2, player.getRating());
+
+        player.setRating(newElo);
+        opponent.setRating(newElo2);
+
+        System.out.println("new:  " + player.getRating() + "  " + opponent.getRating());
     }
 
     private Player announceWinner() {
@@ -219,15 +234,14 @@ public class    Game {
      * Moves the rook if the king does castling.
      *
      */
-    private void handlingCasting(Position secondPos){
-        if(potentialPiece!=null)return;
-        Position potentialPos = secondPos;
-        if(!castlingMoves.contains(potentialPos)) return;
+    public void handlingCasting(AbstractChessPiece piece){
+            Position potentialPos = board.getPosition(piece);
+        //  if(!castlingMoves.contains(potentialPos)) return;
 
         Position rookOriginalPos = null;
         Position rookNewPos = null;
 
-        if (firstPiece.isWhite()){
+        if (piece.isWhite()){
             if(potentialPos.equals(new Position(2,0))){
                 rookOriginalPos = new Position(0, 0);
                 rookNewPos = new Position(3, 0);
@@ -244,7 +258,7 @@ public class    Game {
                 rookNewPos = new Position(5, 7);
             }
         }
-        board.movePiece(rookOriginalPos, rookNewPos);
+        board.castle(rookOriginalPos, rookNewPos);
     }
 
 
