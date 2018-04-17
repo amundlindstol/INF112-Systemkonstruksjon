@@ -44,9 +44,14 @@ public class    Game {
         }
 
         this.player1 = player1;
-        this.player2 = player2;
+        if(player2 instanceof Player) {
+            this.player2 = player2;
+            player2 = new Player("Spiller2", "asd", !player1.isWhite());
 
-        player2 = new Player("Spiller2", "asd", !player1.isWhite());
+        } else {
+            aiPlayer = (AI) player2;
+        }
+
         gameId = ++currid;
 
         board = new Board();
@@ -68,7 +73,7 @@ public class    Game {
     }
 
     private boolean gameHasIllegalArguments(IActor player1, IActor player2) { // TODO: check if the two players are different colors
-        return player1 == null || player2 == null; // || player1.isWhite() == player2.isWhite();
+        return player1 == null || player2 == null || player1.isWhite() == player2.isWhite();
     }
 
     public Board getBoard(){
@@ -318,8 +323,8 @@ public class    Game {
             File f = new File("Sound/"+url);
             Clip clip = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream( f );
-            clip.open(ais);
-            clip.start(); // TODO: Uncomment code.
+            //clip.open(ais);
+            //clip.start(); // TODO: Uncomment code.
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -66,6 +66,11 @@ public class Player implements IActor{
         rating = newRating;
     }
 
+
+    public void setIsWhite(boolean isWhite) {
+        this.isWhite = isWhite;
+    }
+
     @Override
     public boolean isWhite() {
         return isWhite;
