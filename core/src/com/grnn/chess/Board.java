@@ -46,8 +46,7 @@ public class Board {
     public void movePiece(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
 
-        if (piece.getValidMoves(this).contains(endPos) || piece.getCaptureMoves(this).contains(endPos)) {
-
+        if (isValidMove(startPos, endPos)) {
             //if (isValidMove(startPos, endPos)) {
             setPiece(piece, endPos);
             setPiece(null, startPos);
@@ -59,6 +58,15 @@ public class Board {
             //    throw new IllegalMoveException("movePiece was called with illegal arguments");
             //}
         }
+    }
+
+    public void castle(Position startPos, Position endPos){
+        AbstractChessPiece piece = getPieceAt(startPos);
+
+        setPiece(piece, endPos);
+        setPiece(null, startPos);
+        piece.move();
+        moveHistory.add(new Move(endPos, startPos, piece));
     }
 
     public Position getKingPos(boolean kingIsWhite){

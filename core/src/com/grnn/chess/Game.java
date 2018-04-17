@@ -44,9 +44,14 @@ public class    Game {
         }
 
         this.player1 = player1;
-        this.player2 = player2;
+        if(player2 instanceof Player) {
+            this.player2 = player2;
+            player2 = new Player("Spiller2", "asd", !player1.isWhite());
 
-        player2 = new Player("Spiller2", "asd", !player1.isWhite());
+        } else {
+            aiPlayer = (AI) player2;
+        }
+
         gameId = ++currid;
 
         board = new Board();
@@ -68,7 +73,7 @@ public class    Game {
     }
 
     private boolean gameHasIllegalArguments(IActor player1, IActor player2) { // TODO: check if the two players are different colors
-        return player1 == null || player2 == null; // || player1.isWhite() == player2.isWhite();
+        return player1 == null || player2 == null || player1.isWhite() == player2.isWhite();
     }
 
     public Board getBoard(){
@@ -169,7 +174,7 @@ public class    Game {
         } else if(potentialPiece == null && validMove){
 //            board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
-            handlingCasting(secondPosition);
+            //handlingCasting(secondPosition);
             handleCheckChecking();
             reset();
             turn = !turn;
@@ -186,8 +191,23 @@ public class    Game {
         captureMoves.clear();
         castlingMoves.clear();
     }
-    private void endGame(int res) {
-        return;
+    private void endGame(Result res, Result res2) {
+        if(isAi())
+            return;
+        Player player = ((Player) player1);
+        Player opponent = ((Player) player2);
+        System.out.println("old: " + player.getRating() + "  " + opponent.getRating());
+
+        EloRatingSystem elo = new EloRatingSystem(player);
+        EloRatingSystem elo2 = new EloRatingSystem(opponent);
+
+        int newElo = elo.getNewRating(res, opponent.getRating());
+        int newElo2 = elo2.getNewRating(res2, player.getRating());
+
+        player.setRating(newElo);
+        opponent.setRating(newElo2);
+
+        System.out.println("new:  " + player.getRating() + "  " + opponent.getRating());
     }
 
     private Player announceWinner() {
@@ -214,15 +234,14 @@ public class    Game {
      * Moves the rook if the king does castling.
      *
      */
-    private void handlingCasting(Position secondPos){
-        if(potentialPiece!=null)return;
-        Position potentialPos = secondPos;
-        if(!castlingMoves.contains(potentialPos)) return;
+    public void handlingCasting(AbstractChessPiece piece){
+            Position potentialPos = board.getPosition(piece);
+        //  if(!castlingMoves.contains(potentialPos)) return;
 
         Position rookOriginalPos = null;
         Position rookNewPos = null;
 
-        if (firstPiece.isWhite()){
+        if (piece.isWhite()){
             if(potentialPos.equals(new Position(2,0))){
                 rookOriginalPos = new Position(0, 0);
                 rookNewPos = new Position(3, 0);
@@ -239,7 +258,7 @@ public class    Game {
                 rookNewPos = new Position(5, 7);
             }
         }
-        board.movePiece(rookOriginalPos, rookNewPos);
+        board.castle(rookOriginalPos, rookNewPos);
     }
 
 
@@ -318,8 +337,8 @@ public class    Game {
             File f = new File("Sound/"+url);
             Clip clip = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream( f );
-            clip.open(ais);
-            clip.start(); // TODO: Uncomment code.
+            //clip.open(ais);
+            //clip.start(); // TODO: Uncomment code.
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (IOException e) {

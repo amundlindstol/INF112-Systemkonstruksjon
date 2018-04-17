@@ -44,7 +44,7 @@ public class Player implements IActor{
         gamesPlayed = new ArrayList<Game>();
         noOfWins = wins;
         noOfLose = losses;
-        noOfDraws = rating;
+        noOfDraws = draws;
         this.rating = rating;
     }
 
@@ -64,6 +64,11 @@ public class Player implements IActor{
 
     public void setRating(int newRating){
         rating = newRating;
+    }
+
+
+    public void setIsWhite(boolean isWhite) {
+        this.isWhite = isWhite;
     }
 
     @Override
