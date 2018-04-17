@@ -206,7 +206,13 @@ public class PlayState extends State {
                 pieceIsMoving = false;
                 piece.stopMoving();
                 //THIS IS WHERE THE ACTUAL MOVING HAPPENS
-                board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
+                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())))){
+                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
+                    game.handlingCasting(piece);
+                }
+                else {
+                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
+                }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
                 animationPath.clear();
