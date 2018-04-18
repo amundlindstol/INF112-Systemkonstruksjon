@@ -133,17 +133,17 @@ public class SelectPlayerState extends State {
         // Button for play against AI lett
         if (playBtn.isPressed()) {
             player1.setIsWhite(true);
-            gsm.set(new PlayState(gsm, 1, player1, new AI(1, true)));
+            gsm.set(new PlayState(gsm, 1, player1, new AI(1, true),playerData));
         }
         // Button for play against AI medium
         if (playBtn2.isPressed()) {
             player1.setIsWhite(true);
-            gsm.set(new PlayState(gsm, 2, player1, new AI(2, true)));
+            gsm.set(new PlayState(gsm, 2, player1, new AI(2, true),playerData));
         }
         // Button for play against AI vanskelig
         if (playBtn3.isPressed()) {
             player1.setIsWhite(true);
-            gsm.set(new PlayState(gsm, 3, player1, new AI(1, true)));
+            gsm.set(new PlayState(gsm, 3, player1, new AI(1, true),playerData));
         }
 
 
@@ -151,7 +151,7 @@ public class SelectPlayerState extends State {
             // Button for play with a friend
             if (playBtn4.isPressed()) {
                 player1.setIsWhite(player1isWhite);
-                gsm.set(new PlayState(gsm, 0, player1, new Player("Spiller2", "2", false)));  //TODO: should isWhite be initialized here?
+                gsm.set(new PlayState(gsm, 0, player1, new Player("Spiller2", "2", false),playerData));  //TODO: should isWhite be initialized here?
             }
         }
         if(!playerData.isOffline()){
@@ -172,7 +172,7 @@ public class SelectPlayerState extends State {
                 player2.setIsWhite(!player1isWhite);
 
                 if (password.equals(player2.getPassword())) {
-                    gsm.set(new PlayState(gsm,0,player1,player2));
+                    gsm.set(new PlayState(gsm,0,player1,player2,playerData));
                 } else {
                     message.setText("Feil brukernavn eller passord.");
                 }

@@ -22,6 +22,7 @@ public class PlayState extends State {
     // Variables
     Game game;
     Board board;
+    PlayerData playerData;
 
     Texture bg;
     Texture bgBoard;
@@ -58,7 +59,7 @@ public class PlayState extends State {
      * @param player1  Should always be player
      * @param player2  Either AI or Player
      */
-    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2) {
+    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
         super(gsm);
         //textures
         bg = new Texture("Graphics/GUI/GUI.png");
@@ -71,6 +72,7 @@ public class PlayState extends State {
         }
         //game
         game = new Game(aiPlayer, player1, player2);
+        this.playerData = playerData;
         board = game.getBoard();
         potentialMoves = game.getValidMoves();
         captureMoves = game.getCaptureMoves();
@@ -305,7 +307,7 @@ public class PlayState extends State {
             Result result1 = Result.DRAW;
             Result result2 = Result.DRAW;
 
-            game.endGame(result1, result2);
+            game.endGame(result1, result2,playerData);
             gsm.set(new GameDoneState(gsm, result1, result2));
         }
     }

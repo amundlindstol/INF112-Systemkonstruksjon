@@ -195,7 +195,9 @@ public class    Game {
         captureMoves.clear();
         castlingMoves.clear();
     }
-    public void endGame(Result res, Result res2) {
+    public void endGame(Result res, Result res2, PlayerData playerData) {
+
+        //Updating rating
         if(isAi())
             return;
         Player player = ((Player) player1);
@@ -212,6 +214,9 @@ public class    Game {
         opponent.setRating(newElo2);
 
         System.out.println("new:  " + player.getRating() + "  " + opponent.getRating());
+
+        //Saving to database
+        playerData.updatePlayers(player1, player2);
     }
 
     private Player announceWinner() {
