@@ -15,8 +15,9 @@ import com.grnn.chess.Actors.Player;
  */
 public class StartGameState extends State {
     private Texture background, pieces;
-    private TextButton playBtn;
-    private int xPos, yPos, Count;
+    private TextButton playBtn, statsBtn;
+    private int xPosPlayBtn, yPosPlayBtn, Count;
+    private int xPosStatsBtn, yPosStatsBtn;
     private Player currentPlayer;
 
     private Skin skin;
@@ -40,8 +41,16 @@ public class StartGameState extends State {
         playBtn = new TextButton("Spill", skin);
         stage.addActor(playBtn);
 
-        xPos = (int) (Gdx.graphics.getWidth()/2 - playBtn.getWidth()/2 - 20);
-        yPos = 340;
+        statsBtn = new TextButton("Statistikk", skin);
+
+        xPosStatsBtn = (int) (Gdx.graphics.getWidth()/2 - statsBtn.getWidth()/2 - 10);
+        yPosStatsBtn = 245;
+        statsBtn.setPosition(xPosStatsBtn, yPosStatsBtn);
+
+        stage.addActor(statsBtn);
+
+        xPosPlayBtn = (int) (Gdx.graphics.getWidth()/2 - playBtn.getWidth()/2 - 10);
+        yPosPlayBtn = 340;
         Count = 20;
         currentPlayer = player;
     }
@@ -50,6 +59,9 @@ public class StartGameState extends State {
     public void handleInput() {
         if (playBtn.isPressed()) {
             gsm.set(new SelectPlayerState(gsm, currentPlayer));
+        } else if(statsBtn.isPressed()) {
+            System.out.println("butn");
+            gsm.set(new ShowStatsState(gsm, currentPlayer));
         }
     }
 
@@ -74,10 +86,10 @@ public class StartGameState extends State {
     private void animate() {
         Count++;
         if (Count <= 40 ) {
-            playBtn.setPosition(++xPos, yPos);
+            playBtn.setPosition(++xPosPlayBtn, yPosPlayBtn);
         }
         else if (Count <= 80){
-            playBtn.setPosition(--xPos, yPos);
+            playBtn.setPosition(--xPosPlayBtn, yPosPlayBtn);
         }
         else {
             Count = 0;
