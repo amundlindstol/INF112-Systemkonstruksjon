@@ -94,7 +94,8 @@ public class SelectPlayerState extends State {
 
             //add textfield to display errors, help etc.
             message = new Label("                     ", skin);
-            message.setPosition(xPos - message.getWidth()+70, (int) (yPos - usernameField.getHeight()) - 30);
+            message.setFontScale(0.8f);
+            message.setPosition(xPos - message.getWidth()+95, (int) (yPos - usernameField.getHeight()) - 30);
 
             stage.addActor(message);
             stage.addActor(usernameTxt);
@@ -150,7 +151,7 @@ public class SelectPlayerState extends State {
             // Button for play with a friend
             if (playBtn4.isPressed()) {
                 player1.setIsWhite(player1isWhite);
-                gsm.set(new PlayState(gsm, 0, player1, new Player("Spiller2", "2", true)));  //TODO: should isWhite be initialized here?
+                gsm.set(new PlayState(gsm, 0, player1, new Player("Spiller2", "2", false)));  //TODO: should isWhite be initialized here?
             }
         }
         if(!playerData.isOffline()){

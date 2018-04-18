@@ -107,7 +107,7 @@ public class LoginUserState extends State {
         }
 
         if (menuButton.isPressed()) {
-            gsm.set(new MainMenuState(gsm));
+            gsm.set(new MainMenuState(gsm,playerData));
         }
     }
 
