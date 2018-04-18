@@ -60,7 +60,7 @@ public class Player implements IActor{
 
     public String getPassword() { return password; }
 
-    public boolean checkPassword(String password) { return this.password == password; }
+    public boolean checkPassword(String password) { return this.password.equals(password); }
 
     public void setRating(int newRating){
         rating = newRating;
