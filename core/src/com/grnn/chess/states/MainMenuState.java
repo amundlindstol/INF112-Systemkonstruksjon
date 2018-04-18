@@ -36,7 +36,7 @@ public class MainMenuState extends State {
      */
     public MainMenuState(GameStateManager gsm) {
         super(gsm);
-        playerData = new PlayerData(1);
+        playerData = new PlayerData();
         setup();
     }
 
