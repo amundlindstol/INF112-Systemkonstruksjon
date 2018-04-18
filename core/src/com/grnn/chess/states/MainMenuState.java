@@ -36,6 +36,11 @@ public class MainMenuState extends State {
      */
     public MainMenuState(GameStateManager gsm) {
         super(gsm);
+        playerData = new PlayerData(1);
+        setup();
+    }
+
+    private void setup(){
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
@@ -43,7 +48,6 @@ public class MainMenuState extends State {
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
         kingBlack = new Texture("Graphics/Menu/KingBlack.png");
-        playerData = new PlayerData(1);
         xPos = Gdx.graphics.getWidth() / 2;
         yPos = Gdx.graphics.getHeight() / 2;
         if(playerData.isOffline()) {
@@ -67,11 +71,22 @@ public class MainMenuState extends State {
         countKingY = -1;
     }
 
+    /**
+     * Constructor w/ GameData
+     * @param gsm
+     * @param playerData
+     */
+    public MainMenuState(GameStateManager gsm, PlayerData playerData){
+        super(gsm);
+        this.playerData=playerData;
+        setup();
+    }
+
     @Override
     public void handleInput() {
         if(playerData.isOffline()){
             if(loginBtn.isPressed()){
-                gsm.set(new SelectPlayerState(gsm,new Player("Player1","", true)));
+                gsm.set(new SelectPlayerState(gsm,new Player("Spiller1","", true),playerData));
             }
         }else {
             if (loginBtn.isPressed()) {

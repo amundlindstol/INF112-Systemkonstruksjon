@@ -42,6 +42,13 @@ eclipse {
         linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/core/assets'
     }
 }
+project(":desktop") {
+    dependencies {
+        dependencies
+        compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
+        compile 'junit:junit:4.12'
+    }
+}
 
 task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
   doLast {
