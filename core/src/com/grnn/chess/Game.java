@@ -195,7 +195,7 @@ public class    Game {
         captureMoves.clear();
         castlingMoves.clear();
     }
-    private void endGame(Result res, Result res2) {
+    public void endGame(Result res, Result res2) {
         if(isAi())
             return;
         Player player = ((Player) player1);

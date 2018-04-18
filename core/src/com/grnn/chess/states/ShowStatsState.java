@@ -50,6 +50,5 @@ public class ShowStatsState extends State {
     public void dispose() {
         stage.dispose();
         background.dispose();
-        pieces.dispose();
     }
 }
