@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Actors.Player;
+import com.grnn.chess.PlayerData;
 
 /**
  * @author Amund 15.03.18
@@ -23,18 +24,21 @@ public class StartGameState extends State {
     private Skin skin;
     private Stage stage;
 
+    private PlayerData playerData;
+
     /**
      * main menu when logged in
      * @param gsm
      * @param player player currently logged in
      */
-    public StartGameState(GameStateManager gsm, Player player) {
+    public StartGameState(GameStateManager gsm, Player player, PlayerData playerData) {
         super(gsm);
         // init stage and listener
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
 
+        this.playerData = playerData;
         this.currentPlayer = player;
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
@@ -58,7 +62,7 @@ public class StartGameState extends State {
     @Override
     public void handleInput() {
         if (playBtn.isPressed()) {
-            gsm.set(new SelectPlayerState(gsm, currentPlayer));
+            gsm.set(new SelectPlayerState(gsm, currentPlayer, playerData));
         } else if(statsBtn.isPressed()) {
             System.out.println("butn");
             gsm.set(new ShowStatsState(gsm, currentPlayer));

@@ -70,7 +70,6 @@ public class PlayerData {
 				int losses = res.getInt("Losses");
 				int draw = res.getInt("Draws");
 				int rating = res.getInt("Rating");
-				System.out.println(name);
 				Player player = new Player(name,password,wins,losses,draw,rating);
 				if(player!=null) {
 					accounts.add(player);
