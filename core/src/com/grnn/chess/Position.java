@@ -38,6 +38,12 @@ public class Position implements Comparable<Object> {
 
 	public Position south(int steps) { return new Position(posX,posY-steps); }
 
+	public String toAlgebraic() {
+		String letterPositions = "abcdefgh";
+
+		return "" + letterPositions.charAt(posX) + posY;
+	}
+
 	@Override
 	public int compareTo(Object o) {
 		if(!(o instanceof Position)) {

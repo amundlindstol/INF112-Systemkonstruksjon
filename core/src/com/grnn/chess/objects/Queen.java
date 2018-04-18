@@ -15,7 +15,7 @@ public class Queen extends AbstractChessPiece{
 	}
 
 	public String toString() {
-		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
+		return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
 	}
 
 

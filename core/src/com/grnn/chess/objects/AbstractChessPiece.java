@@ -11,7 +11,7 @@ import java.util.List;
  * Abstract class to represent a chess piece
  */
 public abstract class AbstractChessPiece {
-	protected boolean hasMoved = false;
+	public boolean hasMoved = false;
     protected boolean isMoving = false;
     protected boolean isWhite;
     protected boolean validMove;
@@ -123,7 +123,7 @@ public abstract class AbstractChessPiece {
      * @return
      */
     public String toString() {
-		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
+		return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
 	}
 
     /**

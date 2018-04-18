@@ -17,7 +17,7 @@ public class Board {
     private ArrayList<AbstractChessPiece> removedPieces;
     private ArrayList<Move> moveHistory;
 
-    private ArrayList<Position> positions;
+    public ArrayList<Position> positions;
 
     public Board() {
         moveHistory = new ArrayList<Move>();
@@ -70,6 +70,8 @@ public class Board {
         }
         return null;
     }
+
+
 
     private boolean isValidMove(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
@@ -208,7 +210,7 @@ public class Board {
 
     public String toString() {
         String out = "";
-        for (int y = size - 1; y >= 0; y--) {
+        for (int y = size() - 1; y >= 0; y--) {
             out += y + "|";
             for (int x = 0; x < size(); x++) {
                 Position p = new Position(x, y);
