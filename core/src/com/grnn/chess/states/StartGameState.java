@@ -64,7 +64,6 @@ public class StartGameState extends State {
         if (playBtn.isPressed()) {
             gsm.set(new SelectPlayerState(gsm, currentPlayer, playerData));
         } else if(statsBtn.isPressed()) {
-            System.out.println("butn");
             gsm.set(new ShowStatsState(gsm, currentPlayer));
         }
     }
