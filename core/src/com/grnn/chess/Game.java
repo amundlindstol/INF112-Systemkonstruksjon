@@ -4,6 +4,7 @@ import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
+import javafx.geometry.Pos;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -83,6 +84,9 @@ public class    Game {
     public int[] getRemovedPieces(){
         return removedPieces;
     }
+    /**
+     * @return true if its whites turn
+     */
     public Boolean getTurn(){
         return turn;
     }
@@ -191,7 +195,7 @@ public class    Game {
         captureMoves.clear();
         castlingMoves.clear();
     }
-    private void endGame(Result res, Result res2) {
+    public void endGame(Result res, Result res2) {
         if(isAi())
             return;
         Player player = ((Player) player1);
@@ -346,5 +350,109 @@ public class    Game {
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getCastlingMoves() {
+        AbstractChessPiece whiteKing = board.getPieceAt(board.getKingPos(true));
+        AbstractChessPiece blackKing = board.getPieceAt(board.getKingPos(false));
+
+        AbstractChessPiece whiteLeftRook = board.getPieceAt(new Position(0, 0));
+        AbstractChessPiece whiteRightRook = board.getPieceAt(new Position(7, 0));
+        AbstractChessPiece blackRightRook = board.getPieceAt(new Position(0, 7));
+        AbstractChessPiece blackLeftRook = board.getPieceAt(new Position(7, 7));
+
+        String moves = "";
+
+        if(!whiteKing.hasMoved) {
+            if(whiteLeftRook instanceof Rook && !whiteLeftRook.hasMoved) {
+                moves += "K";
+            }
+            if(whiteRightRook instanceof Rook && !blackRightRook.hasMoved) {
+                moves += "Q";
+            }
+        }
+
+        if(!blackKing.hasMoved) {
+            if(blackLeftRook instanceof Rook && !blackLeftRook.hasMoved) {
+                moves += "k";
+            }
+            if(blackRightRook instanceof Rook && !blackRightRook.hasMoved) {
+                moves += "q";
+            }
+        }
+
+        return moves == "" ? "-" : moves;
+    }
+
+    public int fullMoveNumber() {
+        return 1 + (board.getMoveHistory().size() / 2);
+    }
+
+    public int halfMoveNumber() {
+        return 0;
+    }
+
+    public String getEnPassantSquare() {
+        ArrayList<Move> moveHistory = board.getMoveHistory();
+        if(moveHistory.size() == 0)
+            return "-";
+
+        Move lastMove = moveHistory.get(moveHistory.size() - 1);
+        AbstractChessPiece lastMovedPiece = board.getPieceAt(lastMove.getToPos());
+        int xDist = Math.abs(lastMove.getToPos().getX() - lastMove.getFromPos().getX());
+
+        if(lastMovedPiece instanceof Pawn && xDist == 2) {
+            if(lastMovedPiece.isWhite()) {
+                return lastMove.getToPos().north().toAlgebraic();
+            } else {
+                return lastMove.getToPos().south().toAlgebraic();
+            }
+        }
+
+        return "-";
+    }
+
+    public String getBoardState() {
+        String out = "";
+        for (int y = board.size() - 1; y >= 0; y--) {
+            int emptyCount = 0;
+            for (int x = 0; x < board.size(); x++) {
+                Position p = new Position(x, y);
+                AbstractChessPiece piece = board.getPieceAt(p);
+                if (piece != null) {
+                    if(emptyCount > 0) {
+                        out += emptyCount;
+                        emptyCount = 0;
+                    }
+
+                    out += piece;
+                } else {
+                    emptyCount += 1;
+                }
+            }
+            if(emptyCount > 0) {
+                out += emptyCount;
+            }
+            if(y != 0) {
+                out += "/";
+            }
+        }
+
+        return out;
+    }
+
+    public String toFen() {
+        String out = "";
+
+        out += getBoardState();
+        out += " " + (getTurn() ? "w" : "b");
+        out += " " + getCastlingMoves();
+        out += " " + getEnPassantSquare();
+        out += " " + halfMoveNumber();
+        out += " " + fullMoveNumber();
+
+
+
+        return out;
     }
 }

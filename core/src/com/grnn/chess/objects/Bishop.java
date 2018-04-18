@@ -16,7 +16,7 @@ public class Bishop extends AbstractChessPiece {
 		super(isWhite); setImage("Bishop");
 	}
 	public String toString() {
-		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
+		return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
 	}
 
 	//TODO: actually implement this

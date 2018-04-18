@@ -3,6 +3,7 @@ package com.grnn.chess.objects;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Position;
+import javafx.geometry.Pos;
 //import javafx.geometry.Pos;
 
 import java.lang.reflect.Array;
@@ -25,7 +26,7 @@ public class King extends AbstractChessPiece {
     }
 
     public String toString() {
-        return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
+        return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
     }
 
     /**
@@ -73,6 +74,7 @@ public class King extends AbstractChessPiece {
      * @return The possible castling positions for the king
      */
     public ArrayList<Position> getCastlingMoves(Board board, Position kingPos) {
+
         ArrayList<Position> validMoves = new ArrayList<Position>();
 
         if (this.hasMoved)
@@ -81,6 +83,11 @@ public class King extends AbstractChessPiece {
         validMoves.addAll(getCastlingMoveEast(board, kingPos));
         validMoves.addAll(getCastlingMoveWest(board, kingPos));
         return validMoves;
+    }
+
+    public ArrayList<Position> getCastlingMoves(Board board) {
+        Position kingPos = this.getPosition(board);
+        return getCastlingMoves(board, kingPos);
     }
 
     /**

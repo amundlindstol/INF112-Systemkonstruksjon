@@ -25,9 +25,6 @@ public class ChessForKids extends ApplicationAdapter {
 
 		gsm.push(new MainMenuState(gsm));
 
-		GameData data = new GameData();
-		SerialGame hakonVsSimon = data.getGame(1);
-		System.out.println(hakonVsSimon.getWhiteName());
 	}
 
 	@Override

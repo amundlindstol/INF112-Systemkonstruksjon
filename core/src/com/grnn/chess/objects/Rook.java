@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Rook extends AbstractChessPiece {
 	private final int value = 5;
-	String letterRepresentation = "t";
+	String letterRepresentation = "r";
 	protected String image = "ChessPieces/Rook";
 	private boolean hasMoved;
 
@@ -23,7 +23,7 @@ public class Rook extends AbstractChessPiece {
     }
 
 	public String toString() {
-		return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
+		return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
 	}
 
 	//TODO: actually implement this

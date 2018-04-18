@@ -301,6 +301,12 @@ public class PlayState extends State {
                 game.moveFirstSelectedPieceTo(potentialPos);
                 prevMove = potentialPos;
             }
+        } else if (!activegame) { // TODO: Actual result
+            Result result1 = Result.DRAW;
+            Result result2 = Result.DRAW;
+
+            game.endGame(result1, result2);
+            gsm.set(new GameDoneState(gsm, result1, result2));
         }
     }
 

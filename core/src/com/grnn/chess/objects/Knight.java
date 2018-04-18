@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Knight extends AbstractChessPiece {
     private final int value = 3;
-    String letterRepresentation = "h";
+    String letterRepresentation = "n";
 
     public Knight(boolean isWhite) {
         super(isWhite);
@@ -60,7 +60,7 @@ public class Knight extends AbstractChessPiece {
     }
 
     public String toString() {
-        return isWhite ? letterRepresentation : letterRepresentation.toUpperCase();
+        return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
     }
 
     public int getValue() {

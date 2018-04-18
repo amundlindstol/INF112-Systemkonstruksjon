@@ -169,6 +169,8 @@ public class SelectPlayerState extends State {
                     return;
                 }
                 Player player2 = playerData.getPlayer(username);
+                player2.setIsWhite(!player1isWhite);
+
                 if (password.equals(player2.getPassword())) {
                     gsm.set(new PlayState(gsm,0,player1,player2));
                 } else {
