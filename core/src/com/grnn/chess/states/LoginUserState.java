@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.grnn.chess.Player;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.PlayerData;
 
 /**
@@ -27,11 +27,13 @@ public class LoginUserState extends State {
     private Skin skin;
     private Stage stage;
 
+    private PlayerData playerData;
+
     /**
      * Constructor for the state
      * @param gsm, GameStateManager
      */
-    public LoginUserState(GameStateManager gsm) {
+    public LoginUserState(GameStateManager gsm,PlayerData playerData) {
         super(gsm);
         // init stage and listener
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
@@ -75,14 +77,16 @@ public class LoginUserState extends State {
         stage.addActor(loginButton);
         background = new Texture("Graphics/Menu/MenuLogin.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-    }
 
+        //Playerdata
+        this.playerData = playerData;
+
+    }
 
     @Override
     public void handleInput() {
 
         if (loginButton.isPressed()) {
-            PlayerData playerData = new PlayerData();
             String username = usernameField.getText();
             String password = passwordField.getText();
             String checkUsr = username.replaceAll("[^A-Za-z0-9]", "");

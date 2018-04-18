@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.*;
+import com.grnn.chess.Actors.IActor;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
 //import javafx.geometry.Pos;
 
@@ -48,10 +50,15 @@ public class PlayState extends State {
     private String player1Name;
     private String player2Name;
 
-    private int[]removedPieces;
+    private int[] removedPieces;
 
-
-    public PlayState(GameStateManager gsm, int aiPlayer, Player player1, Player player2) {
+    /**
+     * @param gsm      Game state
+     * @param aiPlayer Level of AI player
+     * @param player1  Should always be player
+     * @param player2  Either AI or Player
+     */
+    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2) {
         super(gsm);
         //textures
         bg = new Texture("Graphics/GUI/GUI.png");
@@ -59,17 +66,20 @@ public class PlayState extends State {
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
 
+        if (!(player1 instanceof Player)) {
+            throw new IllegalArgumentException("player1 should always be of class Player");
+        }
         //game
-        game = new Game(aiPlayer,player1,player2);
+        game = new Game(aiPlayer, player1, player2);
         board = game.getBoard();
         potentialMoves = game.getValidMoves();
         captureMoves = game.getCaptureMoves();
         text = game.getText();
         removedPieces = game.getRemovedPieces();
-        player1Name = player1.name;
-        if(player2!=null) {
-            player2Name = player2.name;
-        }else{
+        player1Name = ((Player) player1).name;
+        if (player2 instanceof Player) {
+            player2Name = ((Player) player2).name;
+        } else {
             player2Name = "Datamaskin";
         }
 
@@ -88,9 +98,9 @@ public class PlayState extends State {
         activegame = true;
 
 
-        for( int y = 40, yi = 0; y<560; y+=65, yi++){
-            for(int x=40, xi= 0; x<560; x+=65, xi++){
-                AbstractChessPiece piece = board.getPieceAt(new Position(xi,yi));
+        for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
+            for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
+                AbstractChessPiece piece = board.getPieceAt(new Position(xi, yi));
 
                 Position pos = new Position(xi, yi);
                 positions.add(pos);
@@ -118,11 +128,10 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
 
-        if(removedPieces[2]==1){
-            text = "Du vant "+ player1Name +", gratulerer!";
+        if (removedPieces[2] == 1) {
+            text = "Du vant " + player1Name + ", gratulerer!";
             activegame = false;
-        }
-        else if(removedPieces[8]==1){
+        } else if (removedPieces[8] == 1) {
             text = "Du vant " + player1Name + ", du må nok øve mer..."; //TODO wrong output
             activegame = false;
         }
@@ -143,11 +152,11 @@ public class PlayState extends State {
         fontCounter.draw(batch, "" + removedPieces[11], 1037, 105);
 
         // Player names
-        fontCounter.draw(batch, "" + player1Name , 726, 241);
-        fontCounter.draw(batch, "" + player2Name , 723, 555);
+        fontCounter.draw(batch, "" + player1Name, 726, 241);
+        fontCounter.draw(batch, "" + player2Name, 723, 555);
 
         //iterate through cells
-        for(int i=0; i<positions.size() ; i++) {
+        for (int i = 0; i < positions.size(); i++) {
             Position piecePos = positions.get(i);
             int[] pos = translator.toPixels(piecePos.getX(), piecePos.getY());
             AbstractChessPiece piece = board.getPieceAt(piecePos);
@@ -195,7 +204,13 @@ public class PlayState extends State {
                 pieceIsMoving = false;
                 piece.stopMoving();
                 //THIS IS WHERE THE ACTUAL MOVING HAPPENS
-                board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
+                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())))){
+                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
+                    game.handlingCasting(piece);
+                }
+                else {
+                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
+                }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
                 animationPath.clear();
@@ -203,7 +218,7 @@ public class PlayState extends State {
             }
             pos[0] = animationPath.get(animationIndex).getX();
             pos[1] = animationPath.get(animationIndex).getY();
-            if (animationPath.size() > animationIndex+10) animationIndex+=10; //faster animation
+            if (animationPath.size() > animationIndex + 10) animationIndex += 10; //faster animation
             else animationIndex++;
         } else if (!pieceIsMoving && piece.isMoving()) {
             if (ai)
@@ -218,19 +233,19 @@ public class PlayState extends State {
     }
 
     private void generateAnimationPath(Position startPos, Position endPos) {
-         TranslateToCellPos translator = new TranslateToCellPos();
+        TranslateToCellPos translator = new TranslateToCellPos();
         int[] startPixelPos = translator.toPixels(startPos.getX(), startPos.getY());
         int[] endPixelPos = translator.toPixels(endPos.getX(), endPos.getY());
 
         while (startPixelPos[0] != endPixelPos[0] || startPixelPos[1] != endPixelPos[1]) {
-            if (shorterDistTo(true, startPixelPos,1, endPixelPos) == 1) {
+            if (shorterDistTo(true, startPixelPos, 1, endPixelPos) == 1) {
                 startPixelPos[0]++;
-            } else if (shorterDistTo(true, startPixelPos,1, endPixelPos) != 0) {
+            } else if (shorterDistTo(true, startPixelPos, 1, endPixelPos) != 0) {
                 startPixelPos[0]--;
             }
-            if (shorterDistTo(false, startPixelPos,1, endPixelPos) == 1) {
+            if (shorterDistTo(false, startPixelPos, 1, endPixelPos) == 1) {
                 startPixelPos[1]++;
-            } else if (shorterDistTo(false, startPixelPos,1, endPixelPos) != 0) {
+            } else if (shorterDistTo(false, startPixelPos, 1, endPixelPos) != 0) {
                 startPixelPos[1]--;
             }
             animationPath.add(new Position(startPixelPos[0], startPixelPos[1]));
@@ -239,13 +254,17 @@ public class PlayState extends State {
 
     //is it shorter distance? 1=yes -1=no 0=same
     private int shorterDistTo(boolean changeInXaxis, int[] startPixelPo, int variance, int[] endPixelPo) {
-        double startVal = Math.sqrt((Math.pow(Math.abs(startPixelPo[0]-endPixelPo[0]), 2))+(Math.pow(startPixelPo[1]-endPixelPo[1], 2)));
+        double startVal = Math.sqrt((Math.pow(Math.abs(startPixelPo[0] - endPixelPo[0]), 2)) + (Math.pow(startPixelPo[1] - endPixelPo[1], 2)));
         double nextVal;
         if (changeInXaxis) {
-            if (startPixelPo[0] == endPixelPo[0]) {return 0;}
+            if (startPixelPo[0] == endPixelPo[0]) {
+                return 0;
+            }
             nextVal = Math.sqrt((Math.pow(Math.abs(startPixelPo[0] + variance - endPixelPo[0]), 2)) + (Math.pow(startPixelPo[1] - endPixelPo[1], 2)));
         } else {
-            if (startPixelPo[1] == endPixelPo[1]) {return 0;}
+            if (startPixelPo[1] == endPixelPo[1]) {
+                return 0;
+            }
             nextVal = Math.sqrt((Math.pow(Math.abs(startPixelPo[0] - endPixelPo[0]), 2)) + (Math.pow(startPixelPo[1] + variance - endPixelPo[1], 2)));
         }
         if (nextVal < startVal)
@@ -261,7 +280,7 @@ public class PlayState extends State {
         int y = Math.abs(Gdx.input.getY());
         Boolean notSelected = game.pieceHasNotBeenSelected();
 
-        if (x>40 && x< 560 && y>40 && y<560 && activegame && !pieceIsMoving) {
+        if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
 
             //AI
             if (!game.getTurn() && game.isAi()) {
@@ -289,7 +308,7 @@ public class PlayState extends State {
     public void dispose() {
         bg.dispose();
         bgBoard.dispose();
-        for(Texture tex : pieceTexures){
+        for (Texture tex : pieceTexures) {
             tex.dispose();
         }
         potentialTex.dispose();

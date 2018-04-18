@@ -2,7 +2,7 @@ package com.grnn.chess.test;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Game;
-import com.grnn.chess.Player;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.Position;
 import org.junit.Test;
 
@@ -15,8 +15,8 @@ public class FenTest {
         String defaultBoardFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
         Game defaultGame =
-                new Game(0, new Player("hakon", "123456"),
-                    new Player("hakon", "123456"));
+                new Game(0, new Player("hakon", "123456", true),
+                    new Player("hakon", "123456", false));
 
         assertThat(defaultGame.toFen(), is(defaultBoardFEN));
     }
@@ -26,8 +26,8 @@ public class FenTest {
         String defaultBoardFEN = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
 
         Game defaultGame =
-                new Game(0, new Player("hakon", "123456"),
-                        new Player("hakon", "123456"));
+                new Game(0, new Player("hakon", "123456", true),
+                        new Player("hakon", "123456", false));
 
         defaultGame.selectFirstPiece(new Position(4, 1));
         defaultGame.moveFirstSelectedPieceTo(new Position(4, 3));

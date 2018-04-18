@@ -4,6 +4,7 @@ import com.grnn.chess.exceptions.IllegalMoveException;
 import com.grnn.chess.objects.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class to represent a board
@@ -45,8 +46,7 @@ public class Board {
     public void movePiece(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
 
-        if (piece.getValidMoves(this).contains(endPos) || piece.getCaptureMoves(this).contains(endPos)) {
-
+        if (isValidMove(startPos, endPos)) {
             //if (isValidMove(startPos, endPos)) {
             setPiece(piece, endPos);
             setPiece(null, startPos);
@@ -58,6 +58,15 @@ public class Board {
             //    throw new IllegalMoveException("movePiece was called with illegal arguments");
             //}
         }
+    }
+
+    public void castle(Position startPos, Position endPos){
+        AbstractChessPiece piece = getPieceAt(startPos);
+
+        setPiece(piece, endPos);
+        setPiece(null, startPos);
+        piece.move();
+        moveHistory.add(new Move(endPos, startPos, piece));
     }
 
     public Position getKingPos(boolean kingIsWhite){
@@ -93,14 +102,15 @@ public class Board {
     /**
      * Gets possible moves the AI can do.
      * @return possible moves the AI can do.
+     * @param isWhite
      */
-    public ArrayList<Move> getPossibleAIMoves() { //Aka get black's moves
+    public ArrayList<Move> getPossibleAIMoves(boolean isWhite) { //Aka get black's moves
 
         ArrayList<Move> possibleMoves = new ArrayList<Move>();
 
         for(Position position : positions){
             AbstractChessPiece piece = this.getPieceAt(position);
-            if(piece!=null && !piece.isWhite()) {
+            if(piece!=null && isWhite == piece.isWhite()) {
                 ArrayList<Position> posList = piece.getValidMoves(this);
                 posList.addAll(piece.getCaptureMoves(this));
                 if (!posList.isEmpty()){
@@ -365,4 +375,40 @@ public class Board {
         return boardCopy;
     }
 
-}
+    public int calculateBoardForActor(boolean isWhite) {
+        // TODO: implement
+        return 0;
+    }
+    /**
+     * Gets all the pieces on the board.
+     * @return A List of all the pieces on the board.
+     */
+    public List<AbstractChessPiece> getAllPieces() {
+        List<AbstractChessPiece> listOfPieces = new ArrayList<AbstractChessPiece>();
+        listOfPieces.addAll(getSpesificPlayersPieces(true));
+        listOfPieces.addAll(getSpesificPlayersPieces(false));
+
+        return listOfPieces;
+    }
+
+    /**
+     * Gets all the pieces of a spesific player.
+     * @param isWhite Which player it is.
+     * @return A List of all the player's pieces.
+     */
+    public List<AbstractChessPiece> getSpesificPlayersPieces(boolean isWhite) {
+        List<AbstractChessPiece> listOfPieces = new ArrayList<AbstractChessPiece>();
+
+        for(int y = 0; y < size; y++) {
+            for(int x = 0; x < size; x++) {
+                AbstractChessPiece piece = getPieceAt(new Position(x, y));
+                if(piece != null && piece.isWhite() == isWhite) {
+                    listOfPieces.add(piece);
+                }
+            }
+        }
+        return listOfPieces;
+    }
+
+
+    }

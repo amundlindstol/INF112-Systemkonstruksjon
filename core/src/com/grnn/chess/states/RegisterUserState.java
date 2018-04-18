@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.grnn.chess.Player;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.PlayerData;
 
 /**
@@ -30,12 +30,16 @@ public class RegisterUserState extends State {
     private Skin skin;
     private Stage stage;
 
-    public RegisterUserState(GameStateManager gsm) {
+    private PlayerData playerData;
+
+    public RegisterUserState(GameStateManager gsm,PlayerData playerData) {
         super(gsm);
         // create skin
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
+
+        this.playerData = playerData;
 
         usernameField = new TextField("", skin);
         passwordField = new TextField("", skin);
@@ -79,7 +83,6 @@ public class RegisterUserState extends State {
     @Override
     public void handleInput() {
         if (confirmBtn.isPressed()) {
-            PlayerData playerData = new PlayerData();
             String username = usernameField.getText();
             String password = passwordField.getText();
             String checkUsr = username.replaceAll("[^A-Za-z0-9]", "");
@@ -95,13 +98,13 @@ public class RegisterUserState extends State {
             } else if (password.length() == 0) {
                 message.setText("      Lag et passord."); //TODO add ascii code æøå
                 return;
-            } else if (username != checkUsr || password != checkPwd) {
+            } else if (!username.equals(checkUsr) || !password.equals(checkPwd)) {
                 message.setText("Spesialtegn kan ikke brukes.");
                 return;
             }
 
-            Player player = new Player(username, password);
-            playerData.addAccount(player);
+            Player player = new Player(username, password, true); //TODO: should isWhite be initialized here?
+            playerData.addAccountToDatabase(player);
             gsm.set(new StartGameState(gsm, player));
         }
 

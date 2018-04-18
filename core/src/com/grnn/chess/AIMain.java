@@ -1,6 +1,6 @@
 package com.grnn.chess;
 
-import com.grnn.chess.AI.AI;
+import com.grnn.chess.Actors.AI.AI;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -14,7 +14,7 @@ public class AIMain {
         System.out.println("welcome to chess3000, get ready to play!");
         System.out.println("Player one, give me your name: ");
         String player1 = input.nextLine();
-        AI ai = new AI(0);
+        AI ai = new AI(0, true);
         Move bestMove = ai.calculateBestMove(board);
         System.out.println("Doing move " + bestMove);
 

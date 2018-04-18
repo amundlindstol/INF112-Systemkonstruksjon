@@ -1,22 +1,21 @@
 package com.grnn.chess;
 
-import com.grnn.chess.AI.AI;
+import com.grnn.chess.Actors.AI.AI;
+import com.grnn.chess.Actors.IActor;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
 import javafx.geometry.Pos;
 
 import javax.sound.sampled.*;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
-public class Game {
+public class    Game {
 
     private Board board;
-    private Player player1;
-    private Player player2;
+    private IActor player1;
+    private IActor player2;
     private AI aiPlayer;
     private boolean turn;
     private AbstractChessPiece firstPiece;
@@ -40,16 +39,20 @@ public class Game {
         currid = id;
     }
 
-    public Game(int aiLevel, Player player1, Player player2){
-        if(player1!=null) {
-            this.player1 = player1;
+    public Game(int aiLevel, IActor player1, IActor player2){
+        if(gameHasIllegalArguments(player1, player2)) {
+            throw new IllegalArgumentException("Player not initialized");
         }
-        if(player2!=null) {
+
+        this.player1 = player1;
+        if(player2 instanceof Player) {
             this.player2 = player2;
+            player2 = new Player("Spiller2", "asd", !player1.isWhite());
+
         } else {
-            aiPlayer = new AI(aiLevel);
+            aiPlayer = (AI) player2;
         }
-        player2 = new Player("Spiller2", "asd");
+
         gameId = ++currid;
 
         board = new Board();
@@ -68,6 +71,10 @@ public class Game {
         for(Integer count : removedPieces){ //TODO what even is this
             count = 0;
         }
+    }
+
+    private boolean gameHasIllegalArguments(IActor player1, IActor player2) { // TODO: check if the two players are different colors
+        return player1 == null || player2 == null || player1.isWhite() == player2.isWhite();
     }
 
     public Board getBoard(){
@@ -94,7 +101,7 @@ public class Game {
     public ArrayList<Position> getCaptureMoves() {
         return captureMoves;
     }
-    public boolean isAi() {return aiPlayer != null ? true : false;}
+    public boolean isAi() {return aiPlayer != null;}
 
     /**
      * ai's move method
@@ -151,6 +158,10 @@ public class Game {
                     board.removePiece(potentialPiece);
                     removed = true;
                     updatePieceCounter(potentialPiece);
+
+                    if(turn) playSound("takePiece.wav");
+
+                    else playSound("lostPiece.wav");
 //                    board.movePiece(board.getPosition(firstPiece), secondPosition);
                     firstPiece.startMoving();
                     handleCheckChecking();
@@ -167,7 +178,7 @@ public class Game {
         } else if(potentialPiece == null && validMove){
 //            board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
-            handlingCasting(secondPosition);
+            //handlingCasting(secondPosition);
             handleCheckChecking();
             reset();
             turn = !turn;
@@ -184,8 +195,23 @@ public class Game {
         captureMoves.clear();
         castlingMoves.clear();
     }
-    private void endGame(int res) {
-        return;
+    private void endGame(Result res, Result res2) {
+        if(isAi())
+            return;
+        Player player = ((Player) player1);
+        Player opponent = ((Player) player2);
+        System.out.println("old: " + player.getRating() + "  " + opponent.getRating());
+
+        EloRatingSystem elo = new EloRatingSystem(player);
+        EloRatingSystem elo2 = new EloRatingSystem(opponent);
+
+        int newElo = elo.getNewRating(res, opponent.getRating());
+        int newElo2 = elo2.getNewRating(res2, player.getRating());
+
+        player.setRating(newElo);
+        opponent.setRating(newElo2);
+
+        System.out.println("new:  " + player.getRating() + "  " + opponent.getRating());
     }
 
     private Player announceWinner() {
@@ -212,15 +238,14 @@ public class Game {
      * Moves the rook if the king does castling.
      *
      */
-    private void handlingCasting(Position secondPos){
-        if(potentialPiece!=null)return;
-        Position potentialPos = secondPos;
-        if(!castlingMoves.contains(potentialPos)) return;
+    public void handlingCasting(AbstractChessPiece piece){
+            Position potentialPos = board.getPosition(piece);
+        //  if(!castlingMoves.contains(potentialPos)) return;
 
         Position rookOriginalPos = null;
         Position rookNewPos = null;
 
-        if (firstPiece.isWhite()){
+        if (piece.isWhite()){
             if(potentialPos.equals(new Position(2,0))){
                 rookOriginalPos = new Position(0, 0);
                 rookNewPos = new Position(3, 0);
@@ -237,7 +262,7 @@ public class Game {
                 rookNewPos = new Position(5, 7);
             }
         }
-        board.movePiece(rookOriginalPos, rookNewPos);
+        board.castle(rookOriginalPos, rookNewPos);
     }
 
 
@@ -247,32 +272,32 @@ public class Game {
      */
     private void updatePieceCounter(AbstractChessPiece removedPiece){
         if(removedPiece instanceof Pawn){
-            if(!turn)
+            if(turn)
                 removedPieces[0]++;
             else
                 removedPieces[6]++;
         }else if(removedPiece instanceof Bishop){
-            if(!turn)
+            if(turn)
                 removedPieces[1]++;
             else
                 removedPieces[7]++;
         }else if(removedPiece instanceof King){
-            if(!turn)
+            if(turn)
                 removedPieces[2]++;
             else
                 removedPieces[8]++;
-        }else if(removedPiece instanceof Queen){
-            if(!turn)
+        }else if(removedPiece instanceof Rook){
+            if(turn)
                 removedPieces[3]++;
             else
                 removedPieces[9]++;
-        }else if(removedPiece instanceof Rook){
-            if(!turn)
+        }else if(removedPiece instanceof Queen){
+            if(turn)
                 removedPieces[4]++;
             else
                 removedPieces[10]++;
         }else if(removedPiece instanceof Knight){
-            if(!turn)
+            if(turn)
                 removedPieces[5]++;
             else
                 removedPieces[11]++;
@@ -316,8 +341,8 @@ public class Game {
             File f = new File("Sound/"+url);
             Clip clip = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream( f );
-            clip.open(ais);
-            clip.start();
+            //clip.open(ais);
+            //clip.start(); // TODO: Uncomment code.
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (IOException e) {
