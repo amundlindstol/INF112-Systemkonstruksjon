@@ -18,14 +18,13 @@ public class ShowStatsState extends State {
 
     private Skin skin;
     private Stage stage;
-    private Texture background, pieces;
+    private Texture background;
     private Player currentPlayer;
     private TextButton menuButton;
     private int xPos;
     private int yPos;
     private PlayerData playerData;
     private BitmapFont fontText;
-    private String text;
 
     public ShowStatsState (GameStateManager gsm, Player currentPlayer, PlayerData playerData) {
         super(gsm);
@@ -42,7 +41,6 @@ public class ShowStatsState extends State {
 
         fontText = new BitmapFont();
         fontText.setColor(Color.WHITE);
-       // text = playerData.getTopTenPlayers().get(0).getName();
         stage.addActor(menuButton);
     }
 
@@ -63,10 +61,6 @@ public class ShowStatsState extends State {
         sb.begin();
         sb.draw(background, 0,0);
 
-        for(int i = 0; i < 10; i++){
-
-        }
-
         fontText.draw(sb, playerData.getTopTenPlayers().get(0).getName(), 390, 430);
         fontText.draw(sb, playerData.getTopTenPlayers().get(1).getName(), 390, 400);
         fontText.draw(sb, playerData.getTopTenPlayers().get(2).getName(), 390, 370);
@@ -74,9 +68,9 @@ public class ShowStatsState extends State {
         fontText.draw(sb, playerData.getTopTenPlayers().get(4).getName(), 390, 310);
         fontText.draw(sb, playerData.getTopTenPlayers().get(5).getName(), 390, 280);
         fontText.draw(sb, playerData.getTopTenPlayers().get(6).getName(), 390, 250);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(7).getName(), 390, 230);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(8).getName(), 390, 200);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(9).getName(), 390, 170);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(7).getName(), 390, 220);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(8).getName(), 390, 190);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(9).getName(), 390, 160);
 
 
         fontText.draw(sb, "" + playerData.getTopTenPlayers().get(0).rating, 600, 430);
@@ -101,9 +95,6 @@ public class ShowStatsState extends State {
         fontText.draw(sb, "" + playerData.getTopTenPlayers().get(7).getNoOfWins(), 700, 220);
         fontText.draw(sb, "" + playerData.getTopTenPlayers().get(8).getNoOfWins(), 700, 190);
         fontText.draw(sb, "" + playerData.getTopTenPlayers().get(9).getNoOfWins(), 700, 160);
-
-
-
 
         sb.end();
         stage.draw();
