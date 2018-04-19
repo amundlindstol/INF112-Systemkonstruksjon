@@ -151,7 +151,7 @@ public class SelectPlayerState extends State {
             // Button for play with a friend
             if (playBtn4.isPressed()) {
                 player1.setIsWhite(player1isWhite);
-                gsm.set(new PlayState(gsm, 0, player1, new Player("Spiller2", "2", false),playerData));  //TODO: should isWhite be initialized here?
+                gsm.set(new PlayState(gsm, 0, player1, new Player("Spiller2", "2", !player1isWhite),playerData));  //TODO: should isWhite be initialized here?
             }
         }
         if(!playerData.isOffline()){

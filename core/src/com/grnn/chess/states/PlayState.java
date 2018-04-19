@@ -5,7 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.*;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
@@ -50,6 +55,9 @@ public class PlayState extends State {
     private String text;
     private String player1Name;
     private String player2Name;
+    private TextButton resignBtn;
+    private Stage stage;
+    private Skin skin;
 
     private int[] removedPieces;
 
@@ -73,6 +81,10 @@ public class PlayState extends State {
         bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
+
+        stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
+        Gdx.input.setInputProcessor(stage);
+        skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
 
         if (!(player1 instanceof Player)) {
             throw new IllegalArgumentException("player1 should always be of class Player");
@@ -106,6 +118,10 @@ public class PlayState extends State {
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
+        resignBtn = new TextButton("gi opp", skin);
+        resignBtn.setSize(resignBtn.getWidth(), 80);
+        resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth(), resignBtn.getY());
+        stage.addActor(resignBtn);
 
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
             for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
@@ -207,6 +223,7 @@ public class PlayState extends State {
                 }
             }
         }
+        stage.draw();
     }
 
 
@@ -216,13 +233,13 @@ public class PlayState extends State {
                 pieceIsMoving = false;
                 piece.stopMoving();
                 //THIS IS WHERE THE ACTUAL MOVING HAPPENS
-                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())))){
-                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
-                    game.handlingCasting(piece);
-                }
-                else {
-                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
-                }
+//                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())))){
+//                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
+//                    game.handlingCasting(piece);
+//                }
+//                else {
+//                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
+//                }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
                 animationPath.clear();
@@ -237,6 +254,7 @@ public class PlayState extends State {
                 generateAnimationPath(prevAImove.getFromPos(), prevAImove.getToPos());
             else
                 generateAnimationPath(piecePos, prevMove);
+            board.movePiece(piecePos, prevMove);
             pieceIsMoving = true;
             animationIndex = 0;
             game.playSound("movePiece.wav");
@@ -291,7 +309,14 @@ public class PlayState extends State {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY());
         Boolean notSelected = game.pieceHasNotBeenSelected();
-
+        if (resignBtn.isPressed() && activegame) {
+            if (!playerData.isOffline()) {
+                game.endGame(Result.DRAW, Result.DRAW,playerData);
+//                gsm.set(new ShowStatsState(gsm, player1Name, Result.DRAW));
+            } else {
+//                gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW));
+            }
+        }
         if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
 
             //AI
@@ -331,6 +356,7 @@ public class PlayState extends State {
         }
         potentialTex.dispose();
         captureTex.dispose();
+        stage.dispose();
         System.out.println("PlayState Disposed");
     }
 }
