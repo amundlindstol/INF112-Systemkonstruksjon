@@ -97,7 +97,6 @@ public class PlayState extends State {
         board = game.getBoard();
         potentialMoves = game.getValidMoves();
         captureMoves = game.getCaptureMoves();
-        helpingMove = game.getHelpingMove();
         text = game.getText();
         removedPieces = game.getRemovedPieces();
         player1Name = ((Player) player1).name;
@@ -170,19 +169,16 @@ public class PlayState extends State {
         }
 
         fontText.draw(batch, text, 645, 334);
-        fontCounter.draw(batch, "" + removedPieces[0], 668, 418);
-        fontCounter.draw(batch, "" + removedPieces[1], 739, 418);
-        fontCounter.draw(batch, "" + removedPieces[2], 810, 418);
-        fontCounter.draw(batch, "" + removedPieces[3], 883, 418);
-        fontCounter.draw(batch, "" + removedPieces[4], 960, 418);
-        fontCounter.draw(batch, "" + removedPieces[5], 1037, 418);
 
-        fontCounter.draw(batch, "" + removedPieces[6], 668, 105);
-        fontCounter.draw(batch, "" + removedPieces[7], 739, 105);
-        fontCounter.draw(batch, "" + removedPieces[8], 810, 105);
-        fontCounter.draw(batch, "" + removedPieces[9], 882, 105);
-        fontCounter.draw(batch, "" + removedPieces[10], 959, 105);
-        fontCounter.draw(batch, "" + removedPieces[11], 1037, 105);
+        //Helge, look at this for-loop! It's so pretty <3
+        for(int i=0, j=668; i<6; i++, j+= 71) {
+            if(i>=4){
+                j+=7;
+            }
+            fontCounter.draw(batch, "" + removedPieces[i], j, 418);
+            fontCounter.draw(batch, "" + removedPieces[5 + i], j, 105);
+
+        }
 
         // Player names
         fontCounter.draw(batch, "" + player1Name, 726, 241);
@@ -222,6 +218,14 @@ public class PlayState extends State {
                 int[] pos = translator.toPixels(capPos.getX(), capPos.getY());
                 batch.draw(captureTex, pos[0], pos[1]);
             }
+        }
+        if (helpingMove!=null){
+            Position fromPos = helpingMove.getFromPos();
+            Position toPos = helpingMove.getToPos();
+            int[] frompos = translator.toPixels(fromPos.getX(),fromPos.getY());
+            int[] topos = translator.toPixels(toPos.getX(),toPos.getY());
+            batch.draw(potentialTex,frompos[0],frompos[1]);
+            batch.draw(potentialTex,topos[0],topos[1]);
         }
         batch.end();
         if (!pieceTexures.isEmpty()) {
@@ -322,6 +326,10 @@ public class PlayState extends State {
                 game.endGame(Result.DRAW, Result.DRAW,playerData);
                 gsm.set(new ShowStatsState(gsm, player1, playerData));
         }
+        if(helpBtn.isPressed() && activegame){
+            helpingMove = game.getHelpingMove();
+            System.out.println(helpingMove);
+        }
         if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
 
             //AI
@@ -342,6 +350,7 @@ public class PlayState extends State {
                 Position potentialPos = translator.toCellPos(x, y);
                 game.moveFirstSelectedPieceTo(potentialPos);
                 prevMove = potentialPos;
+                helpingMove = null;
             }
         } else if (!activegame) { // TODO: Actual result
             Result result1 = Result.DRAW;
