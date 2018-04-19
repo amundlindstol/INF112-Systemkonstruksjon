@@ -118,9 +118,9 @@ public class PlayState extends State {
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
-        resignBtn = new TextButton("gi opp", skin);
-        resignBtn.setSize(resignBtn.getWidth(), 80);
-        resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth(), resignBtn.getY());
+        resignBtn = new TextButton("avslutt", skin);
+        resignBtn.setSize(resignBtn.getWidth(), 60);
+        resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-15, resignBtn.getY()+7);
         stage.addActor(resignBtn);
 
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
@@ -192,9 +192,9 @@ public class PlayState extends State {
             if (piece != null && piece.isMoving()) { //should this piece change its location?
                 if (game.isAi() && game.getTurn()) { //ai piece
                     if (prevAImove == null) prevAImove = game.getAiMove();
-                    pos = animatePiece(piece, piecePos, pos, true);
+                    animatePiece(piece, piecePos, pos, true);
                 } else
-                    pos = animatePiece(piece, piecePos, pos, false);
+                    animatePiece(piece, piecePos, pos, false);
             }
 
             if (piece != null) {
@@ -227,23 +227,29 @@ public class PlayState extends State {
     }
 
 
-    private int[] animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
+    private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
         if (pieceIsMoving && piece.isMoving()) {
             if (animationIndex == animationPath.size() && animationPath.size() > 0) { //reached end of list
-                pieceIsMoving = false;
                 piece.stopMoving();
+                pieceIsMoving = false;
                 //THIS IS WHERE THE ACTUAL MOVING HAPPENS
                 if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)){
                     board.movePiece(piecePos, prevMove);
-                    game.handlingCasting(piece);
-                }
-                else {
+
+                    animationPath.clear();
+                    Position[] castingPos = game.handlingCasting(piece);
+                    AbstractChessPiece p = board.getPieceAt(castingPos[0]);
+                    prevMove = castingPos[1];
+                    animationIndex = 0;
+                    p.startMoving();
+                    return;
+                } else {
                     board.movePiece(piecePos, prevMove);
                 }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
                 animationPath.clear();
-                return pos;
+                return;
             }
             pos[0] = animationPath.get(animationIndex).getX();
             pos[1] = animationPath.get(animationIndex).getY();
@@ -258,7 +264,7 @@ public class PlayState extends State {
             animationIndex = 0;
             game.playSound("movePiece.wav");
         }
-        return pos;
+        return;
     }
 
     private void generateAnimationPath(Position startPos, Position endPos) {
