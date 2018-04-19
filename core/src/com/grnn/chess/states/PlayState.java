@@ -119,7 +119,7 @@ public class PlayState extends State {
         activegame = true;
 
         resignBtn = new TextButton("gi opp", skin);
-        resignBtn.setSize(resignBtn.getWidth(), 60);
+        resignBtn.setSize(resignBtn.getWidth(), 80);
         resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth(), resignBtn.getY());
         stage.addActor(resignBtn);
 
@@ -153,10 +153,10 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
 
-        if (removedPieces[2] == 1) {
+        if (removedPieces[5] == 1) {
             text = "Du vant " + player1Name + ", gratulerer!";
             activegame = false;
-        } else if (removedPieces[8] == 1) {
+        } else if (removedPieces[11] == 1) {
             text = "Du vant " + player1Name + ", du må nok øve mer..."; //TODO wrong output
             activegame = false;
         }
@@ -232,6 +232,14 @@ public class PlayState extends State {
             if (animationIndex == animationPath.size() && animationPath.size() > 0) { //reached end of list
                 pieceIsMoving = false;
                 piece.stopMoving();
+                //THIS IS WHERE THE ACTUAL MOVING HAPPENS
+                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)){
+                    board.movePiece(piecePos, prevMove);
+                    game.handlingCasting(piece);
+                }
+                else {
+                    board.movePiece(piecePos, prevMove);
+                }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
                 animationPath.clear();
@@ -246,8 +254,6 @@ public class PlayState extends State {
                 generateAnimationPath(prevAImove.getFromPos(), prevAImove.getToPos());
             else
                 generateAnimationPath(piecePos, prevMove);
-
-            board.movePiece(piecePos, prevMove);
             pieceIsMoving = true;
             animationIndex = 0;
             game.playSound("movePiece.wav");
@@ -304,8 +310,8 @@ public class PlayState extends State {
         Boolean notSelected = game.pieceHasNotBeenSelected();
         if (resignBtn.isPressed() && activegame) {
             if (!playerData.isOffline()) {
-                game.endGame(Result.DRAW, Result.DRAW, playerData);
-//                gsm.set(new ShowStatsState(gsm, player1Name, ));
+                game.endGame(Result.DRAW, Result.DRAW,playerData);
+//                gsm.set(new ShowStatsState(gsm, player1Name, Result.DRAW));
             } else {
 //                gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW));
             }

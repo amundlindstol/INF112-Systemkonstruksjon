@@ -16,13 +16,20 @@ public class EloRatingSystem {
     }
 
     public int getNewRating(Result result, int opponentRating){
+        int playerRating = 0;
         switch (result){
             case WIN:
                 return getNewRating(1.0, opponentRating);
             case DRAW:
-                return getNewRating(0.5, opponentRating);
+                playerRating = getNewRating(0.5, opponentRating);
+                if (playerRating < 1000)
+                    playerRating = 1000;
+                return playerRating;
             case LOSS:
-                return getNewRating(0.0, opponentRating);
+                playerRating = getNewRating(0, opponentRating);
+                if (playerRating < 1000)
+                    playerRating = 1000;
+                return playerRating;
         }
         return -1;
     }
