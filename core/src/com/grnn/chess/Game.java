@@ -159,7 +159,7 @@ public class    Game {
                     removed = true;
                     updatePieceCounter(potentialPiece);
 
-                    if(turn) playSound("takePiece1.wav");
+                    if(turn) playSound("takePiece.wav");
 
                     else playSound("lostPiece.wav");
 //                    board.movePiece(board.getPosition(firstPiece), secondPosition);
