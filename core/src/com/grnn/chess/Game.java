@@ -176,9 +176,7 @@ public class    Game {
                     reset();
                 }
         } else if(potentialPiece == null && validMove){
-//            board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
-            //handlingCasting(secondPosition);
             handleCheckChecking();
             reset();
             turn = !turn;
@@ -244,8 +242,8 @@ public class    Game {
      *
      */
     public void handlingCasting(AbstractChessPiece piece){
-            Position potentialPos = board.getPosition(piece);
-        //  if(!castlingMoves.contains(potentialPos)) return;
+        Position potentialPos = board.getPosition(piece);
+       // if(!castlingMoves.contains(potentialPos)) return;
 
         Position rookOriginalPos = null;
         Position rookNewPos = null;
@@ -286,7 +284,7 @@ public class    Game {
                 removedPieces[1]++;
             else
                 removedPieces[7]++;
-        }else if(removedPiece instanceof King){
+        }else if(removedPiece instanceof Knight){
             if(turn)
                 removedPieces[2]++;
             else
@@ -301,7 +299,7 @@ public class    Game {
                 removedPieces[4]++;
             else
                 removedPieces[10]++;
-        }else if(removedPiece instanceof Knight){
+        }else if(removedPiece instanceof King){
             if(turn)
                 removedPieces[5]++;
             else
@@ -346,8 +344,8 @@ public class    Game {
             File f = new File("Sound/"+url);
             Clip clip = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream( f );
-            //clip.open(ais);
-            //clip.start(); // TODO: Uncomment code.
+            clip.open(ais);
+            clip.start(); // TODO: Uncomment code.
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (IOException e) {
