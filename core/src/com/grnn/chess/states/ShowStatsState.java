@@ -21,6 +21,7 @@ public class ShowStatsState extends State {
     private Skin skin;
     private Stage stage;
     private Texture background;
+    private Texture scoreboard;
     private Player currentPlayer;
     private TextButton menuButton;
     private int xPos;
@@ -40,11 +41,12 @@ public class ShowStatsState extends State {
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
         background = new Texture("Graphics/Menu/Menu_background.png");
-        xPos = 700;
+        xPos = 712;
         yPos = 130;
         menuButton = new TextButton("Tilbake", skin);
         menuButton.setPosition((float) (xPos - menuButton.getWidth()*1.08), yPos - menuButton.getHeight() - 15);
         menuButton.setSize(280,60);
+        scoreboard = new Texture("Graphics/Menu/scoreboard.png");
 
         fontText = new BitmapFont();
         fontText.setColor(Color.WHITE);
@@ -67,10 +69,16 @@ public class ShowStatsState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0,0);
+        sb.draw(scoreboard,-20 , 0);
 
         if(!playerData.isOffline()) {
-            for (int i = 0, j = 430; i < 10; i++, j -= 30) {
-                fontText.draw(sb, topTenPlayers.get(i).getName(), 390, j);
+
+            fontText.draw(sb, "Navn", 365, 420);
+            fontText.draw(sb, "Score", 600, 420);
+            fontText.draw(sb, "Vunnet", 700, 420);
+
+            for (int i = 0, j = 390; i < 10; i++, j -= 30) {
+                fontText.draw(sb, topTenPlayers.get(i).getName(), 365, j);
                 fontText.draw(sb, "" + topTenPlayers.get(i).rating, 600, j);
                 fontText.draw(sb, "" + topTenPlayers.get(i).getNoOfWins(), 700, j);
             }
