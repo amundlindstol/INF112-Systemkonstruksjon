@@ -119,7 +119,7 @@ public class PlayState extends State {
         activegame = true;
 
         resignBtn = new TextButton("gi opp", skin);
-        resignBtn.setSize(resignBtn.getWidth(), 80);
+        resignBtn.setSize(resignBtn.getWidth(), 60);
         resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth(), resignBtn.getY());
         stage.addActor(resignBtn);
 
@@ -232,14 +232,6 @@ public class PlayState extends State {
             if (animationIndex == animationPath.size() && animationPath.size() > 0) { //reached end of list
                 pieceIsMoving = false;
                 piece.stopMoving();
-                //THIS IS WHERE THE ACTUAL MOVING HAPPENS
-//                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())))){
-//                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
-//                    game.handlingCasting(piece);
-//                }
-//                else {
-//                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
-//                }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
                 animationPath.clear();
@@ -254,6 +246,7 @@ public class PlayState extends State {
                 generateAnimationPath(prevAImove.getFromPos(), prevAImove.getToPos());
             else
                 generateAnimationPath(piecePos, prevMove);
+
             board.movePiece(piecePos, prevMove);
             pieceIsMoving = true;
             animationIndex = 0;
@@ -311,8 +304,8 @@ public class PlayState extends State {
         Boolean notSelected = game.pieceHasNotBeenSelected();
         if (resignBtn.isPressed() && activegame) {
             if (!playerData.isOffline()) {
-                game.endGame(Result.DRAW, Result.DRAW,playerData);
-//                gsm.set(new ShowStatsState(gsm, player1Name, Result.DRAW));
+                game.endGame(Result.DRAW, Result.DRAW, playerData);
+//                gsm.set(new ShowStatsState(gsm, player1Name, ));
             } else {
 //                gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW));
             }
