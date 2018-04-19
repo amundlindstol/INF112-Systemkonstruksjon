@@ -244,13 +244,10 @@ public class PlayState extends State {
                 if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)){
                     board.movePiece(piecePos, prevMove);
 
-                    animationPath.clear();
                     Position[] castingPos = game.handlingCasting(piece);
                     AbstractChessPiece p = board.getPieceAt(castingPos[0]);
                     prevMove = castingPos[1];
-                    animationIndex = 0;
                     p.startMoving();
-                    return;
                 } else {
                     board.movePiece(piecePos, prevMove);
                 }
