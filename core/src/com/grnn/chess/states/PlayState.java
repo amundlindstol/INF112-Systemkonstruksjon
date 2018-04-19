@@ -121,14 +121,14 @@ public class PlayState extends State {
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
-        resignBtn = new TextButton("avslutt", skin);
+        resignBtn = new TextButton("Avslutt", skin);
         resignBtn.setSize(resignBtn.getWidth(), 60);
         resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-15, resignBtn.getY()+7);
         stage.addActor(resignBtn);
 
         helpBtn = new TextButton("Hjelp", skin);
         helpBtn.setSize(helpBtn.getWidth(),60);
-        helpBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-helpBtn.getWidth(),(resignBtn.getY()+3));
+        helpBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-helpBtn.getWidth()+10,(resignBtn.getY()));
         stage.addActor(helpBtn);
 
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
@@ -322,12 +322,8 @@ public class PlayState extends State {
         int y = Math.abs(Gdx.input.getY());
         Boolean notSelected = game.pieceHasNotBeenSelected();
         if (resignBtn.isPressed() && activegame) {
-            if (!playerData.isOffline()) {
                 game.endGame(Result.DRAW, Result.DRAW,playerData);
                 gsm.set(new ShowStatsState(gsm, player1, playerData));
-            } else {
-                gsm.set(new ShowStatsState(gsm, player1, playerData));
-            }
         }
         if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
 

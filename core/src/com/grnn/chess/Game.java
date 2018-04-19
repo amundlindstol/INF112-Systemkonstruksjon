@@ -217,7 +217,10 @@ public class    Game {
         System.out.println("new:  " + player.getRating() + "  " + opponent.getRating());
 
         //Saving to database
-        playerData.updatePlayers(player1, player2);
+
+        if(!playerData.isOffline()) {
+            playerData.updatePlayers(player1, player2);
+        }
     }
 
     private Player announceWinner() {

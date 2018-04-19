@@ -76,7 +76,7 @@ public class ShowStatsState extends State {
             }
         }
         else{
-           fontText.draw(sb, "You are not connected to the database", 270,390);
+           fontText.draw(sb, "You are not connected to the database", Gdx.graphics.getWidth()/2-110,390);
         }
 
         sb.end();
