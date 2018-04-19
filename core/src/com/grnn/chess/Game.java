@@ -4,7 +4,7 @@ import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 
 import javax.sound.sampled.*;
 import java.io.File;
