@@ -272,7 +272,6 @@ public class PlayState extends State {
             animationIndex = 0;
             game.playSound("movePiece.wav");
         }
-        return;
     }
 
     private void generateAnimationPath(Position startPos, Position endPos) {
@@ -325,9 +324,9 @@ public class PlayState extends State {
         if (resignBtn.isPressed() && activegame) {
             if (!playerData.isOffline()) {
                 game.endGame(Result.DRAW, Result.DRAW,playerData);
-//                gsm.set(new ShowStatsState(gsm, player1Name, Result.DRAW));
+                gsm.set(new ShowStatsState(gsm, player1, playerData));
             } else {
-//                gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW));
+                gsm.set(new ShowStatsState(gsm, player1, playerData));
             }
         }
         if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {

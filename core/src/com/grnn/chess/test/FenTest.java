@@ -29,6 +29,7 @@ public class FenTest {
                 new Game(0, new Player("hakon", "123456", true),
                         new Player("hakon", "123456", false));
 
+        //defaultGame.getBoard().movePiece(new Position(4, 1), new Position(4, 3));
         defaultGame.selectFirstPiece(new Position(4, 1));
         defaultGame.moveFirstSelectedPieceTo(new Position(4, 3));
 
