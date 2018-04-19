@@ -41,7 +41,7 @@ public class ShowStatsState extends State {
         xPos = 700;
         yPos = 130;
         menuButton = new TextButton("Tilbake", skin);
-        menuButton.setPosition((float) (xPos - menuButton.getWidth()*1.08), yPos - menuButton.getHeight() - 25);
+        menuButton.setPosition((float) (xPos - menuButton.getWidth()*1.08), yPos - menuButton.getHeight() - 15);
         menuButton.setSize(280,60);
 
         fontText = new BitmapFont();
