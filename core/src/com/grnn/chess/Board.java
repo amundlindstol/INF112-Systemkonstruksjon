@@ -17,6 +17,7 @@ public class Board {
     private ArrayList<ArrayList<AbstractChessPiece>> grid = new ArrayList<ArrayList<AbstractChessPiece>>(size);
     private ArrayList<AbstractChessPiece> removedPieces;
     private ArrayList<Move> moveHistory;
+    private int halfmoveNumber;
 
     public ArrayList<Position> positions;
 
@@ -45,6 +46,7 @@ public class Board {
 
     public void movePiece(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
+        AbstractChessPiece capturePiece = getPieceAt(endPos);
 
         if (isValidMove(startPos, endPos)) {
             //if (isValidMove(startPos, endPos)) {
@@ -54,9 +56,11 @@ public class Board {
             moveHistory.add(new Move(endPos, startPos, piece));
             enPassant();
 
-            //} else {
-            //    throw new IllegalMoveException("movePiece was called with illegal arguments");
-            //}
+            if(capturePiece == null || piece instanceof Pawn) {
+                halfmoveNumber = 0;
+            } else {
+                halfmoveNumber++;
+            }
         }
     }
 

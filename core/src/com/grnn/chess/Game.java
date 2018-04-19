@@ -162,7 +162,7 @@ public class    Game {
                     if(turn) playSound("takePiece.wav");
 
                     else playSound("lostPiece.wav");
-//                    board.movePiece(board.getPosition(firstPiece), secondPosition);
+                    //board.movePiece(board.getPosition(firstPiece), secondPosition);
                     firstPiece.startMoving();
                     handleCheckChecking();
                     turn = !turn;
@@ -176,7 +176,7 @@ public class    Game {
                     reset();
                 }
         } else if(potentialPiece == null && validMove){
-//            board.movePiece(board.getPosition(firstPiece), secondPosition);
+            //board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
             //handlingCasting(secondPosition);
             handleCheckChecking();
