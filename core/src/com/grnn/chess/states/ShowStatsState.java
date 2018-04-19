@@ -29,10 +29,10 @@ public class ShowStatsState extends State {
     public ShowStatsState (GameStateManager gsm, Player currentPlayer, PlayerData playerData) {
         super(gsm);
         this.playerData = playerData;
+        this.currentPlayer = currentPlayer;
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
-        this.currentPlayer = currentPlayer;
         background = new Texture("Graphics/Menu/Menu_background.png");
         xPos = 690;
         yPos = 130;
@@ -104,5 +104,8 @@ public class ShowStatsState extends State {
     public void dispose() {
         stage.dispose();
         background.dispose();
+        fontText.dispose();
+        skin.dispose();
+        System.out.println("ShowStats State Disposed");
     }
 }
