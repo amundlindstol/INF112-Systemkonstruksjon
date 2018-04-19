@@ -41,7 +41,7 @@ public class ShowStatsState extends State {
         menuButton.setPosition((float) (xPos - menuButton.getWidth()*1.08), yPos - menuButton.getHeight() - 25);
 
         fontText = new BitmapFont();
-        fontText.setColor(Color.BLACK);
+        fontText.setColor(Color.WHITE);
        // text = playerData.getTopTenPlayers().get(0).getName();
         stage.addActor(menuButton);
     }
@@ -67,16 +67,16 @@ public class ShowStatsState extends State {
 
         }
 
-        fontText.draw(sb, playerData.getTopTenPlayers().get(0).getName(), 420, 430);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(1).getName(), 420, 400);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(2).getName(), 420, 370);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(3).getName(), 420, 340);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(4).getName(), 420, 310);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(5).getName(), 420, 280);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(6).getName(), 420, 250);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(7).getName(), 420, 230);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(8).getName(), 420, 200);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(9).getName(), 420, 170);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(0).getName(), 390, 430);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(1).getName(), 390, 400);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(2).getName(), 390, 370);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(3).getName(), 390, 340);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(4).getName(), 390, 310);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(5).getName(), 390, 280);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(6).getName(), 390, 250);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(7).getName(), 390, 230);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(8).getName(), 390, 200);
+        fontText.draw(sb, playerData.getTopTenPlayers().get(9).getName(), 390, 170);
 
 
         fontText.draw(sb, "" + playerData.getTopTenPlayers().get(0).rating, 600, 430);
@@ -86,9 +86,21 @@ public class ShowStatsState extends State {
         fontText.draw(sb, "" + playerData.getTopTenPlayers().get(4).rating, 600, 310);
         fontText.draw(sb, "" + playerData.getTopTenPlayers().get(5).rating, 600, 280);
         fontText.draw(sb, "" + playerData.getTopTenPlayers().get(6).rating, 600, 250);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(7).rating, 600, 230);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(8).rating, 600, 200);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(9).rating, 600, 170);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(7).rating, 600, 220);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(8).rating, 600, 190);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(9).rating, 600, 160);
+
+
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(0).getNoOfWins(), 700, 430);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(1).getNoOfWins(), 700, 400);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(2).getNoOfWins(), 700, 370);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(3).getNoOfWins(), 700, 340);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(4).getNoOfWins(), 700, 310);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(5).getNoOfWins(), 700, 280);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(6).getNoOfWins(), 700, 250);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(7).getNoOfWins(), 700, 220);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(8).getNoOfWins(), 700, 190);
+        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(9).getNoOfWins(), 700, 160);
 
 
 
