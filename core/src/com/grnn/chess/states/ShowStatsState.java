@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.PlayerData;
 
+import java.util.ArrayList;
+
 
 public class ShowStatsState extends State {
 
@@ -24,11 +26,13 @@ public class ShowStatsState extends State {
     private int xPos;
     private int yPos;
     private PlayerData playerData;
+    private ArrayList<Player> topTenPlayers;
     private BitmapFont fontText;
 
     public ShowStatsState (GameStateManager gsm, Player currentPlayer, PlayerData playerData) {
         super(gsm);
         this.playerData = playerData;
+        topTenPlayers = playerData.getTopTenPlayers();
         this.currentPlayer = currentPlayer;
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
@@ -61,41 +65,12 @@ public class ShowStatsState extends State {
         sb.begin();
         sb.draw(background, 0,0);
 
-        fontText.draw(sb, playerData.getTopTenPlayers().get(0).getName(), 390, 430);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(1).getName(), 390, 400);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(2).getName(), 390, 370);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(3).getName(), 390, 340);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(4).getName(), 390, 310);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(5).getName(), 390, 280);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(6).getName(), 390, 250);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(7).getName(), 390, 220);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(8).getName(), 390, 190);
-        fontText.draw(sb, playerData.getTopTenPlayers().get(9).getName(), 390, 160);
-
-
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(0).rating, 600, 430);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(1).rating, 600, 400);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(2).rating, 600, 370);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(3).rating, 600, 340);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(4).rating, 600, 310);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(5).rating, 600, 280);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(6).rating, 600, 250);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(7).rating, 600, 220);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(8).rating, 600, 190);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(9).rating, 600, 160);
-
-
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(0).getNoOfWins(), 700, 430);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(1).getNoOfWins(), 700, 400);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(2).getNoOfWins(), 700, 370);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(3).getNoOfWins(), 700, 340);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(4).getNoOfWins(), 700, 310);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(5).getNoOfWins(), 700, 280);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(6).getNoOfWins(), 700, 250);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(7).getNoOfWins(), 700, 220);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(8).getNoOfWins(), 700, 190);
-        fontText.draw(sb, "" + playerData.getTopTenPlayers().get(9).getNoOfWins(), 700, 160);
-
+        for(int i=0, j=430; i<10; i++, j-=30) {
+            fontText.draw(sb, topTenPlayers.get(i).getName(), 390, j);
+            fontText.draw(sb,""+topTenPlayers.get(i).rating,600,j);
+            fontText.draw(sb,""+topTenPlayers.get(i).getNoOfWins(),700,j);
+        }
+        
         sb.end();
         stage.draw();
     }

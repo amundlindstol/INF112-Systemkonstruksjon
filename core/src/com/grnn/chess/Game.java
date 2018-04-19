@@ -68,9 +68,6 @@ public class    Game {
         whitePutInCheck = false;
 
         removedPieces = new int[12];
-        for(Integer count : removedPieces){ //TODO what even is this
-            count = 0;
-        }
     }
 
     private boolean gameHasIllegalArguments(IActor player1, IActor player2) { // TODO: check if the two players are different colors
@@ -159,7 +156,7 @@ public class    Game {
                     removed = true;
                     updatePieceCounter(potentialPiece);
 
-                    if(turn) playSound("takePiece1.wav");
+                    if(turn) playSound("takePiece.wav");
 
                     else playSound("lostPiece.wav");
 //                    board.movePiece(board.getPosition(firstPiece), secondPosition);
