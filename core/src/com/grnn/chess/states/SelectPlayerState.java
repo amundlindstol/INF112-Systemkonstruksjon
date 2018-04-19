@@ -169,8 +169,12 @@ public class SelectPlayerState extends State {
                     return;
                 }
                 Player player2 = playerData.getPlayer(username);
-                player2.setIsWhite(!player1isWhite);
-
+                if(player1 == player2){
+                    message.setText("Du kan ikke spille mot deg selv.");
+                    return;
+                }else {
+                    player2.setIsWhite(!player1isWhite);
+                }
                 if (password.equals(player2.getPassword())) {
                     gsm.set(new PlayState(gsm,0,player1,player2,playerData));
                 } else {
