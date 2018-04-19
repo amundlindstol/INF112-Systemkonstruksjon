@@ -17,6 +17,15 @@ public class AI implements IActor{
         this.level = level;
         this.isWhite = isWhite;
     }
+
+    /**
+     * Change the color of AI, will be used in showing best avalible move.
+     * @param isWhite True for white, false for black.
+     */
+    public void setAiColor(boolean isWhite){
+        this.isWhite = isWhite;
+    }
+
     // TODO: Not doing random move
 
     /**

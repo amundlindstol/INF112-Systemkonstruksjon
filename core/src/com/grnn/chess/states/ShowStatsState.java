@@ -70,7 +70,7 @@ public class ShowStatsState extends State {
             fontText.draw(sb,""+topTenPlayers.get(i).rating,600,j);
             fontText.draw(sb,""+topTenPlayers.get(i).getNoOfWins(),700,j);
         }
-        
+
         sb.end();
         stage.draw();
     }

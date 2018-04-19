@@ -25,6 +25,9 @@ public class    Game {
     private AbstractChessPiece potentialPiece;
     private Move aiMove;
 
+    //Helper-ai
+    private AI helper;
+
     private boolean removed;
     private int[] removedPieces;
 
@@ -63,6 +66,8 @@ public class    Game {
         firstPiece = null;
         potentialPiece = null;
         turn = true;
+
+        helper = new AI(2,true);
 
         blackPutInCheck = false;
         whitePutInCheck = false;
@@ -385,6 +390,12 @@ public class    Game {
         }
 
         return moves == "" ? "-" : moves;
+    }
+
+    public Move getHelpingMove(){
+        helper.setAiColor(turn);
+        Move helpingmove = helper.calculateBestMove(board);
+        return helpingmove;
     }
 
     public int fullMoveNumber() {

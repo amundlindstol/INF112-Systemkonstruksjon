@@ -41,6 +41,7 @@ public class PlayState extends State {
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
     private ArrayList<Position> castlingMoves;
+    private Move helpingMove;
     private TranslateToCellPos translator;
 
     private ArrayList<Position> animationPath;
@@ -56,6 +57,7 @@ public class PlayState extends State {
     private String player1Name;
     private String player2Name;
     private TextButton resignBtn;
+    private TextButton helpBtn;
     private Stage stage;
     private Skin skin;
 
@@ -95,6 +97,7 @@ public class PlayState extends State {
         board = game.getBoard();
         potentialMoves = game.getValidMoves();
         captureMoves = game.getCaptureMoves();
+        helpingMove = game.getHelpingMove();
         text = game.getText();
         removedPieces = game.getRemovedPieces();
         player1Name = ((Player) player1).name;
@@ -117,6 +120,11 @@ public class PlayState extends State {
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
+
+        helpBtn = new TextButton("Hjelp", skin);
+        helpBtn.setSize(helpBtn.getWidth(),60);
+        helpBtn.setPosition(Gdx.graphics.getWidth()-(2*helpBtn.getWidth()),helpBtn.getY());
+        stage.addActor(helpBtn);
 
         resignBtn = new TextButton("gi opp", skin);
         resignBtn.setSize(resignBtn.getWidth(), 80);
