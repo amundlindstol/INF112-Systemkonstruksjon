@@ -4,7 +4,7 @@ import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -68,9 +68,6 @@ public class    Game {
         whitePutInCheck = false;
 
         removedPieces = new int[12];
-        for(Integer count : removedPieces){ //TODO what even is this
-            count = 0;
-        }
     }
 
     private boolean gameHasIllegalArguments(IActor player1, IActor player2) { // TODO: check if the two players are different colors
@@ -178,7 +175,6 @@ public class    Game {
         } else if(potentialPiece == null && validMove){
             //board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
-            //handlingCasting(secondPosition);
             handleCheckChecking();
             reset();
             turn = !turn;
@@ -195,7 +191,9 @@ public class    Game {
         captureMoves.clear();
         castlingMoves.clear();
     }
-    private void endGame(Result res, Result res2) {
+    public void endGame(Result res, Result res2, PlayerData playerData) {
+
+        //Updating rating
         if(isAi())
             return;
         Player player = ((Player) player1);
@@ -212,6 +210,9 @@ public class    Game {
         opponent.setRating(newElo2);
 
         System.out.println("new:  " + player.getRating() + "  " + opponent.getRating());
+
+        //Saving to database
+        playerData.updatePlayers(player1, player2);
     }
 
     private Player announceWinner() {
@@ -238,9 +239,8 @@ public class    Game {
      * Moves the rook if the king does castling.
      *
      */
-    public void handlingCasting(AbstractChessPiece piece){
-            Position potentialPos = board.getPosition(piece);
-        //  if(!castlingMoves.contains(potentialPos)) return;
+    public Position[] handlingCasting(AbstractChessPiece piece){
+        Position potentialPos = board.getPosition(piece);
 
         Position rookOriginalPos = null;
         Position rookNewPos = null;
@@ -262,7 +262,10 @@ public class    Game {
                 rookNewPos = new Position(5, 7);
             }
         }
-        board.castle(rookOriginalPos, rookNewPos);
+        Position[] l = new Position[2];
+        l[0] = rookOriginalPos;
+        l[1] = rookNewPos;
+        return l;
     }
 
 
@@ -281,7 +284,7 @@ public class    Game {
                 removedPieces[1]++;
             else
                 removedPieces[7]++;
-        }else if(removedPiece instanceof King){
+        }else if(removedPiece instanceof Knight){
             if(turn)
                 removedPieces[2]++;
             else
@@ -296,7 +299,7 @@ public class    Game {
                 removedPieces[4]++;
             else
                 removedPieces[10]++;
-        }else if(removedPiece instanceof Knight){
+        }else if(removedPiece instanceof King){
             if(turn)
                 removedPieces[5]++;
             else
@@ -341,8 +344,8 @@ public class    Game {
             File f = new File("Sound/"+url);
             Clip clip = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream( f );
-            //clip.open(ais);
-            //clip.start(); // TODO: Uncomment code.
+            clip.open(ais);
+            clip.start(); // TODO: Uncomment code.
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (IOException e) {

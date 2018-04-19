@@ -2,6 +2,7 @@ package com.grnn.chess;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 
 
@@ -18,22 +19,13 @@ public class PlayerData {
 	private Connection conn;
 	private Boolean offline;
 
-	/**
-	 * Object for getting userdata from the database.
-	 * Initialises a file handle.
-	 * Adds test data if none is present.
-	 */
-	public PlayerData() {
-		userHandle = Gdx.files.local("data/players.csv");
 
-		accounts = getAccounts();
 
-		if(accounts.size() == 0) {
-			addTestAccounts();
-			accounts = getAccounts();
-		}
-	}
-	public PlayerData(int i){
+    /**
+     * Constructor for PlayerData. Will try to connect to our MySql server
+     * If there is a trouble with the connection, an offline PlayerData will be made.
+     */
+	public PlayerData(){
 		accounts = new ArrayList<Player>();
 		boolean successfullConnection = connectToDatabase();
 		if(successfullConnection) {
@@ -46,10 +38,17 @@ public class PlayerData {
 		}
 	}
 
+    /**
+     * Tells if the PlayerData is offline
+     * @return True if the Database did not connect, otherwise false.
+     */
 	public boolean isOffline(){
 		return offline;
 	}
 
+    /**
+     * Adds two offline Players
+     */
 	private void addOfflinePlayers(){
 		Player player1 = new Player("Player1","", true);
 		Player player2 = new Player("Player2","", false);
@@ -57,6 +56,9 @@ public class PlayerData {
 		accounts.add(player2);
 	}
 
+    /**
+     * Get all the accounts from the DataBase into accounts
+     */
 	private void getAccountsFromDB() {
 		Statement stmt = null;
 		String query = "SELECT * FROM Users";
@@ -90,6 +92,10 @@ public class PlayerData {
 
 	}
 
+    /**
+     * Connects to the DataBase
+     * @return True if the connection was successfull, otherwise false
+     */
 	private boolean connectToDatabase(){
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -104,16 +110,12 @@ public class PlayerData {
 			return false;
 		}
 	}
-	/**
-	 * Adds test players Simon and Håkon
-	 */
-	public void addTestAccounts() {
-		Player test1 = new Player("Håkon", "123456", true);
-		Player test2 = new Player("Simon", "123456", false);
-		addAccount(test1);
-		addAccount(test2);
-	}
 
+    /**
+     * Get one player from the database
+     * @param playerName name off the player
+     * @return the player if the connection works, otherwise null
+     */
 	public Player getPlayerFromDatabase(String playerName){
 		if(!offline){
 			try{
@@ -125,7 +127,7 @@ public class PlayerData {
 				return null;
 			}
 		}else {
-			return getPlayer(playerName);
+			return null;
 		}
 	}
 
@@ -146,48 +148,9 @@ public class PlayerData {
 	}
 
 
-	/**
-	 * Gets all accounts in the database
-	 * @return
-	 */
-	public ArrayList<Player> getAccounts() {
-		ArrayList<Player> players = new ArrayList<Player>();
-		String text = userHandle.readString();
-		if(text.equals("")) return players;
-		String accountStrings[] = text.split("\\n");
-		for(String csv : accountStrings) {
-			String[] userData = csv.split(";");
-			players.add(new Player(
-					userData[0],
-					userData[1],
-					Integer.parseInt(userData[2]),
-					Integer.parseInt(userData[3]),
-					Integer.parseInt(userData[4]),
-					Integer.parseInt(userData[5])
-			));
-		}
-
-		return players;
-	}
-
-	/**
-	 * Saves accounts
-	 */
-	public void saveAccounts() {
-		String out = "";
-		for(Player account : accounts) {
-			out += account.getName() + ";" +
-					account.getPassword() + ";" +
-					account.getNoOfWins() + ";" +
-					account.getNoOfDraws() +  ";" +
-					account.getNoOfLose() + ";" +
-					account.getRating();
-			out += "\n";
-		}
-
-		userHandle.writeString(out, false);
-	}
-
+    /**
+     * Save all players in accounts to the database
+     */
 	public void saveAccountsToDatabase(){
 		try{
 			for(Player account : accounts) {
@@ -201,27 +164,24 @@ public class PlayerData {
 			}
 	}
 
+    /**
+     * Add a new player to the database
+     * @param player The player that should be added
+     */
 	public void addAccountToDatabase(Player player){
-		try{
-			String query = "INSERT INTO Users VALUES ('"+player.name+"', '"+player.getPassword()+"', "+player.getNoOfWins()+", "+player.getNoOfLose()+", "+player.getNoOfDraws()+", "+player.getRating()+");";
-			Statement stmt = conn.createStatement();
-			int res = stmt.executeUpdate(query);
-		}catch (SQLException e){
+	    if(!nameExists(player.name)) {
+	        accounts.add(player);
+            try {
+                String query = "INSERT INTO Users VALUES ('" + player.name + "', '" + player.getPassword() + "', " + player.getNoOfWins() + ", " + player.getNoOfLose() + ", " + player.getNoOfDraws() + ", " + player.getRating() + ");";
+                Statement stmt = conn.createStatement();
+                int res = stmt.executeUpdate(query);
+            } catch (SQLException e) {
 
-		}
+            }
+        }else
+            throw new IllegalArgumentException();
 	}
-	/**
-	 * adds an account
-	 * @param account the account to be added
-	 */
-	public void addAccount(Player account) {
-		if(!nameExists(account.name)) {
-			accounts.add(account);
-			saveAccounts();
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
+
 
 	/**
 	 * Checks if a name is taken
@@ -236,5 +196,52 @@ public class PlayerData {
 
 		return false;
 	}
+
+    /**
+     * Asks the Database for the top 10 players
+     * @return a list of top 10 players
+     */
+	public ArrayList<Player> getTopTenPlayers(){
+        ArrayList<Player> topTenPlayers = new ArrayList<Player>();
+	    try{
+            String query = "SELECT * FROM Users ORDER BY Rating DESC LIMIT 10";
+            Statement stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while(res.next()) {
+                topTenPlayers.add(new Player(res.getString("Name"), res.getString("Password"), res.getInt("Wins"), res.getInt("Losses"), res.getInt("Rating"), res.getInt("Rating")));
+            }
+            return topTenPlayers;
+	    }catch (SQLException e){
+	        return null;
+        }
+    }
+
+    /**
+     * method that updates the score for two playors
+     * @param player1 an AI or a Player
+     * @param player2 an AI or a Player
+     */
+    public void updatePlayers(IActor player1, IActor player2){
+	    if(player1 instanceof Player){
+	        updatePlayer((Player) player1);
+        }
+        if(player2 instanceof Player){
+	        updatePlayer((Player) player2);
+        }
+    }
+
+    /**
+     * Update one player in the database.
+     * @param player The player that should be added to the database
+     */
+    public void updatePlayer(Player player){
+        try{
+            String query = "UPDATE Users SET Wins = "+player.getNoOfWins()+", Losses = "+player.getNoOfLose()+", Draws = "+player.getNoOfDraws()+", Rating = "+player.getRating()+" WHERE Name = '"+player.name+"';";
+            Statement stmt = conn.createStatement();
+            int res = stmt.executeUpdate(query);
+        }catch (SQLException e){
+
+        }
+    }
 
 }

@@ -36,7 +36,7 @@ public class MainMenuState extends State {
      */
     public MainMenuState(GameStateManager gsm) {
         super(gsm);
-        playerData = new PlayerData(1);
+        playerData = new PlayerData();
         setup();
     }
 
@@ -58,11 +58,11 @@ public class MainMenuState extends State {
             loginBtn = new TextButton("login", skin);
 
 
-            registerBtn.setPosition(xPos - registerBtn.getWidth() / 2 - 20, yPos);
+            registerBtn.setPosition(xPos - registerBtn.getWidth() / 2 - 20, yPos - 50);
 
             stage.addActor(registerBtn);
         }
-        loginBtn.setPosition(xPos - loginBtn.getWidth() / 2 - 20, yPos + loginBtn.getHeight());
+        loginBtn.setPosition(xPos - loginBtn.getWidth() / 2 - 20, yPos + loginBtn.getHeight() - 20);
 
         loginBtn.setSize(loginBtn.getWidth(), loginBtn.getHeight());
         stage.addActor(loginBtn);

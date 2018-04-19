@@ -48,19 +48,17 @@ public class Board {
         AbstractChessPiece piece = getPieceAt(startPos);
         AbstractChessPiece capturePiece = getPieceAt(endPos);
 
-        if (isValidMove(startPos, endPos)) {
-            //if (isValidMove(startPos, endPos)) {
-            setPiece(piece, endPos);
-            setPiece(null, startPos);
-            piece.move();
-            moveHistory.add(new Move(endPos, startPos, piece));
-            enPassant();
+        //if (isValidMove(startPos, endPos)) {
+        setPiece(piece, endPos);
+        setPiece(null, startPos);
+        piece.move();
+        moveHistory.add(new Move(endPos, startPos, piece));
+        enPassant();
 
-            if(capturePiece == null || piece instanceof Pawn) {
-                halfmoveNumber = 0;
-            } else {
-                halfmoveNumber++;
-            }
+        if(capturePiece == null || piece instanceof Pawn) {
+            halfmoveNumber = 0;
+        } else {
+            halfmoveNumber++;
         }
     }
 
@@ -71,6 +69,11 @@ public class Board {
         setPiece(null, startPos);
         piece.move();
         moveHistory.add(new Move(endPos, startPos, piece));
+        setPiece(piece, endPos);
+        setPiece(null, startPos);
+        piece.move();
+        moveHistory.add(new Move(endPos, startPos, piece));
+        enPassant();
     }
 
     public Position getKingPos(boolean kingIsWhite){

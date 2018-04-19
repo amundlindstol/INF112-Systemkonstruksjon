@@ -5,7 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.*;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
@@ -22,6 +27,7 @@ public class PlayState extends State {
     // Variables
     Game game;
     Board board;
+    PlayerData playerData;
 
     Texture bg;
     Texture bgBoard;
@@ -49,8 +55,14 @@ public class PlayState extends State {
     private String text;
     private String player1Name;
     private String player2Name;
+    private TextButton resignBtn;
+    private Stage stage;
+    private Skin skin;
 
     private int[] removedPieces;
+
+    private Player player1;
+    private Player player2;
 
     /**
      * @param gsm      Game state
@@ -58,19 +70,28 @@ public class PlayState extends State {
      * @param player1  Should always be player
      * @param player2  Either AI or Player
      */
-    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2) {
+    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
         super(gsm);
+
+        this.player1 = (Player) player1;
+        this.player2 = (Player) player2;
+
         //textures
         bg = new Texture("Graphics/GUI/GUI.png");
         bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
 
+        stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
+        Gdx.input.setInputProcessor(stage);
+        skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
+
         if (!(player1 instanceof Player)) {
             throw new IllegalArgumentException("player1 should always be of class Player");
         }
         //game
         game = new Game(aiPlayer, player1, player2);
+        this.playerData = playerData;
         board = game.getBoard();
         potentialMoves = game.getValidMoves();
         captureMoves = game.getCaptureMoves();
@@ -97,6 +118,10 @@ public class PlayState extends State {
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
+        resignBtn = new TextButton("avslutt", skin);
+        resignBtn.setSize(resignBtn.getWidth(), 60);
+        resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-15, resignBtn.getY()+7);
+        stage.addActor(resignBtn);
 
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
             for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
@@ -128,10 +153,10 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
 
-        if (removedPieces[2] == 1) {
+        if (removedPieces[5] == 1) {
             text = "Du vant " + player1Name + ", gratulerer!";
             activegame = false;
-        } else if (removedPieces[8] == 1) {
+        } else if (removedPieces[11] == 1) {
             text = "Du vant " + player1Name + ", du må nok øve mer..."; //TODO wrong output
             activegame = false;
         }
@@ -153,7 +178,10 @@ public class PlayState extends State {
 
         // Player names
         fontCounter.draw(batch, "" + player1Name, 726, 241);
+        fontCounter.draw(batch, "Score: " + player1.rating , 726, 221);
+
         fontCounter.draw(batch, "" + player2Name, 723, 555);
+        fontCounter.draw(batch, "Score: " + player2.rating , 723, 535);
 
         //iterate through cells
         for (int i = 0; i < positions.size(); i++) {
@@ -164,9 +192,9 @@ public class PlayState extends State {
             if (piece != null && piece.isMoving()) { //should this piece change its location?
                 if (game.isAi() && game.getTurn()) { //ai piece
                     if (prevAImove == null) prevAImove = game.getAiMove();
-                    pos = animatePiece(piece, piecePos, pos, true);
+                    animatePiece(piece, piecePos, pos, true);
                 } else
-                    pos = animatePiece(piece, piecePos, pos, false);
+                    animatePiece(piece, piecePos, pos, false);
             }
 
             if (piece != null) {
@@ -195,26 +223,33 @@ public class PlayState extends State {
                 }
             }
         }
+        stage.draw();
     }
 
 
-    private int[] animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
+    private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
         if (pieceIsMoving && piece.isMoving()) {
             if (animationIndex == animationPath.size() && animationPath.size() > 0) { //reached end of list
-                pieceIsMoving = false;
                 piece.stopMoving();
+                pieceIsMoving = false;
                 //THIS IS WHERE THE ACTUAL MOVING HAPPENS
-                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())))){
-                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
-                    game.handlingCasting(piece);
-                }
-                else {
-                    board.movePiece(piecePos, translator.toCellPos(animationPath.get(animationIndex-1).getX(), translator.translateY(animationPath.get(animationIndex-1).getY())));
+                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)){
+                    board.movePiece(piecePos, prevMove);
+
+                    animationPath.clear();
+                    Position[] castingPos = game.handlingCasting(piece);
+                    AbstractChessPiece p = board.getPieceAt(castingPos[0]);
+                    prevMove = castingPos[1];
+                    animationIndex = 0;
+                    p.startMoving();
+                    return;
+                } else {
+                    board.movePiece(piecePos, prevMove);
                 }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
                 animationPath.clear();
-                return pos;
+                return;
             }
             pos[0] = animationPath.get(animationIndex).getX();
             pos[1] = animationPath.get(animationIndex).getY();
@@ -229,7 +264,7 @@ public class PlayState extends State {
             animationIndex = 0;
             game.playSound("movePiece.wav");
         }
-        return pos;
+        return;
     }
 
     private void generateAnimationPath(Position startPos, Position endPos) {
@@ -279,7 +314,14 @@ public class PlayState extends State {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY());
         Boolean notSelected = game.pieceHasNotBeenSelected();
-
+        if (resignBtn.isPressed() && activegame) {
+            if (!playerData.isOffline()) {
+                game.endGame(Result.DRAW, Result.DRAW,playerData);
+//                gsm.set(new ShowStatsState(gsm, player1Name, Result.DRAW));
+            } else {
+//                gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW));
+            }
+        }
         if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
 
             //AI
@@ -301,6 +343,12 @@ public class PlayState extends State {
                 game.moveFirstSelectedPieceTo(potentialPos);
                 prevMove = potentialPos;
             }
+        } else if (!activegame) { // TODO: Actual result
+            Result result1 = Result.DRAW;
+            Result result2 = Result.DRAW;
+
+            game.endGame(result1, result2,playerData);
+            gsm.set(new GameDoneState(gsm, result1, result2));
         }
     }
 
@@ -313,6 +361,7 @@ public class PlayState extends State {
         }
         potentialTex.dispose();
         captureTex.dispose();
+        stage.dispose();
         System.out.println("PlayState Disposed");
     }
 }
