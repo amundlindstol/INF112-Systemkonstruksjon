@@ -73,9 +73,6 @@ public class    Game {
         whitePutInCheck = false;
 
         removedPieces = new int[12];
-        for(Integer count : removedPieces){ //TODO what even is this
-            count = 0;
-        }
     }
 
     private boolean gameHasIllegalArguments(IActor player1, IActor player2) { // TODO: check if the two players are different colors
@@ -246,9 +243,8 @@ public class    Game {
      * Moves the rook if the king does castling.
      *
      */
-    public void handlingCasting(AbstractChessPiece piece){
+    public Position[] handlingCasting(AbstractChessPiece piece){
         Position potentialPos = board.getPosition(piece);
-       // if(!castlingMoves.contains(potentialPos)) return;
 
         Position rookOriginalPos = null;
         Position rookNewPos = null;
@@ -270,7 +266,10 @@ public class    Game {
                 rookNewPos = new Position(5, 7);
             }
         }
-        board.castle(rookOriginalPos, rookNewPos);
+        Position[] l = new Position[2];
+        l[0] = rookOriginalPos;
+        l[1] = rookNewPos;
+        return l;
     }
 
 

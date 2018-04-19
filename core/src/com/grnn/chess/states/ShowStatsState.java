@@ -38,10 +38,11 @@ public class ShowStatsState extends State {
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
         background = new Texture("Graphics/Menu/Menu_background.png");
-        xPos = 690;
+        xPos = 700;
         yPos = 130;
         menuButton = new TextButton("Tilbake", skin);
-        menuButton.setPosition((float) (xPos - menuButton.getWidth()*1.08), yPos - menuButton.getHeight() - 25);
+        menuButton.setPosition((float) (xPos - menuButton.getWidth()*1.08), yPos - menuButton.getHeight() - 15);
+        menuButton.setSize(280,60);
 
         fontText = new BitmapFont();
         fontText.setColor(Color.WHITE);
