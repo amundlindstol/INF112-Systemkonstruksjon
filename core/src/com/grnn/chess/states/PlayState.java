@@ -53,6 +53,9 @@ public class PlayState extends State {
 
     private int[] removedPieces;
 
+    private Player player1;
+    private Player player2;
+
     /**
      * @param gsm      Game state
      * @param aiPlayer Level of AI player
@@ -61,6 +64,10 @@ public class PlayState extends State {
      */
     public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
         super(gsm);
+
+        this.player1 = (Player) player1;
+        this.player2 = (Player) player2;
+
         //textures
         bg = new Texture("Graphics/GUI/GUI.png");
         bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
@@ -155,7 +162,10 @@ public class PlayState extends State {
 
         // Player names
         fontCounter.draw(batch, "" + player1Name, 726, 241);
+        fontCounter.draw(batch, "Score: " + player1.rating , 726, 221);
+
         fontCounter.draw(batch, "" + player2Name, 723, 555);
+        fontCounter.draw(batch, "Score: " + player2.rating , 723, 535);
 
         //iterate through cells
         for (int i = 0; i < positions.size(); i++) {
