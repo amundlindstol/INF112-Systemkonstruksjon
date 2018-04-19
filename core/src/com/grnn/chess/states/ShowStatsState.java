@@ -32,7 +32,9 @@ public class ShowStatsState extends State {
     public ShowStatsState (GameStateManager gsm, Player currentPlayer, PlayerData playerData) {
         super(gsm);
         this.playerData = playerData;
-        topTenPlayers = playerData.getTopTenPlayers();
+        if(!playerData.isOffline()) {
+            topTenPlayers = playerData.getTopTenPlayers();
+        }
         this.currentPlayer = currentPlayer;
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
@@ -66,10 +68,15 @@ public class ShowStatsState extends State {
         sb.begin();
         sb.draw(background, 0,0);
 
-        for(int i=0, j=430; i<10; i++, j-=30) {
-            fontText.draw(sb, topTenPlayers.get(i).getName(), 390, j);
-            fontText.draw(sb,""+topTenPlayers.get(i).rating,600,j);
-            fontText.draw(sb,""+topTenPlayers.get(i).getNoOfWins(),700,j);
+        if(!playerData.isOffline()) {
+            for (int i = 0, j = 430; i < 10; i++, j -= 30) {
+                fontText.draw(sb, topTenPlayers.get(i).getName(), 390, j);
+                fontText.draw(sb, "" + topTenPlayers.get(i).rating, 600, j);
+                fontText.draw(sb, "" + topTenPlayers.get(i).getNoOfWins(), 700, j);
+            }
+        }
+        else{
+           fontText.draw(sb, "You are not connected to the database", 270,390);
         }
 
         sb.end();

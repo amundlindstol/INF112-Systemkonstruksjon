@@ -121,15 +121,15 @@ public class PlayState extends State {
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
-        helpBtn = new TextButton("Hjelp", skin);
-        helpBtn.setSize(helpBtn.getWidth(),60);
-        helpBtn.setPosition(Gdx.graphics.getWidth()-(2*helpBtn.getWidth()),helpBtn.getY());
-        stage.addActor(helpBtn);
-
         resignBtn = new TextButton("avslutt", skin);
         resignBtn.setSize(resignBtn.getWidth(), 60);
         resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-15, resignBtn.getY()+7);
         stage.addActor(resignBtn);
+
+        helpBtn = new TextButton("Hjelp", skin);
+        helpBtn.setSize(helpBtn.getWidth(),60);
+        helpBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-helpBtn.getWidth(),(resignBtn.getY()+3));
+        stage.addActor(helpBtn);
 
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
             for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
