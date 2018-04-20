@@ -176,7 +176,7 @@ public class PlayState extends State {
                 j+=7;
             }
             fontCounter.draw(batch, "" + removedPieces[i], j, 418);
-            fontCounter.draw(batch, "" + removedPieces[5 + i], j, 105);
+            fontCounter.draw(batch, "" + removedPieces[6 + i], j, 105);
 
         }
 
