@@ -44,7 +44,7 @@ public class    Game {
 
     public Game(int aiLevel, IActor player1, IActor player2){
         if(gameHasIllegalArguments(player1, player2)) {
-            throw new IllegalArgumentException("Player not initialized");
+            //throw new IllegalArgumentException("Player not initialized");
         }
 
         this.player1 = player1;

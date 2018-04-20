@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.*;
+import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
@@ -75,8 +76,12 @@ public class PlayState extends State {
     public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
         super(gsm);
 
-        this.player1 = (Player) player1;
-        this.player2 = (Player) player2;
+        if( player1 instanceof Player) {
+            this.player1 = (Player) player1;
+        }
+        if(player2 instanceof Player) {
+            this.player2 = (Player) player2;
+        }
 
         //textures
         bg = new Texture("Graphics/GUI/GUI.png");
@@ -185,7 +190,9 @@ public class PlayState extends State {
         fontCounter.draw(batch, "Score: " + player1.rating , 726, 221);
 
         fontCounter.draw(batch, "" + player2Name, 723, 555);
-        fontCounter.draw(batch, "Score: " + player2.rating , 723, 535);
+        if(player2 instanceof Player) {
+            fontCounter.draw(batch, "Score: " + player2.rating, 723, 535);
+        }
 
         //iterate through cells
         for (int i = 0; i < positions.size(); i++) {
@@ -357,7 +364,7 @@ public class PlayState extends State {
             Result result2 = Result.DRAW;
 
             game.endGame(result1, result2,playerData);
-            gsm.set(new GameDoneState(gsm, result1, result2));
+            gsm.set(new ShowStatsState(gsm,player1,playerData));
         }
     }
 
