@@ -251,16 +251,28 @@ public class PlayState extends State {
             if (animationIndex == animationPath.size() && animationPath.size() > 0) { //reached end of list
                 piece.stopMoving();
                 pieceIsMoving = false;
-                //THIS IS WHERE THE ACTUAL MOVING HAPPENS
-                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)){
-                    board.movePiece(piecePos, prevMove);
-
-                    Position[] castingPos = game.handlingCasting(piece);
-                    AbstractChessPiece p = board.getPieceAt(castingPos[0]);
-                    prevMove = castingPos[1];
-                    p.startMoving();
+                //THIS IS WHERE THE ACTUAL MOVING HAPPENS TODO CLEAN MESS
+                if (ai) {
+                    if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevAImove.getToPos())) {
+                        board.movePiece(piecePos, prevAImove.getToPos());
+                        Position[] castingPos = game.handlingCasting(piece);
+                        AbstractChessPiece p = board.getPieceAt(castingPos[0]);
+                        prevMove = castingPos[1];
+                        p.startMoving();
+                    } else {
+                        board.movePiece(piecePos, prevAImove.getToPos());
+                    }
                 } else {
-                    board.movePiece(piecePos, prevMove);
+                    if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)) {
+                        board.movePiece(piecePos, prevMove);
+                        Position[] castingPos = game.handlingCasting(piece);
+                        AbstractChessPiece p = board.getPieceAt(castingPos[0]);
+                        prevMove = castingPos[1];
+                        p.startMoving();
+                    } else {
+                        board.movePiece(piecePos, prevMove);
+                    }
+
                 }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();

@@ -126,7 +126,7 @@ public class    Game {
     }
 
     /**
-     * used once, do not use this method
+     * used once when move is not initiated
      * @return aiMove
      */
     public Move getAiMove() {
