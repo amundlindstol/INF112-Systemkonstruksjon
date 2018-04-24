@@ -12,14 +12,13 @@ import java.util.List;
 
 public class Board {
 
+    public ArrayList<Position> positions;
     // Variables
     private int size = 8;
     private ArrayList<ArrayList<AbstractChessPiece>> grid = new ArrayList<ArrayList<AbstractChessPiece>>(size);
     private ArrayList<AbstractChessPiece> removedPieces;
     private ArrayList<Move> moveHistory;
     private int halfmoveNumber;
-
-    public ArrayList<Position> positions;
 
     public Board() {
         moveHistory = new ArrayList<Move>();
@@ -55,14 +54,14 @@ public class Board {
         moveHistory.add(new Move(endPos, startPos, piece));
         enPassant();
 
-        if(capturePiece == null || piece instanceof Pawn) {
+        if (capturePiece == null || piece instanceof Pawn) {
             halfmoveNumber = 0;
         } else {
             halfmoveNumber++;
         }
     }
 
-    public void castle(Position startPos, Position endPos){
+    public void castle(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
 
         setPiece(piece, endPos);
@@ -76,10 +75,10 @@ public class Board {
         enPassant();
     }
 
-    public Position getKingPos(boolean kingIsWhite){
-        for (int i=0; i<size; i++){
-            for (int j=0; j<size; j++){
-                if (getPieceAt(new Position(i, j)) instanceof King && getPieceAt(new Position(i, j)).isWhite()==kingIsWhite){
+    public Position getKingPos(boolean kingIsWhite) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (getPieceAt(new Position(i, j)) instanceof King && getPieceAt(new Position(i, j)).isWhite() == kingIsWhite) {
                     return new Position(i, j);
                 }
             }
@@ -88,11 +87,10 @@ public class Board {
     }
 
 
-
     private boolean isValidMove(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
         boolean containsCastlingMove;
-        if(piece instanceof King) {
+        if (piece instanceof King) {
             ArrayList<Position> castlingMoves = ((King) piece).getCastlingMoves(this, startPos);
             containsCastlingMove = castlingMoves.contains(endPos);
         } else {
@@ -108,19 +106,20 @@ public class Board {
 
     /**
      * Gets possible moves the AI can do.
-     * @return possible moves the AI can do.
+     *
      * @param isWhite
+     * @return possible moves the AI can do.
      */
     public ArrayList<Move> getPossibleAIMoves(boolean isWhite) { //Aka get black's moves
 
         ArrayList<Move> possibleMoves = new ArrayList<Move>();
 
-        for(Position position : positions){
+        for (Position position : positions) {
             AbstractChessPiece piece = this.getPieceAt(position);
-            if(piece!=null && isWhite == piece.isWhite()) {
+            if (piece != null && isWhite == piece.isWhite()) {
                 ArrayList<Position> posList = piece.getValidMoves(this);
                 posList.addAll(piece.getCaptureMoves(this));
-                if (!posList.isEmpty()){
+                if (!posList.isEmpty()) {
                     for (Position toMove : posList) {
                         Move newMove = new Move(toMove, position, piece);
                         possibleMoves.add(newMove);
@@ -265,7 +264,7 @@ public class Board {
             Position conditionFromPos = conditionMove.getFromPos();
             Position conditionToPos = conditionMove.getToPos();
             AbstractChessPiece conditionPiece = conditionMove.getPiece();
-            if(lastPiece.getClass() == Pawn.class && conditionPiece.getClass() == Pawn.class) {
+            if (lastPiece.getClass() == Pawn.class && conditionPiece.getClass() == Pawn.class) {
                 if (conditionToPos.getX() == lastToPos.getX()) {
                     if (lastPiece.isWhite() && lastFromPos.getY() == 4 && lastToPos.getY() == 5) {
                         if (!conditionPiece.isWhite() && conditionFromPos.getY() == 6 && conditionToPos.getY() == 4) {
@@ -283,63 +282,67 @@ public class Board {
     }
 
 
-    /** Finds out if the piece to be moved is covering the king from attack, and if so, finds the attacking pieces
+    /**
+     * Finds out if the piece to be moved is covering the king from attack, and if so, finds the attacking pieces
      * and returns a list of positions that pieceToBeMoved could occupy without putting the king in danger (without considering valid moves)
-     * @param kingpos Position of the king
+     *
+     * @param kingpos        Position of the king
      * @param pieceToBeMoved piece selected by player
      * @return A list of positions the piece can move to and still cover the king. Null if the piece isn't protecting the king.
-    * */
-    public ArrayList<Position> positionsPieceCanMoveToAndStillCoverKing(Position kingpos,  AbstractChessPiece pieceToBeMoved) {
-           Position poseOfOtherPiece = null;
-           ArrayList<Position> posesThatCanBeMovedTo= new ArrayList<Position>();
-           Position posToCheck = kingpos;
-            int[][] offsets = { {1,0}, {0,1}, {-1,0}, {0,-1}, {1,1}, {-1,-1}, {-1,1}, {1,-1}};
-            int[] dir = new int[2];
-            Position pos;
-            boolean foundPieceToBeMoved=false;
-            outerloop:
-            for (int[] moves: offsets) {
-                posToCheck = new Position(kingpos.getX() + moves[0], kingpos.getY() + moves[1]);
-                while (posIsWithinBoard(posToCheck)) {
-                    if (getPieceAt(posToCheck) != null) {
-                        if (getPieceAt(posToCheck).equals(pieceToBeMoved)) {//Checks if there are no pieces between the king and pieceToBeMoved
-                            foundPieceToBeMoved = true;
-                        } else if (foundPieceToBeMoved && !getPieceAt(posToCheck).isSameColor(pieceToBeMoved) && (!dirIsHorizontal(moves) && (getPieceAt(posToCheck) instanceof Bishop) ||
-                                    dirIsHorizontal(moves) && (getPieceAt(posToCheck) instanceof Rook) || (getPieceAt(posToCheck) instanceof Queen))) {
-                                dir = moves;
-                                poseOfOtherPiece = (posToCheck);
-                                break outerloop;
-                        } else {
-                            foundPieceToBeMoved = false;
-                            break;
-                        }
+     */
+    public ArrayList<Position> positionsPieceCanMoveToAndStillCoverKing(Position kingpos, AbstractChessPiece pieceToBeMoved) {
+        Position poseOfOtherPiece = null;
+        ArrayList<Position> posesThatCanBeMovedTo = new ArrayList<Position>();
+        Position posToCheck = kingpos;
+        int[][] offsets = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {-1, -1}, {-1, 1}, {1, -1}};
+        int[] dir = new int[2];
+        Position pos;
+        boolean foundPieceToBeMoved = false;
+        outerloop:
+        for (int[] moves : offsets) {
+            posToCheck = new Position(kingpos.getX() + moves[0], kingpos.getY() + moves[1]);
+            while (posIsWithinBoard(posToCheck)) {
+                if (getPieceAt(posToCheck) != null) {
+                    if (getPieceAt(posToCheck).equals(pieceToBeMoved)) {//Checks if there are no pieces between the king and pieceToBeMoved
+                        foundPieceToBeMoved = true;
+                    } else if (foundPieceToBeMoved && !getPieceAt(posToCheck).isSameColor(pieceToBeMoved) && (!dirIsHorizontal(moves) && (getPieceAt(posToCheck) instanceof Bishop) ||
+                            dirIsHorizontal(moves) && (getPieceAt(posToCheck) instanceof Rook) || (getPieceAt(posToCheck) instanceof Queen))) {
+                        dir = moves;
+                        poseOfOtherPiece = (posToCheck);
+                        break outerloop;
+                    } else {
+                        foundPieceToBeMoved = false;
+                        break;
                     }
-                    posToCheck = new Position(posToCheck.getX() + moves[0], posToCheck.getY() + moves[1]);
                 }
+                posToCheck = new Position(posToCheck.getX() + moves[0], posToCheck.getY() + moves[1]);
             }
-            if (poseOfOtherPiece != null)
-                return getPositionsBetween(kingpos, poseOfOtherPiece, dir, pieceToBeMoved.getPosition(this));
-            return null;
+        }
+        if (poseOfOtherPiece != null)
+            return getPositionsBetween(kingpos, poseOfOtherPiece, dir, pieceToBeMoved.getPosition(this));
+        return null;
     }
 
-    private boolean dirIsHorizontal(int[] dir){
-        if ((dir[0]+dir[1])%2==0)
+    private boolean dirIsHorizontal(int[] dir) {
+        if ((dir[0] + dir[1]) % 2 == 0)
             return false;
         return true;
     }
 
-    /** Returns the squares between the king and the piece that will put the king in check if selected piece moves
-     * @param kingPos Position of the king
+    /**
+     * Returns the squares between the king and the piece that will put the king in check if selected piece moves
+     *
+     * @param kingPos                        Position of the king
      * @param pieceThatWillPutKingInCheckPos
-     * @param posPieceToBeMoved Piece selected by player
-     * @param dir Direction of pieceThatWillPutKingInCheckPos relative to the king
+     * @param posPieceToBeMoved              Piece selected by player
+     * @param dir                            Direction of pieceThatWillPutKingInCheckPos relative to the king
      * @return A list of positions the piece can move to and still cover the king
-     * */
-    public ArrayList<Position> getPositionsBetween(Position kingPos, Position pieceThatWillPutKingInCheckPos, int[] dir, Position posPieceToBeMoved){
+     */
+    public ArrayList<Position> getPositionsBetween(Position kingPos, Position pieceThatWillPutKingInCheckPos, int[] dir, Position posPieceToBeMoved) {
         Position posToCheck = kingPos;
         ArrayList<Position> poses = new ArrayList<Position>();
-        for (int i=1; ;i++) {
-            posToCheck = new Position(kingPos.getX()+dir[0]*i, kingPos.getY()+dir[1]*i);
+        for (int i = 1; ; i++) {
+            posToCheck = new Position(kingPos.getX() + dir[0] * i, kingPos.getY() + dir[1] * i);
             if (posToCheck.equals(pieceThatWillPutKingInCheckPos))
                 break;
             poses.add(posToCheck);
@@ -348,46 +351,102 @@ public class Board {
         return poses;
     }
 
-    /** Returns the intersection of the piece's valid moves and, if the piece is covering the king, the positions it can
+    /**
+     * Returns the intersection of the piece's valid moves and, if the piece is covering the king, the positions it can
      * move to and still cover him
-     * @param piece Piece to be moved
+     *
+     * @param piece         Piece to be moved
      * @param possibleMoves The piece's valid moves (without considering if a move will put the king in check)
      * @return A list of positions the piece can legally move to
-     * */
+     */
     public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> possibleMoves) {
-        System.out.println("possible moves 1 "+possibleMoves);
-        for (int i=0; i<possibleMoves.size(); i++){
+        System.out.println("possible moves 1 " + possibleMoves);
+        for (int i = 0; i < possibleMoves.size(); i++) {
             Board boardCopy = copyBoard(this);
             Position p = piece.getPosition(this);
             boardCopy.setPiece(piece, possibleMoves.get(i));
             boardCopy.setPiece(null, p);
-            if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite()))){
-                System.out.println(possibleMoves.get(i)); possibleMoves.remove(i); i--;
+            if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite()))) {
+                System.out.println(possibleMoves.get(i));
+                possibleMoves.remove(i);
+                i--;
             }
         }
-        System.out.println("possible moves 2 "+possibleMoves);
+        System.out.println("possible moves 2 " + possibleMoves);
         return possibleMoves;
     }
 
-    public Board copyBoard(Board board){
+    public Board copyBoard(Board board) {
         Board boardCopy = new Board();
 
-        for (int i=0; i<size; i++){
-            for (int j=0; j<size; j++){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 Position pos = new Position(i, j);
-                AbstractChessPiece p = board.getPieceAt(pos);
-                boardCopy.setPiece(p, pos);
+                AbstractChessPiece piece = board.getPieceAt(pos);
+
+                if (piece instanceof Bishop) {
+                    piece = new Bishop(piece.isWhite());
+                } else if (piece instanceof King) {
+                    piece = new King(piece.isWhite());
+                } else if (piece instanceof Knight) {
+                    piece = new Knight(piece.isWhite());
+                } else if (piece instanceof Pawn) {
+                    piece = new Pawn(piece.isWhite());
+                } else if (piece instanceof Queen) {
+                    piece = new Queen(piece.isWhite());
+                } else if (piece instanceof Rook) {
+                    piece = new Rook(piece.isWhite());
+                }
+
+                boardCopy.setPiece(piece, pos);
             }
         }
         return boardCopy;
     }
 
+    /**
+     * Evaluate the board.
+     * @param isWhite Whether the actor is white or not.
+     * @return The value of the board.
+     */
     public int calculateBoardForActor(boolean isWhite) {
-        // TODO: implement
-        return 0;
+        int sum = 0;
+
+        sum += getBoardValue(isWhite);
+        sum -= getBoardValue(!isWhite);
+
+        return sum;
     }
+
+    /**
+     * Evaluate the board for a specific actor.
+     * @param isWhite Whether the actor is white or not.
+     * @return The value of the board.
+     */
+    public int getBoardValue(boolean isWhite) {
+        int sum = 0;
+        // value of your chess pieces
+        for (AbstractChessPiece piece : getSpesificPlayersPieces(isWhite)) {
+            if (piece instanceof Bishop) {
+                sum += ((Bishop) piece).getValue();
+            } else if (piece instanceof King) {
+                sum += ((King) piece).getValue();
+            } else if (piece instanceof Knight) {
+                sum += ((Knight) piece).getValue();
+            } else if (piece instanceof Pawn) {
+                sum += ((Pawn) piece).getValue();
+            } else if (piece instanceof Queen) {
+                sum += ((Queen) piece).getValue();
+            } else if (piece instanceof Rook) {
+                sum += ((Rook) piece).getValue();
+            }
+        }
+        return sum;
+    }
+
     /**
      * Gets all the pieces on the board.
+     *
      * @return A List of all the pieces on the board.
      */
     public List<AbstractChessPiece> getAllPieces() {
@@ -400,16 +459,17 @@ public class Board {
 
     /**
      * Gets all the pieces of a spesific player.
+     *
      * @param isWhite Which player it is.
      * @return A List of all the player's pieces.
      */
     public List<AbstractChessPiece> getSpesificPlayersPieces(boolean isWhite) {
         List<AbstractChessPiece> listOfPieces = new ArrayList<AbstractChessPiece>();
 
-        for(int y = 0; y < size; y++) {
-            for(int x = 0; x < size; x++) {
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
                 AbstractChessPiece piece = getPieceAt(new Position(x, y));
-                if(piece != null && piece.isWhite() == isWhite) {
+                if (piece != null && piece.isWhite() == isWhite) {
                     listOfPieces.add(piece);
                 }
             }
@@ -418,4 +478,4 @@ public class Board {
     }
 
 
-    }
+}
