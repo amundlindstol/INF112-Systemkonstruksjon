@@ -355,7 +355,7 @@ public class PlayState extends State {
             //second selected piece
             else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
                 Position potentialPos = translator.toCellPos(x, y);
-                game.moveFirstSelectedPieceTo(potentialPos);
+                activegame = game.moveFirstSelectedPieceTo(potentialPos);
                 prevMove = potentialPos;
                 helpingMove = null;
             }

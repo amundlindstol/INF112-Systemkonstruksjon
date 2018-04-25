@@ -118,7 +118,7 @@ public class    Game {
                 updatePieceCounter(victim);
             }
             aiMove.getPiece().startMoving();
-            handleCheckChecking();
+            handleCheckChecking(aiMove.getToPos());
             turn = !turn;
             return aiMove;
         }
@@ -152,7 +152,7 @@ public class    Game {
         }
     }
 
-    public void moveFirstSelectedPieceTo(Position secondPosition){
+    public boolean moveFirstSelectedPieceTo(Position secondPosition){
         potentialPiece = board.getPieceAt(secondPosition);
         Boolean validMove = validMoves.contains(secondPosition) || captureMoves.contains(secondPosition) || castlingMoves.contains(secondPosition);
         if(potentialPiece != null) {
@@ -166,7 +166,8 @@ public class    Game {
                     else playSound("lostPiece.wav");
                     //board.movePiece(board.getPosition(firstPiece), secondPosition);
                     firstPiece.startMoving();
-                    handleCheckChecking();
+                    if (!handleCheckChecking(secondPosition))
+                        return false;
                     turn = !turn;
                     reset();
                 } else if(potentialPiece.isWhite()==turn){
@@ -180,7 +181,8 @@ public class    Game {
         } else if(potentialPiece == null && validMove){
             //board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
-            handleCheckChecking();
+            if (!handleCheckChecking(secondPosition))
+                return false;
             reset();
             turn = !turn;
             removed = false;
@@ -188,6 +190,7 @@ public class    Game {
             reset();
             removed = false;
         }
+        return true;
     }
 
     private void reset(){
@@ -227,11 +230,14 @@ public class    Game {
         return null;
     }
 
-    public void handleCheckChecking(){
+    public boolean handleCheckChecking(Position secondPosition){
         Position kingPos = board.getKingPos(!turn);
         if(kingPos != null){
+            Board bc = board.copyBoard(board);
+            bc.movePiece(firstPiece.getPosition(board), secondPosition);
             King king = (King) board.getPieceAt(kingPos);
-            king.isInCheck = king.willThisKingBePutInCheckByMoveTo(board, kingPos);
+            king.isInCheck = king.willThisKingBePutInCheckByMoveTo(bc, kingPos);
+            boolean otherPlayerHasNoValidMoves=noValidMoves(bc);
             if(king.isInCheck){
                 if(turn){
                     blackPutInCheck = true;
@@ -239,8 +245,31 @@ public class    Game {
                     whitePutInCheck = true;
                 }
                 System.out.println("SJAKK");
+                if (otherPlayerHasNoValidMoves) {
+                    System.out.println("Sjakk matt");
+                    return false;
+                }
+            }
+            else if (otherPlayerHasNoValidMoves){
+                System.out.println("Patt");
+                return false;
             }
         }
+        return true;
+    }
+
+    public boolean noValidMoves(Board b){
+        for (int i=0; i<board.size(); i++){
+            for (int j=0; j<board.size(); j++){
+                AbstractChessPiece piece = b.getPieceAt(new Position(i,j));
+                if (piece !=null && piece.isWhite()==!turn){
+                    if(!piece.getValidMoves(b).isEmpty()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     /**
