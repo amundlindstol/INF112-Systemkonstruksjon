@@ -10,13 +10,21 @@ public class AIMain {
     public static void main(String[] args) {
         Board board = new Board();
         board.initializeBoard();
-        Scanner input = new Scanner(System.in);
         System.out.println("welcome to chess3000, get ready to play!");
-        System.out.println("Player one, give me your name: ");
-        String player1 = input.nextLine();
-        AI ai = new AI(0, true);
-        Move bestMove = ai.calculateBestMove(board);
-        System.out.println("Doing move " + bestMove);
+
+        AI aiBlack = new AI(2, false);
+        AI aiWhite = new AI(2, true);
+
+
+        for(int i = 0; i < 20; i++) {
+            Move bestMoveWhite = aiWhite.calculateBestMove(board);
+            System.out.println("White doing move " + bestMoveWhite);
+            board.movePiece(bestMoveWhite.getToPos(), bestMoveWhite.getFromPos());
+
+            Move bestMoveBlack = aiBlack.calculateBestMove(board);
+            System.out.println("White doing move " + bestMoveBlack);
+            board.movePiece(bestMoveBlack.getToPos(), bestMoveBlack.getFromPos());
+        }
 
 
 
