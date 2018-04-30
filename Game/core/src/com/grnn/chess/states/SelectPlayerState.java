@@ -1,6 +1,7 @@
 package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -155,7 +156,7 @@ public class SelectPlayerState extends State {
             }
         }
         if(!playerData.isOffline()){
-            if (playBtn4.isPressed()) {
+            if (playBtn4.isPressed() || Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
                 player1.setIsWhite(player1isWhite);
                 String username = usernameField.getText();
                 String password = passwordField.getText();
