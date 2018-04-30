@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class King extends AbstractChessPiece {
-    private final int value = Integer.MAX_VALUE;
+    private final int value = 900;
     public boolean isInCheck;
     String letterRepresentation = "k";
     private boolean hasMoved;
