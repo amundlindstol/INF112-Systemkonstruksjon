@@ -135,6 +135,17 @@ public class    Game {
     }
 
     /**
+     *
+     * @param piece
+     */
+    public void findPossibleMoves(AbstractChessPiece piece){
+        if (piece.isWhite()==turn) {
+            validMoves = board.findEmptySquares(piece);
+            firstPiece = piece;
+        }
+    }
+
+    /**
      * Method for selecting the first piece
      * @param selectedPosition
      * @return A list of lists of valid positions. In the first position validmoves, second position capturemoves and third castlingmoves
@@ -150,6 +161,19 @@ public class    Game {
         } else {
             firstPiece = null;
         }
+    }
+
+    public boolean movePieceFromPocketTo(Position secondPosition){
+        if (validMoves.contains(secondPosition)) {
+            board.putNewPieceOnBoard(firstPiece, secondPosition);
+            if (!handleCheckChecking(secondPosition))
+                return false;
+        }
+        reset();
+        turn = !turn;
+        removed = false;
+
+        return true;
     }
 
     public boolean moveFirstSelectedPieceTo(Position secondPosition){
@@ -234,7 +258,8 @@ public class    Game {
         Position kingPos = board.getKingPos(!turn);
         if(kingPos != null){
             Board bc = board.copyBoard(board);
-            bc.movePiece(firstPiece.getPosition(board), secondPosition);
+            if (!firstPiece.fromPocket)
+                bc.movePiece(firstPiece.getPosition(board), secondPosition);
             King king = (King) board.getPieceAt(kingPos);
             king.isInCheck = king.willThisKingBePutInCheckByMoveTo(bc, kingPos);
             boolean otherPlayerHasNoValidMoves=noValidMoves(bc);

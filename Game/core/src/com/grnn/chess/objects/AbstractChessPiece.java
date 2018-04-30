@@ -19,6 +19,7 @@ public abstract class AbstractChessPiece {
     protected ArrayList<Position> captureMoves;
     protected String letterRepresentation = "";
     protected String image = "Graphics/ChessPieces/";
+    public boolean fromPocket = false;
     protected final int value = 0; // Should value be set in the abstract class?
 
     /**

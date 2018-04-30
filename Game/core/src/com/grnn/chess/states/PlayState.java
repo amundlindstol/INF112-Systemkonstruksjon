@@ -18,6 +18,7 @@ import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
 //import javafx.geometry.Pos;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -61,6 +62,7 @@ public class PlayState extends State {
     private TextButton helpBtn;
     private Stage stage;
     private Skin skin;
+    ArrayList<JButton> pocket;
 
     private int[] removedPieces;
 
@@ -81,6 +83,15 @@ public class PlayState extends State {
         }
         if(player2 instanceof Player) {
             this.player2 = (Player) player2;
+        }
+
+        pocket = new ArrayList<JButton>();
+        for (int i=0; i<12; i++){
+            JButton button = new JButton();
+            button.setOpaque(false);
+            button.setContentAreaFilled(false);
+            button.setBorderPainted(false);
+            pocket.add(button);
         }
 
         //textures
