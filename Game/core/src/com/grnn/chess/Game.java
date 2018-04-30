@@ -126,7 +126,7 @@ public class    Game {
     }
 
     /**
-     * used once, do not use this method
+     * used once when move is not initiated
      * @return aiMove
      */
     public Move getAiMove() {
@@ -471,5 +471,27 @@ public class    Game {
 
 
         return out;
+    }
+
+    /**
+     * Get player one
+     * @return Player one if player1 is instance of player, null otherwise (e.g. if AI)
+     */
+    public Player getPlayer1(){
+        if(player1 instanceof Player) {
+            return (Player) player1;
+        }
+        return null;
+    }
+
+    /**
+     * Get player two
+     * @return Player two if player1 is instance of player, null otherwise (e.g. if AI)
+     */
+    public Player getPlayer2(){
+        if(player2 instanceof Player) {
+            return (Player) player2;
+        }
+        return null;
     }
 }
