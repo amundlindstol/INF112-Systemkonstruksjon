@@ -47,9 +47,11 @@ public class Board {
         AbstractChessPiece piece = getPieceAt(startPos);
         AbstractChessPiece capturePiece = getPieceAt(endPos);
 
+
         //if (isValidMove(startPos, endPos)) {
         setPiece(piece, endPos);
         setPiece(null, startPos);
+
         piece.move();
         moveHistory.add(new Move(endPos, startPos, piece));
         enPassant();
@@ -360,29 +362,29 @@ public class Board {
      * @return A list of positions the piece can legally move to
      */
     public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> possibleMoves) {
-        System.out.println("possible moves 1 " + possibleMoves);
+        //System.out.println("possible moves 1 " + possibleMoves);
         for (int i = 0; i < possibleMoves.size(); i++) {
-            Board boardCopy = copyBoard(this);
+            Board boardCopy = copyBoard();
             Position p = piece.getPosition(this);
             boardCopy.setPiece(piece, possibleMoves.get(i));
             boardCopy.setPiece(null, p);
             if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite()))) {
-                System.out.println(possibleMoves.get(i));
+                //System.out.println(possibleMoves.get(i));
                 possibleMoves.remove(i);
                 i--;
             }
         }
-        System.out.println("possible moves 2 " + possibleMoves);
+        //System.out.println("possible moves 2 " + possibleMoves);
         return possibleMoves;
     }
 
-    public Board copyBoard(Board board) {
+    public Board copyBoard() {
         Board boardCopy = new Board();
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 Position pos = new Position(i, j);
-                AbstractChessPiece piece = board.getPieceAt(pos);
+                AbstractChessPiece piece = getPieceAt(pos);
 
                 if (piece instanceof Bishop) {
                     piece = new Bishop(piece.isWhite());
