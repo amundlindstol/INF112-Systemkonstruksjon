@@ -335,7 +335,7 @@ public class PlayState extends State {
         }
         if(helpBtn.isPressed() && activegame){
             helpingMove = game.getHelpingMove();
-            System.out.println(helpingMove);
+            //System.out.println(helpingMove);
         }
         if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
 
