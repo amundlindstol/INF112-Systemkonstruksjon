@@ -33,6 +33,7 @@ public class PlayState extends State {
     Texture bg;
     Texture bgBoard;
     Texture potentialTex;
+    Texture hintTex;
     Texture captureTex;
     ArrayList<Texture> pieceTexures;
     ArrayList<Position> positions;
@@ -122,6 +123,7 @@ public class PlayState extends State {
         fontCounter.setColor(Color.WHITE);
 
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
+        hintTex = new Texture("Graphics/ChessPieces/Hint.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
@@ -231,8 +233,8 @@ public class PlayState extends State {
             Position toPos = helpingMove.getToPos();
             int[] frompos = translator.toPixels(fromPos.getX(),fromPos.getY());
             int[] topos = translator.toPixels(toPos.getX(),toPos.getY());
-            batch.draw(potentialTex,frompos[0],frompos[1]);
-            batch.draw(potentialTex,topos[0],topos[1]);
+            batch.draw(hintTex,frompos[0],frompos[1]);
+            batch.draw(hintTex,topos[0],topos[1]);
         }
         batch.end();
         if (!pieceTexures.isEmpty()) {
