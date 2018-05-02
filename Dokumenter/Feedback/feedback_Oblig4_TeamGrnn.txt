@@ -1,0 +1,32 @@
+Feedback INF112 spring 2018 - Oblig.4
+
+Group: Grnn
+
+Overall feedback
+
+Updated requested items from feedback in oblig 3
+- Good, but your game is still missing a specified license as far as I can tell. (pick one during the next assignment - example MIT)
+
+Minutes
+- Good
+
+Design model
+- Have you not needed to make any major changes to the diagram except adding an interface?
+
+Sequence diagrams
+- Missing SQ diagrams for storing winner stats in DB and for a multiplayer game (Add them during the next assignment)
+
+Source code
+- You need to specify the license of your game as mentioned earlier.
+- The quality of the code seems good (Readability, javadoc etc.) 
+- The games AI does not work as intended - the AI is doing all sorts of crazy stuff (Like making a legal move and then teleporting accross the board to take a piece) 
+- It does not look like the statistics when a player wins against another player is updated (it is still 1200) 
+
+Presentation slides are missing from the repository
+
+Retrospective: Good
+
+Score: 76 (of 100)
+Evaluation: PASS
+
+Graded by Øyvind Skeie Liland and Dan Zhang, Bergen 02.05.2018
