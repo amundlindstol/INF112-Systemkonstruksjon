@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -14,26 +15,26 @@ import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * @author Amund 15.03.18
  */
 public class PlayState extends State {
-
     // Variables
-    Game game;
-    Board board;
-    PlayerData playerData;
+    private Game game;
+    private Board board;
+    private PlayerData playerData;
 
-    Texture bg;
-    Texture bgBoard;
-    Texture potentialTex;
-    Texture hintTex;
-    Texture captureTex;
-    ArrayList<Texture> pieceTexures;
-    ArrayList<Position> positions;
-    Position prevMove;
-    MyInputProcessor mouseInput;
+    private Texture bg;
+    private Texture bgBoard;
+    private Texture potentialTex;
+    private Texture hintTex;
+    private Texture captureTex;
+    private Texture victoryTex;
+    private ArrayList<Texture> pieceTexures;
+    private ArrayList<Position> positions;
+    private Position prevMove;
 
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
@@ -41,13 +42,6 @@ public class PlayState extends State {
     private Move helpingMove;
     private TranslateToCellPos translator;
 
-    private ArrayList<Position> animationPath;
-    private int animationIndex;
-    private boolean pieceIsMoving;
-    private Move prevAImove;
-    private Animation anim;
-    private float frameCounter=0;
-    private TextureRegion texReg;
 
     private Boolean activegame;
     private BitmapFont fontText;
@@ -65,6 +59,22 @@ public class PlayState extends State {
 
     private Player player1;
     private Player player2;
+
+
+    // piece animation
+    private ArrayList<Position> animationPath;
+    private int animationIndex;
+    private boolean pieceIsMoving;
+    private Move prevAImove;
+    // victory animation
+    private float frameCounter;
+    private Animation<TextureRegion> confettiAnimation; // Must declare frame type (TextureRegion)
+    private Texture confettiSheet;
+    private final TextureRegion finalConfettiImg;
+    private float confettiY;
+    private float confettiX;
+    private static final int FRAME_COLS = 5, FRAME_ROWS = 5; // Constant rows and columns of confetti sprite sheet
+    private Label victoryLabel;
 
     /**
      * @param gsm      Game state
@@ -135,7 +145,36 @@ public class PlayState extends State {
         helpBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-helpBtn.getWidth()+10,(resignBtn.getY()));
         stage.addActor(helpBtn);
 
-        anim = GifDecoderOptimized.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("Graphics/Menu/Animations/confetti.gif").readBytes());
+
+        //anim
+        frameCounter = 0f;
+        confettiX = 50;
+        confettiY = 50;
+        confettiSheet = new Texture(Gdx.files.internal("Graphics/Menu/Animations/confetti.png"));
+
+        // Use the split utility method to create a 2D array of TextureRegions. This is
+        // possible because this sprite sheet contains frames of equal size and they are
+        // all aligned.
+        TextureRegion[][] tmp = TextureRegion.split(confettiSheet,
+                confettiSheet.getWidth() / FRAME_COLS,
+                confettiSheet.getHeight() / FRAME_ROWS);
+
+        // Place the regions into a 1D array in the correct order, starting from the top
+        // left, going across first. The Animation constructor requires a 1D array.
+        TextureRegion[] walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+            for (int j = 0; j < FRAME_COLS; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        confettiAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
+        finalConfettiImg = confettiAnimation.getKeyFrames()[confettiAnimation.getKeyFrames().length-1];
+        // Instantiate a SpriteBatch for drawing and reset the elapsed animation
+        // time to 0
+        //anim
 
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
             for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
@@ -162,6 +201,7 @@ public class PlayState extends State {
     public void render(SpriteBatch batch) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        frameCounter += Gdx.graphics.getDeltaTime();
 
         batch.begin();
         batch.draw(bg, 0, 0);
@@ -237,11 +277,19 @@ public class PlayState extends State {
         }
 
 
-        //TODO GET IT WORKING PLS (CHANGE TO SPRITESHEET)
-//        frameCounter += Gdx.graphics.getDeltaTime();
-//        texReg = (TextureRegion) anim.getKeyFrame(frameCounter, false);
-//        batch.draw(texReg, 0, 0);
+        batch.draw(victoryTex, 0, 0);
 
+        //confetti <3
+        if (!activegame) {
+            // Get current frame of animation for the current stateTime
+            TextureRegion currentFrame = confettiAnimation.getKeyFrame(frameCounter, true);
+            batch.draw(currentFrame, confettiX, confettiY);
+            if (currentFrame.equals(finalConfettiImg)) {
+                Random r = new Random();
+                confettiX = r.nextInt(Gdx.graphics.getWidth()-confettiSheet.getWidth()/FRAME_COLS);
+                confettiY = r.nextInt(Gdx.graphics.getHeight()-confettiSheet.getHeight()/FRAME_ROWS);
+            }
+        }
 
         batch.end();
         if (!pieceTexures.isEmpty()) {
@@ -354,18 +402,8 @@ public class PlayState extends State {
             gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW, game,playerData));
         }
 
-        mouseInput = new MyInputProcessor() {
-            @Override
-            public boolean touchDown (int x, int y, int pointer, int button) {
-                if (Gdx.input.justTouched() && activegame && helpBtn.isPressed())
-                    return true;
-
-                return false;
-            }
-        };
-
         // Handle Help button
-        if(mouseInput.touchDown((int)resignBtn.getX(),(int)resignBtn.getY(),1,0) == true){
+        if(Gdx.input.justTouched() && helpBtn.isPressed() && activegame){
             helpingMove = game.getHelpingMove();
         }
 
@@ -392,18 +430,19 @@ public class PlayState extends State {
                 helpingMove = null;
             }
         } else if (!activegame) { // TODO: Actual result
-
-            Result result1;
-            Result result2;
-            if(game.getTurn()) {
-                result1 = Result.LOSS;
-                result2 = Result.WIN;
-            }else{
-                result1 = Result.WIN;
-                result2 = Result.LOSS;
+            if (Gdx.input.justTouched()) {
+                Result result1;
+                Result result2;
+                if(game.getTurn()) {
+                    result1 = Result.LOSS;
+                    result2 = Result.WIN;
+                }else{
+                    result1 = Result.WIN;
+                    result2 = Result.LOSS;
+                }
+                game.endGame(result1, result2, playerData);
+                gsm.set(new GameDoneState(gsm,result1,result2,game,playerData));
             }
-            game.endGame(result1, result2,playerData);
-            gsm.set(new GameDoneState(gsm,result1,result2,game,playerData));
         }
     }
 
@@ -414,6 +453,7 @@ public class PlayState extends State {
         for (Texture tex : pieceTexures) {
             tex.dispose();
         }
+        confettiSheet.dispose();
         potentialTex.dispose();
         captureTex.dispose();
         stage.dispose();
