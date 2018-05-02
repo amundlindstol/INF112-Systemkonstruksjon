@@ -4,9 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -49,6 +47,9 @@ public class PlayState extends State {
     private int animationIndex;
     private boolean pieceIsMoving;
     private Move prevAImove;
+    private Animation anim;
+    private float frameCounter=0;
+    private TextureRegion texReg;
 
     private Boolean activegame;
     private BitmapFont fontText;
@@ -135,6 +136,8 @@ public class PlayState extends State {
         helpBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-helpBtn.getWidth()+10,(resignBtn.getY()));
         stage.addActor(helpBtn);
 
+        anim = GifDecoderOptimized.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("Graphics/Menu/Animations/confetti.gif").readBytes());
+
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
             for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
                 AbstractChessPiece piece = board.getPieceAt(new Position(xi, yi));
@@ -158,7 +161,6 @@ public class PlayState extends State {
 
     @Override
     public void render(SpriteBatch batch) {
-
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
@@ -234,6 +236,14 @@ public class PlayState extends State {
             batch.draw(potentialTex,frompos[0],frompos[1]);
             batch.draw(potentialTex,topos[0],topos[1]);
         }
+
+
+        //TODO GET IT WORKING PLS (CHANGE TO SPRITESHEET)
+//        frameCounter += Gdx.graphics.getDeltaTime();
+//        texReg = (TextureRegion) anim.getKeyFrame(frameCounter, false);
+//        batch.draw(texReg, 0, 0);
+
+
         batch.end();
         if (!pieceTexures.isEmpty()) {
             for (Texture oldTexture : pieceTexures) {

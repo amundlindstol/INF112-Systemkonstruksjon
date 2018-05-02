@@ -5,8 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.states.GameStateManager;
 import com.grnn.chess.states.MainMenuState;
+import com.grnn.chess.states.PlayState;
 
 public class ChessForKids extends ApplicationAdapter {
 	GameStateManager gsm;
@@ -23,8 +25,8 @@ public class ChessForKids extends ApplicationAdapter {
 		board = new Board();
 		board.initializeBoard();
 
-		gsm.push(new MainMenuState(gsm));
-
+//		gsm.push(new MainMenuState(gsm));
+		gsm.push(new PlayState(gsm, 1, new Player("s", "s", false), new Player("a", "s", false), null));
 	}
 
 	@Override
