@@ -10,12 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.*;
-import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
-//import javafx.geometry.Pos;
-
 import java.util.ArrayList;
 
 /**
@@ -31,11 +28,12 @@ public class PlayState extends State {
     Texture bg;
     Texture bgBoard;
     Texture potentialTex;
+    Texture hintTex;
     Texture captureTex;
     ArrayList<Texture> pieceTexures;
     ArrayList<Position> positions;
     Position prevMove;
-
+    MyInputProcessor mouseInput;
 
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
@@ -123,6 +121,7 @@ public class PlayState extends State {
         fontCounter.setColor(Color.WHITE);
 
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
+        hintTex = new Texture("Graphics/ChessPieces/Hint.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
@@ -163,6 +162,7 @@ public class PlayState extends State {
     public void render(SpriteBatch batch) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.begin();
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
@@ -177,16 +177,13 @@ public class PlayState extends State {
 
         fontText.draw(batch, text, 645, 334);
 
-        //Helge, look at this for-loop! It's so pretty <3
         for(int i=0, j=668; i<6; i++, j+= 71) {
             if(i>=4){
                 j+=7;
             }
             fontCounter.draw(batch, "" + removedPieces[i], j, 418);
             fontCounter.draw(batch, "" + removedPieces[6 + i], j, 105);
-
         }
-
         // Player names
         fontCounter.draw(batch, "" + player1Name, 726, 241);
         fontCounter.draw(batch, "Score: " + player1.rating , 726, 221);
@@ -228,13 +225,15 @@ public class PlayState extends State {
                 batch.draw(captureTex, pos[0], pos[1]);
             }
         }
+
         if (helpingMove!=null){
             Position fromPos = helpingMove.getFromPos();
             Position toPos = helpingMove.getToPos();
-            int[] frompos = translator.toPixels(fromPos.getX(),fromPos.getY());
-            int[] topos = translator.toPixels(toPos.getX(),toPos.getY());
-            batch.draw(potentialTex,frompos[0],frompos[1]);
-            batch.draw(potentialTex,topos[0],topos[1]);
+            int[] drawFrom = translator.toPixels(fromPos.getX(),fromPos.getY());
+            int[] drawTo = translator.toPixels(toPos.getX(),toPos.getY());
+            batch.draw(hintTex,drawFrom[0],drawFrom[1]);
+            batch.draw(hintTex,drawTo[0],drawTo[1]);
+
         }
 
 
@@ -254,7 +253,6 @@ public class PlayState extends State {
         }
         stage.draw();
     }
-
 
     private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
         if (pieceIsMoving && piece.isMoving()) {
@@ -346,19 +344,31 @@ public class PlayState extends State {
         return 0;
     }
 
-
     public void handleInput() {
         int x = Math.abs(Gdx.input.getX());
         int y = Math.abs(Gdx.input.getY());
         Boolean notSelected = game.pieceHasNotBeenSelected();
+
         if (resignBtn.isPressed() && activegame) {
-                game.endGame(Result.DRAW, Result.DRAW,playerData);
-                gsm.set(new ShowStatsState(gsm, player1, playerData));
+            game.endGame(Result.DRAW, Result.DRAW,playerData);
+            gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW, game,playerData));
         }
-        if(helpBtn.isPressed() && activegame){
+
+        mouseInput = new MyInputProcessor() {
+            @Override
+            public boolean touchDown (int x, int y, int pointer, int button) {
+                if (Gdx.input.justTouched() && activegame && helpBtn.isPressed())
+                    return true;
+
+                return false;
+            }
+        };
+
+        // Handle Help button
+        if(mouseInput.touchDown((int)resignBtn.getX(),(int)resignBtn.getY(),1,0) == true){
             helpingMove = game.getHelpingMove();
-            System.out.println(helpingMove);
         }
+
         if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
 
             //AI
@@ -382,11 +392,18 @@ public class PlayState extends State {
                 helpingMove = null;
             }
         } else if (!activegame) { // TODO: Actual result
-            Result result1 = Result.DRAW;
-            Result result2 = Result.DRAW;
 
+            Result result1;
+            Result result2;
+            if(game.getTurn()) {
+                result1 = Result.LOSS;
+                result2 = Result.WIN;
+            }else{
+                result1 = Result.WIN;
+                result2 = Result.LOSS;
+            }
             game.endGame(result1, result2,playerData);
-            gsm.set(new ShowStatsState(gsm,player1,playerData));
+            gsm.set(new GameDoneState(gsm,result1,result2,game,playerData));
         }
     }
 
