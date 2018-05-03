@@ -216,7 +216,8 @@ public class PlayerData {
         }
     }
 
-    /**
+
+	/**
      * method that updates the score for two playors
      * @param player1 an AI or a Player
      * @param player2 an AI or a Player
