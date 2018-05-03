@@ -134,16 +134,19 @@ public class SelectPlayerState extends State {
         // Button for play against AI lett
         if (playBtn.isPressed()) {
             player1.setIsWhite(true);
+            player1isWhite = true;
             gsm.set(new PlayState(gsm, 1, player1, new AI(1, !player1isWhite),playerData));
         }
         // Button for play against AI medium
         if (playBtn2.isPressed()) {
             player1.setIsWhite(true);
+            player1isWhite = true;
             gsm.set(new PlayState(gsm, 2, player1, new AI(2, !player1isWhite),playerData));
         }
         // Button for play against AI vanskelig
         if (playBtn3.isPressed()) {
             player1.setIsWhite(true);
+            player1isWhite = true;
             gsm.set(new PlayState(gsm, 3, player1, new AI(1, !player1isWhite),playerData));
         }
 
