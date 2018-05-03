@@ -70,10 +70,9 @@ public class PlayState extends State {
     private float frameCounter;
     private Animation<TextureRegion> confettiAnimation; // Must declare frame type (TextureRegion)
     private Texture confettiSheet;
-    private final TextureRegion finalConfettiImg;
+    private TextureRegion finalConfettiImg;
     private float confettiY;
     private float confettiX;
-    private static final int FRAME_COLS = 5, FRAME_ROWS = 5; // Constant rows and columns of confetti sprite sheet
     private Label victoryLabel;
 
     /**
@@ -135,46 +134,37 @@ public class PlayState extends State {
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
+        //exit game early button
         resignBtn = new TextButton("Avslutt", skin);
         resignBtn.setSize(resignBtn.getWidth(), 60);
         resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-15, resignBtn.getY()+7);
         stage.addActor(resignBtn);
 
+        //help button
         helpBtn = new TextButton("Hjelp", skin);
         helpBtn.setSize(helpBtn.getWidth(),60);
         helpBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-helpBtn.getWidth()+10,(resignBtn.getY()));
         stage.addActor(helpBtn);
 
+        //victory message
+        victoryTex = new Texture("Graphics/Menu/victory.png");
+        victoryLabel = new Label("", skin);
+        victoryLabel.setPosition(bgBoard.getWidth()/2-150, Gdx.graphics.getHeight()/2-victoryLabel.getHeight());
+        BitmapFont buttonFont = new BitmapFont( Gdx.files.internal("Skin/raw/font-button-export.fnt"), Gdx.files.internal("Skin/raw/font-button-export.png"), false );
+        Label.LabelStyle labelStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
+        victoryLabel.setStyle(labelStyle);
+        stage.addActor(victoryLabel);
 
-        //anim
+        //animate confetti
         frameCounter = 0f;
         confettiX = 50;
         confettiY = 50;
         confettiSheet = new Texture(Gdx.files.internal("Graphics/Menu/Animations/confetti.png"));
-
-        // Use the split utility method to create a 2D array of TextureRegions. This is
-        // possible because this sprite sheet contains frames of equal size and they are
-        // all aligned.
-        TextureRegion[][] tmp = TextureRegion.split(confettiSheet,
-                confettiSheet.getWidth() / FRAME_COLS,
-                confettiSheet.getHeight() / FRAME_ROWS);
-
-        // Place the regions into a 1D array in the correct order, starting from the top
-        // left, going across first. The Animation constructor requires a 1D array.
-        TextureRegion[] walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-        int index = 0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-            for (int j = 0; j < FRAME_COLS; j++) {
-                walkFrames[index++] = tmp[i][j];
-            }
-        }
-
         // Initialize the Animation with the frame interval and array of frames
-        confettiAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
+        confettiAnimation = createAnimation(confettiSheet, 5, 5, 0.025f);
+        // finalConfettiImg is used to determine when the animation is complete
         finalConfettiImg = confettiAnimation.getKeyFrames()[confettiAnimation.getKeyFrames().length-1];
-        // Instantiate a SpriteBatch for drawing and reset the elapsed animation
-        // time to 0
-        //anim
+
 
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
             for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
@@ -186,6 +176,7 @@ public class PlayState extends State {
             }
         }
     }
+
 
     @Override
     public void update(float dt) {
@@ -211,7 +202,7 @@ public class PlayState extends State {
             text = "Du vant " + player1Name + ", gratulerer!";
             activegame = false;
         } else if (removedPieces[11] == 1) {
-            text = "Du vant " + player1Name + ", du må nok øve mer..."; //TODO wrong output
+            text = "Du vant " + player1Name + ", du må nok øve mer..."; //TODO wrong output, remove entire block?
             activegame = false;
         }
 
@@ -276,19 +267,8 @@ public class PlayState extends State {
 
         }
 
-
-        batch.draw(victoryTex, 0, 0);
-
-        //confetti <3
-        if (!activegame) {
-            // Get current frame of animation for the current stateTime
-            TextureRegion currentFrame = confettiAnimation.getKeyFrame(frameCounter, true);
-            batch.draw(currentFrame, confettiX, confettiY);
-            if (currentFrame.equals(finalConfettiImg)) {
-                Random r = new Random();
-                confettiX = r.nextInt(Gdx.graphics.getWidth()-confettiSheet.getWidth()/FRAME_COLS);
-                confettiY = r.nextInt(Gdx.graphics.getHeight()-confettiSheet.getHeight()/FRAME_ROWS);
-            }
+        if (!activegame) { // spawn that beautiful confetti <3
+            endGameAction(batch);
         }
 
         batch.end();
@@ -300,6 +280,94 @@ public class PlayState extends State {
             }
         }
         stage.draw();
+    }
+
+    public void handleInput() {
+        int x = Math.abs(Gdx.input.getX());
+        int y = Math.abs(Gdx.input.getY());
+        Boolean notSelected = game.pieceHasNotBeenSelected();
+
+        if (resignBtn.isPressed() && activegame) {
+            game.endGame(Result.DRAW, Result.DRAW,playerData);
+            gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW, game,playerData));
+        }
+
+        // Handle Help button
+        if(Gdx.input.justTouched() && helpBtn.isPressed() && activegame){
+            helpingMove = game.getHelpingMove();
+        }
+
+        if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
+
+            //AI
+            if (!game.getTurn() && game.isAi()) {
+                prevAImove = game.aiMove();
+                return;
+            }
+
+            //first selected piece
+            Position selected = null;
+            if (Gdx.input.justTouched() && notSelected) {
+                game.playSound("selectPiece.wav");
+                selected = translator.toCellPos(x, y);
+                game.selectFirstPiece(selected);
+            }
+            //second selected piece
+            else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
+                Position potentialPos = translator.toCellPos(x, y);
+                game.moveFirstSelectedPieceTo(potentialPos);
+                prevMove = potentialPos;
+                helpingMove = null;
+            }
+        }
+    }
+
+    private void endGameAction(SpriteBatch batch) {
+        Result result1;
+        Result result2;
+        if(game.getTurn()) {
+            result1 = Result.LOSS;
+            result2 = Result.WIN;
+        } else {
+            result1 = Result.WIN;
+            result2 = Result.LOSS;
+        }
+        String victoryMsg = "";
+        if (result1 == Result.WIN) {
+            victoryMsg = "Gratulerer\n" + appendSpaces(game.getPlayer1().name) + "\n  du vant!";
+        } else if (result1 == Result.LOSS && game.isAi()) {// assume white is player TODO make code know which player is AI
+            victoryMsg = "    Oida\n"+ appendSpaces(game.getPlayer1().name) + "\n  AI vant!";
+        } else if(result1 == Result.LOSS) {
+            victoryMsg = "Gratulerer\n" + appendSpaces(game.getPlayer2().name) + "\n  du vant!";
+        } else if(result1 == Result.DRAW) {
+            victoryMsg = "Uavgjordt!";
+        }
+        batch.draw(victoryTex, bgBoard.getWidth() / 2 - victoryTex.getWidth() / 2, Gdx.graphics.getHeight() / 2 - victoryTex.getHeight() / 2);
+        victoryLabel.setText(victoryMsg);
+
+        if (Gdx.input.justTouched()) {
+            game.endGame(result1, result2, playerData);
+            gsm.set(new ShowStatsState(gsm, game.getPlayer1(), playerData));
+        }
+
+        if (result1 == Result.WIN) { // assume white is player TODO make code know which player is AI
+            TextureRegion currentFrame = confettiAnimation.getKeyFrame(frameCounter, true);
+            batch.draw(currentFrame, confettiX, confettiY);
+            if (currentFrame.equals(finalConfettiImg)) {
+                Random r = new Random();
+                confettiX = r.nextInt(Gdx.graphics.getWidth() - confettiSheet.getWidth() / 5);
+                confettiY = r.nextInt(Gdx.graphics.getHeight() - confettiSheet.getHeight() / 5);
+            }
+        }
+    }
+
+    private String appendSpaces(String name) {
+        if (name.length() > 9) return name;
+        String s = "";
+        for (int i = 0; i < 8-name.length(); i++) {
+            s += " ";
+        }
+        return s+name;
     }
 
     private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
@@ -392,58 +460,26 @@ public class PlayState extends State {
         return 0;
     }
 
-    public void handleInput() {
-        int x = Math.abs(Gdx.input.getX());
-        int y = Math.abs(Gdx.input.getY());
-        Boolean notSelected = game.pieceHasNotBeenSelected();
 
-        if (resignBtn.isPressed() && activegame) {
-            game.endGame(Result.DRAW, Result.DRAW,playerData);
-            gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW, game,playerData));
-        }
+    private Animation<TextureRegion> createAnimation(Texture textureSheet, int frameColums, int frameRows, float duration) {
 
-        // Handle Help button
-        if(Gdx.input.justTouched() && helpBtn.isPressed() && activegame){
-            helpingMove = game.getHelpingMove();
-        }
+        // Use the split utility method to create a 2D array of TextureRegions. This is
+        // possible because this sprite sheet contains frames of equal size and they are
+        // all aligned.
+        TextureRegion[][] tmp = TextureRegion.split(textureSheet,
+                textureSheet.getWidth() / frameColums,
+                textureSheet.getHeight() / frameRows);
 
-        if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
-
-            //AI
-            if (!game.getTurn() && game.isAi()) {
-                prevAImove = game.aiMove();
-                return;
-            }
-
-            //first selected piece
-            Position selected = null;
-            if (Gdx.input.justTouched() && notSelected) {
-                game.playSound("selectPiece.wav");
-                selected = translator.toCellPos(x, y);
-                game.selectFirstPiece(selected);
-            }
-            //second selected piece
-            else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
-                Position potentialPos = translator.toCellPos(x, y);
-                game.moveFirstSelectedPieceTo(potentialPos);
-                prevMove = potentialPos;
-                helpingMove = null;
-            }
-        } else if (!activegame) { // TODO: Actual result
-            if (Gdx.input.justTouched()) {
-                Result result1;
-                Result result2;
-                if(game.getTurn()) {
-                    result1 = Result.LOSS;
-                    result2 = Result.WIN;
-                }else{
-                    result1 = Result.WIN;
-                    result2 = Result.LOSS;
-                }
-                game.endGame(result1, result2, playerData);
-                gsm.set(new GameDoneState(gsm,result1,result2,game,playerData));
+        // Place the regions into a 1D array in the correct order, starting from the top
+        // left, going across first. The Animation constructor requires a 1D array.
+        TextureRegion[] animationFrames = new TextureRegion[frameColums * frameRows];
+        int index = 0;
+        for (int i = 0; i < frameRows; i++) {
+            for (int j = 0; j < frameColums; j++) {
+                animationFrames[index++] = tmp[i][j];
             }
         }
+        return new Animation<TextureRegion>(duration, animationFrames);
     }
 
     @Override
