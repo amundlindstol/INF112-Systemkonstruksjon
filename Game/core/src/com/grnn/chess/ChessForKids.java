@@ -25,8 +25,8 @@ public class ChessForKids extends ApplicationAdapter {
 		board = new Board();
 		board.initializeBoard();
 
-//		gsm.push(new MainMenuState(gsm));
-		gsm.push(new PlayState(gsm, 1, new Player("s", "s", false), new Player("a", "s", false), null));
+		gsm.push(new MainMenuState(gsm));
+//		gsm.push(new PlayState(gsm, 1, new Player("s", "s", false), new Player("a", "s", false), null));
 	}
 
 	@Override

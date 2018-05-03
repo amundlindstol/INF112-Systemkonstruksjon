@@ -277,7 +277,7 @@ public class PlayState extends State {
         }
 
 
-        batch.draw(victoryTex, 0, 0);
+        //batch.draw(victoryTex, 0, 0);
 
         //confetti <3
         if (!activegame) {
