@@ -74,6 +74,7 @@ public class PlayState extends State {
     private float confettiY;
     private float confettiX;
     private Label victoryLabel;
+    private boolean isOkToSwitchState = false;
 
     /**
      * @param gsm      Game state
@@ -347,7 +348,7 @@ public class PlayState extends State {
         batch.draw(victoryTex, bgBoard.getWidth() / 2 - victoryTex.getWidth() / 2, Gdx.graphics.getHeight() / 2 - victoryTex.getHeight() / 2);
         victoryLabel.setText(victoryMsg);
 
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.justTouched() && isOkToSwitchState) {
             game.endGame(result1, result2, playerData);
             gsm.set(new ShowStatsState(gsm, game.getPlayer1(), playerData));
         }
@@ -357,6 +358,7 @@ public class PlayState extends State {
             TextureRegion currentFrame = confettiAnimation.getKeyFrame(frameCounter, true);
             batch.draw(currentFrame, confettiX, confettiY);
             if (currentFrame.equals(finalConfettiImg)) {
+                isOkToSwitchState = true;
                 Random r = new Random();
                 confettiX = r.nextInt(Gdx.graphics.getWidth() - confettiSheet.getWidth() / 5);
                 confettiY = r.nextInt(Gdx.graphics.getHeight() - confettiSheet.getHeight() / 5);
