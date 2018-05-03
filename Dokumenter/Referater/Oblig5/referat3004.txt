@@ -1,0 +1,20 @@
+Oppmøte:
+    Alise
+    Simon
+    Magnus
+    Agnete
+    Amund
+    Helge Mikael (referent)
+
+Vi hadde stand-up der vi gikk gjennom hva alle hadde gjort siden forrige møte.
+
+
+Fikset score når noen vinner, og ny skjerm kommer opp.
+Konfetti snart på plass
+
+
+Til neste gang:
+
+Videre AI
+Ferdig konfetti
+Ferdig hint-knapp
