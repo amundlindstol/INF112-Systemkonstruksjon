@@ -333,10 +333,12 @@ public class PlayState extends State {
             result2 = Result.LOSS;
         }
         String victoryMsg = "";
-        if (result1 == Result.WIN) {
+        if (result1 == Result.WIN) { //TODO NEEDS TESTING WITH AI
             victoryMsg = "Gratulerer\n" + appendSpaces(game.getPlayer1().name) + "\n  du vant!";
-        } else if (result1 == Result.LOSS && game.isAi()) {// assume white is player TODO make code know which player is AI
+        } else if (result1 == Result.LOSS && game.isAi() && !game.getAiPlayer().isWhite()) {
             victoryMsg = "    Oida\n"+ appendSpaces(game.getPlayer1().name) + "\n  AI vant!";
+        } else if (result1 == Result.WIN && game.isAi() && game.getAiPlayer().isWhite()) {
+            victoryMsg = "    Oida\n"+ appendSpaces(game.getPlayer2().name) + "\n  AI vant!";
         } else if(result1 == Result.LOSS) {
             victoryMsg = "Gratulerer\n" + appendSpaces(game.getPlayer2().name) + "\n  du vant!";
         } else if(result1 == Result.DRAW) {
@@ -350,7 +352,8 @@ public class PlayState extends State {
             gsm.set(new ShowStatsState(gsm, game.getPlayer1(), playerData));
         }
 
-        if (result1 == Result.WIN) { // assume white is player TODO make code know which player is AI
+        if (!game.isAi() || result1 == Result.WIN && !game.getAiPlayer().isWhite()
+                || result1 == Result.LOSS && game.getAiPlayer().isWhite()) { // won against player? spawn confetti
             TextureRegion currentFrame = confettiAnimation.getKeyFrame(frameCounter, true);
             batch.draw(currentFrame, confettiX, confettiY);
             if (currentFrame.equals(finalConfettiImg)) {

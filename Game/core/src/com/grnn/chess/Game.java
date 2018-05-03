@@ -103,7 +103,10 @@ public class    Game {
     public ArrayList<Position> getCaptureMoves() {
         return captureMoves;
     }
+
     public boolean isAi() {return aiPlayer != null;}
+
+    public AI getAiPlayer() {return aiPlayer;}
 
     /**
      * ai's move method
