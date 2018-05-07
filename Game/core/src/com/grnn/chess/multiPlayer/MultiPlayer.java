@@ -1,12 +1,18 @@
 package com.grnn.chess.multiPlayer;
 
+import com.grnn.chess.Actors.Player;
+import com.grnn.chess.Move;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MultiPlayer {
+
+    int GameID;
 
     Connection conn;
     /**
@@ -23,10 +29,10 @@ public class MultiPlayer {
     }
 
     /**
-     * Return a list of open peers
+     * Return a list of gameId, Player1Id and Player2Id from db
      * @return
      */
-    public ArrayList<String> getGames() {
+    public ArrayList<ArrayList<String>> getGames() {
         ArrayList<String> availableGames = new ArrayList<String>();
         try{
             String query = "SELECT * FROM Games WHERE Available='"+true+"';";
@@ -43,10 +49,10 @@ public class MultiPlayer {
 
 
     /**
-     * Create a new Peer, should upload ip-adress to database and open a socket.
+     * Create a new Game in the database, adds player1
      * @return true if the connection was successful, otherwise false.
      */
-    public boolean createPeer(){
+    public boolean createGame(Player player1){
         //TODO create peer
         try {
             String query = "INSERT INTO Games (IPAdress, Avalible) VALUES ('"+getIP()+"', '"+"');";
@@ -62,46 +68,45 @@ public class MultiPlayer {
     /**
      * Connect to peer
      */
-    public boolean connectToPeer(int nr){
+    public boolean joinGame(Player player2, String gameId ){
         String Ip = getPeerIP(nr);
 
     }
 
+    /**
+     * Make a move in the game with this.gameid
+     * @param move
+     * @return true if succesfull, otherwise false
+     */
+    public boolean makeMove(Move move){
+
+    }
 
     /**
-     * Close the connection and remove the game from the database
+     * Waiting for player 2 to join your game
+     * @return true when player 2 joins, never false
      */
-    public void closeConnection(int nr){
-        //TODO close socket
-        //Remove the game from the database
-        try {
-            String sql = "DELETE FROM Games WHERE GameID='"+nr+"';";
-            Statement stmt = conn.createStatement();
-            boolean res = stmt.execute(sql);
-        }catch(SQLException e){
+    public boolean player2Connected(){
+        while(true){
 
         }
     }
 
     /**
-     * Returns the ip of this machine
+     * Waiting for opponents move
+     * @return the opponents move
      */
-    public String getIP(){
-        //TODO
-        return "localhost";
-    }
-    /**
-     *
-     */
-    public String getPeerIP(int nr){
-        try{
-            String query = "SELECT IPAdress FROM Games WHERE GameID='"+nr+"';";
-            Statement stmt = conn.createStatement();
-            ResultSet res = stmt.executeQuery(query);
-            String ip = res.getString("IPAdress");
-            return ip;
-        }catch(SQLException e) {
-            return null;
+    public Move waitForMove(){
+        while (true) {
+            //check if the move changed
         }
     }
+
+    /**
+     * Set GameActive to False,
+     */
+    public void endGame(){
+
+    }
+
 }
