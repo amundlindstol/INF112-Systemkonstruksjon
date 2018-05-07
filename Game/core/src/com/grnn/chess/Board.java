@@ -48,17 +48,18 @@ public class Board {
         AbstractChessPiece piece = getPieceAt(startPos);
         AbstractChessPiece capturePiece = getPieceAt(endPos);
 
-        //if (isValidMove(startPos, endPos)) {
-        setPiece(piece, endPos);
-        setPiece(null, startPos);
-        piece.move();
-        moveHistory.add(new Move(endPos, startPos, piece));
-        enPassant();
+       // if (isValidMove(startPos, endPos)) {
+            setPiece(piece, endPos);
+            setPiece(null, startPos);
+            piece.move();
+            moveHistory.add(new Move(endPos, startPos, piece));
+            enPassant();
 
-        if(capturePiece == null || piece instanceof Pawn) {
-            halfmoveNumber = 0;
-        } else {
-            halfmoveNumber++;
+            if (capturePiece == null || piece instanceof Pawn) {
+                halfmoveNumber = 0;
+            } else {
+                halfmoveNumber++;
+         //   }
         }
     }
 
