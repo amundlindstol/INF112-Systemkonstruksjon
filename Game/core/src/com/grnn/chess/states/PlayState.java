@@ -73,7 +73,28 @@ public class PlayState extends State {
      * @param player1  Should always be player
      * @param player2  Either AI or Player
      */
+
     public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
+        this(gsm, aiPlayer, player1, player2, playerData, false, null);
+    }
+
+    /**
+     *
+     * @param gsm
+     * @param aiPlayer
+     * @param player1
+     * @param player2
+     * @param playerData
+     * @param onlineGame true if game is online
+     * @param OpponentName name of the opponent
+     */
+    public PlayState(GameStateManager gsm,
+                     int aiPlayer,
+                     IActor player1,
+                     IActor player2,
+                     PlayerData playerData,
+                     boolean onlineGame,
+                     String OpponentName) {
         super(gsm);
 
         if( player1 instanceof Player) {
@@ -272,7 +293,6 @@ public class PlayState extends State {
                     } else {
                         board.movePiece(piecePos, prevMove);
                     }
-
                 }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();

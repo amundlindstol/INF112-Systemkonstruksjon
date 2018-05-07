@@ -51,7 +51,6 @@ public class    Game {
         if(player2 instanceof Player) {
             this.player2 = player2;
             player2 = new Player("Spiller2", "asd", !player1.isWhite());
-
         } else {
             aiPlayer = (AI) player2;
         }
