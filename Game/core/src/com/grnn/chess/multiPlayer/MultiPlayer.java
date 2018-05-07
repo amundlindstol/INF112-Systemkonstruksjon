@@ -41,12 +41,14 @@ public class MultiPlayer implements IActor {
             while(res.next()){
                 ArrayList<String> game = new ArrayList<String>();
                 Integer gameId = res.getInt("GameID");
+                System.out.println(gameId);
                 String player1 = res.getString("Player1ID");
+                System.out.println(player1);
                 game.add(Integer.toString(gameId));
                 game.add(player1);
                 availableGames.add(game);
             }
-            return null;//return availableGames;
+            return availableGames;
         }catch(SQLException e){
             return null;
         }

@@ -244,4 +244,11 @@ public class PlayerData {
         }
     }
 
+	/**
+	 * get the connection
+	 */
+	public Connection getConnection(){
+		return conn;
+	}
+
 }

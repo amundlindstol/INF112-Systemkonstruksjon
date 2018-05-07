@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Actors.Player;
+import com.grnn.chess.PlayerData;
 import com.grnn.chess.multiPlayer.MultiPlayer;
 //import com.grnn.chess.multiPlayer.MultiPlayer;
 
@@ -28,10 +29,12 @@ public class SelectPlayerOnlineState extends State {
     private int yPos;
     private ArrayList<ArrayList<String>> gameList;
     private BitmapFont fontText;
+    private PlayerData playerdata;
 
-    public SelectPlayerOnlineState(GameStateManager gsm, Player currentPlayer) {
+    public SelectPlayerOnlineState(GameStateManager gsm, Player currentPlayer, PlayerData playerdata) {
         super(gsm);
         this.currentPlayer = currentPlayer;
+        this.playerdata = playerdata;
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
@@ -47,12 +50,8 @@ public class SelectPlayerOnlineState extends State {
         stage.addActor(menuButton);
         stage.addActor(createGameBtn);
 
-//        multiplayer = new MultiPlayer();
-        gameList = new ArrayList<ArrayList<String>>();
-        gameList.add(new ArrayList<String>());
-        gameList.get(0).add("1");
-        gameList.get(0).add("Knut Roger");
-        gameList.get(0).add("player2ID");
+        multiplayer = new MultiPlayer(playerdata.getConnection());
+        gameList = multiplayer.getGames();
         fontText = new BitmapFont();
     }
 
@@ -61,14 +60,15 @@ public class SelectPlayerOnlineState extends State {
         if (menuButton.isPressed()) {
 
         } else if (createGameBtn.isPressed()) {
-//            gsm.set(gsm, new WaitForPlayerState(gsm, currentPlayer));
+              multiplayer.createGame(currentPlayer);
+              gsm.set(new WaitForPlayerState(gsm, currentPlayer, playerdata));
         }
     }
 
     @Override
     public void update(float dt) {
         handleInput();
-//        gameList = multiplayer.getGames();
+        gameList = multiplayer.getGames();
     }
 
     @Override
@@ -76,10 +76,10 @@ public class SelectPlayerOnlineState extends State {
         sb.begin();
         sb.draw(background, 0,0);
 
-        if(gameList.size() > 0) {
+        if(gameList!=null && !gameList.isEmpty()) {
 
             for (int i = 0, k = 350; i < gameList.size(); i++, k -= 30) {
-                for (int j = 0, o = 470; j < gameList.get(i).size()-1; j++, o += 100) {
+                for (int j = 0, o = 470; j < gameList.get(i).size(); j++, o += 100) {
                     fontText.draw(sb, gameList.get(i).get(j), o, k);
                 }
             }
@@ -93,6 +93,7 @@ public class SelectPlayerOnlineState extends State {
 
     @Override
     public void dispose() {
+        multiplayer.endGame();
         stage.dispose();
         background.dispose();
         fontText.dispose();
