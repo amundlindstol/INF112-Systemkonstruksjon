@@ -435,20 +435,20 @@ public class Board {
     /**
      * @return A list of all empty squares on the board. If selected piece is a pawn, the 1st or 8th rank is ignored.
      */
-    public ArrayList<Position> findEmptySquares(AbstractChessPiece piece) {
+    public ArrayList<Position> findEmptySquares(String piece) {
         ArrayList<Position> emptySquares = new ArrayList<Position>();
         int s=0;
         int end=size;
-        if (piece instanceof Pawn) {
-            if (piece.isWhite())
+        if (piece=="P")
                 end--;
-            else s++;
-        }
+        if (piece=="p")
+            s++;
+
 
         for (int i=s; i < end; i++) {
             for (int j = 0; j < size; j++) {
                 Position pos = new Position(i, j);
-                if (getPieceAt(pos).equals(null))
+                if (getPieceAt(pos)==null)
                     emptySquares.add(pos);
             }
         }

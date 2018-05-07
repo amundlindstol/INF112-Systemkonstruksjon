@@ -24,6 +24,8 @@ public class    Game {
     private ArrayList<Position> castlingMoves;
     private AbstractChessPiece potentialPiece;
     private Move aiMove;
+    public boolean fromPocket;
+    public String selectedFromPocket;
 
     //Helper-ai
     private AI helper;
@@ -93,6 +95,7 @@ public class    Game {
         return turn;
     }
     public Boolean pieceHasNotBeenSelected(){
+        if (selectedFromPocket==null) return false;
         return (firstPiece==null);
     }
 
@@ -140,7 +143,7 @@ public class    Game {
      */
     public void findPossibleMoves(AbstractChessPiece piece){
         if (piece.isWhite()==turn) {
-            validMoves = board.findEmptySquares(piece);
+            validMoves = board.findEmptySquares(selectedFromPocket);
             firstPiece = piece;
         }
     }
@@ -164,7 +167,9 @@ public class    Game {
     }
 
     public boolean movePieceFromPocketTo(Position secondPosition){
+        validMoves = board.findEmptySquares(selectedFromPocket);
         if (validMoves.contains(secondPosition)) {
+            firstPiece = createNewPieceFromPocket();
             board.putNewPieceOnBoard(firstPiece, secondPosition);
             if (!handleCheckChecking(secondPosition))
                 return false;
@@ -176,16 +181,31 @@ public class    Game {
         return true;
     }
 
+    public AbstractChessPiece createNewPieceFromPocket(){
+        AbstractChessPiece newPiece = null;
+        char c = selectedFromPocket.toLowerCase().charAt(0);
+        switch (c){
+            case 'p': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Pawn(true) : new Pawn(false);}
+            case 'b': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Bishop(true) : new Bishop(false);}
+            case 'h': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Knight(true) : new Knight(false);}
+            case 'r': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Rook(true) : new Rook(false);}
+            case 'q': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Queen(true) : new Queen(false);}
+        }
+        return newPiece;
+    }
+
     public boolean moveFirstSelectedPieceTo(Position secondPosition){
-        potentialPiece = board.getPieceAt(secondPosition);
-        Boolean validMove = validMoves.contains(secondPosition) || captureMoves.contains(secondPosition) || castlingMoves.contains(secondPosition);
-        if(potentialPiece != null) {
-                if(validMove) {
+        if (selectedFromPocket!=null) return movePieceFromPocketTo(secondPosition);
+        else {
+            potentialPiece = board.getPieceAt(secondPosition);
+            Boolean validMove = validMoves.contains(secondPosition) || captureMoves.contains(secondPosition) || castlingMoves.contains(secondPosition);
+            if (potentialPiece != null) {
+                if (validMove) {
                     board.removePiece(potentialPiece);
                     removed = true;
                     updatePieceCounter(potentialPiece);
 
-                    if(turn) playSound("takePiece.wav");
+                    if (turn) playSound("takePiece.wav");
 
                     else playSound("lostPiece.wav");
                     //board.movePiece(board.getPosition(firstPiece), secondPosition);
@@ -194,7 +214,7 @@ public class    Game {
                         return false;
                     turn = !turn;
                     reset();
-                } else if(potentialPiece.isWhite()==turn){
+                } else if (potentialPiece.isWhite() == turn) {
                     reset();
                     selectFirstPiece(secondPosition);
                     removed = false;
@@ -202,23 +222,25 @@ public class    Game {
                     removed = false;
                     reset();
                 }
-        } else if(potentialPiece == null && validMove){
-            //board.movePiece(board.getPosition(firstPiece), secondPosition);
-            firstPiece.startMoving();
-            if (!handleCheckChecking(secondPosition))
-                return false;
-            reset();
-            turn = !turn;
-            removed = false;
-        } else {
-            reset();
-            removed = false;
+            } else if (potentialPiece == null && validMove) {
+                //board.movePiece(board.getPosition(firstPiece), secondPosition);
+                firstPiece.startMoving();
+                if (!handleCheckChecking(secondPosition))
+                    return false;
+                reset();
+                turn = !turn;
+                removed = false;
+            } else {
+                reset();
+                removed = false;
+            }
         }
         return true;
     }
 
     private void reset(){
         firstPiece = null;
+        selectedFromPocket = null;
         validMoves.clear();
         captureMoves.clear();
         castlingMoves.clear();
@@ -258,7 +280,7 @@ public class    Game {
         Position kingPos = board.getKingPos(!turn);
         if(kingPos != null){
             Board bc = board.copyBoard(board);
-            if (!firstPiece.fromPocket)
+            if (fromPocket)
                 bc.movePiece(firstPiece.getPosition(board), secondPosition);
             King king = (King) board.getPieceAt(kingPos);
             king.isInCheck = king.willThisKingBePutInCheckByMoveTo(bc, kingPos);
