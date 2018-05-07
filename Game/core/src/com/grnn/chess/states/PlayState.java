@@ -15,6 +15,7 @@ import com.grnn.chess.*;
 import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
+import com.grnn.chess.multiPlayer.MultiPlayer;
 import com.grnn.chess.objects.*;
 //import javafx.geometry.Pos;
 
@@ -66,6 +67,7 @@ public class PlayState extends State {
 
     private Player player1;
     private Player player2;
+    private MultiPlayer mpOpponent;
 
     /**
      * @param gsm      Game state
@@ -73,14 +75,45 @@ public class PlayState extends State {
      * @param player1  Should always be player
      * @param player2  Either AI or Player
      */
-    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
-        super(gsm);
 
-        if( player1 instanceof Player) {
-            this.player1 = (Player) player1;
-        }
-        if(player2 instanceof Player) {
-            this.player2 = (Player) player2;
+    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
+        this(gsm, aiPlayer, player1, player2, playerData, false, null);
+    }
+
+    /**
+     *
+     * @param gsm same as above
+     * @param aiPlayer
+     * @param player1
+     * @param player2
+     * @param playerData
+     * @param onlineGame true if game is online
+     * @param opponent name of the opponent
+     */
+    public PlayState(GameStateManager gsm,
+                     int aiPlayer,
+                     IActor player1,
+                     IActor player2,
+                     PlayerData playerData,
+                     boolean onlineGame,
+                     MultiPlayer opponent) {
+        super(gsm);
+        mpOpponent = opponent;
+
+
+        if(onlineGame) {
+            if(opponent.isWhite()) {
+                player2 = player1;
+            } else {
+                player1 = player1;
+            }
+        } else {
+            if (player1 instanceof Player) {
+                this.player1 = (Player) player1;
+            }
+            if (player2 instanceof Player) {
+                this.player2 = (Player) player2;
+            }
         }
 
         //textures
@@ -107,6 +140,11 @@ public class PlayState extends State {
         player1Name = ((Player) player1).name;
         if (player2 instanceof Player) {
             player2Name = ((Player) player2).name;
+        } else if (onlineGame) {
+            if(opponent.isWhite()) {
+                player1Name = opponent.getOpponent(player1Name);
+                player2Name = ((Player) player1).name;
+            }
         } else {
             player2Name = "Datamaskin";
         }
@@ -165,13 +203,6 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
 
-        if (removedPieces[5] == 1) {
-            text = "Du vant " + player1Name + ", gratulerer!";
-            activegame = false;
-        } else if (removedPieces[11] == 1) {
-            text = "Du vant " + player1Name + ", du må nok øve mer..."; //TODO wrong output
-            activegame = false;
-        }
 
         fontText.draw(batch, text, 645, 334);
 
@@ -203,9 +234,9 @@ public class PlayState extends State {
             if (piece != null && piece.isMoving()) { //should this piece change its location?
                 if (game.isAi() && game.getTurn()) { //ai piece
                     if (prevAImove == null) prevAImove = game.getAiMove();
-                    animatePiece(piece, piecePos, pos, true);
+                    animatePiece(piece, piecePos, pos, true, game.getTurn());
                 } else
-                    animatePiece(piece, piecePos, pos, false);
+                    animatePiece(piece, piecePos, pos, false, game.getTurn());
             }
 
             if (piece != null) {
@@ -242,11 +273,21 @@ public class PlayState extends State {
                 }
             }
         }
+
+        if(mpOpponent != null && mpOpponent.isWhite() == game.getTurn()) {
+            Move mpMove = mpOpponent.nextMove();
+            if(mpMove != null) {
+
+                AbstractChessPiece movingPiece = board.getPieceAt(mpMove.getFromPos());
+                board.movePiece(mpMove.getFromPos(), mpMove.getToPos());
+                movingPiece.startMoving();
+            }
+        }
         stage.draw();
     }
 
 
-    private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
+    private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai, boolean isWhite) {
         if (pieceIsMoving && piece.isMoving()) {
             if (animationIndex == animationPath.size() && animationPath.size() > 0) { //reached end of list
                 piece.stopMoving();
@@ -272,7 +313,6 @@ public class PlayState extends State {
                     } else {
                         board.movePiece(piecePos, prevMove);
                     }
-
                 }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
@@ -292,6 +332,7 @@ public class PlayState extends State {
             animationIndex = 0;
             game.playSound("movePiece.wav");
         }
+
     }
 
     private void generateAnimationPath(Position startPos, Position endPos) {

@@ -3,6 +3,7 @@ package com.grnn.chess;
 import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
+import com.grnn.chess.multiPlayer.MultiPlayer;
 import com.grnn.chess.objects.*;
 //import javafx.geometry.Pos;
 
@@ -37,12 +38,17 @@ public class    Game {
     private int gameId;
 
     static int currid = 1;
+    private MultiPlayer onlinePlayer;
+
 
     public static void setCurrid(int id) {
         currid = id;
     }
 
-    public Game(int aiLevel, IActor player1, IActor player2){
+    public Game(int aiLevel, IActor player1, IActor player2) {
+        this(aiLevel, player1, player2, null);
+    }
+    public Game(int aiLevel, IActor player1, IActor player2, MultiPlayer multiPlayer){
         if(gameHasIllegalArguments(player1, player2)) {
             //throw new IllegalArgumentException("Player not initialized");
         }
@@ -51,9 +57,12 @@ public class    Game {
         if(player2 instanceof Player) {
             this.player2 = player2;
             player2 = new Player("Spiller2", "asd", !player1.isWhite());
-
         } else {
             aiPlayer = (AI) player2;
+        }
+
+        if(multiPlayer != null) {
+            onlinePlayer = multiPlayer;
         }
 
         gameId = ++currid;
