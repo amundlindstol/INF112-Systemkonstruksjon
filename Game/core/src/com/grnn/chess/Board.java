@@ -478,6 +478,4 @@ public class Board {
         }
         return listOfPieces;
     }
-
-
 }

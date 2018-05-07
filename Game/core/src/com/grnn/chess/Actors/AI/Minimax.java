@@ -57,6 +57,8 @@ public class Minimax implements IA<Move> {
      * @return Best score
      */
     private double minimax(Iterable<Move> initialMoves, final int depth, final int who) {
+        System.out.println("depth: " + depth);
+        System.out.println(board.toString());
         boolean isWhite;
         if(who > 0) {
             isWhite = true;

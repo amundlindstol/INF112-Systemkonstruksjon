@@ -24,12 +24,14 @@ public class Pawn extends AbstractChessPiece {
 		return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
 	}
 
+	
 	@Override
 	public ArrayList<Position> getValidMoves(Board board) {
 		return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
 	}
-
+	
 	public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
+	//public ArrayList<Position> getValidMoves(Board board){
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 		//Get the position of the pawn
 		Position pawnPos = getPosition(board);

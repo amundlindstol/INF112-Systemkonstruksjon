@@ -252,6 +252,7 @@ public class PlayState extends State {
                 piece.stopMoving();
                 pieceIsMoving = false;
                 //THIS IS WHERE THE ACTUAL MOVING HAPPENS
+
                 if (ai) {
                     if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevAImove.getToPos())) {
                         board.movePiece(piecePos, prevAImove.getToPos());
@@ -343,7 +344,7 @@ public class PlayState extends State {
         Boolean notSelected = game.pieceHasNotBeenSelected();
         if (resignBtn.isPressed() && activegame) {
                 game.endGame(Result.DRAW, Result.DRAW,playerData);
-                gsm.set(new ShowStatsState(gsm, player1, playerData));
+                gsm.set(new GameDoneState(gsm, Result.DRAW, Result.DRAW, game,playerData));
         }
         if(helpBtn.isPressed() && activegame){
             helpingMove = game.getHelpingMove();
@@ -372,11 +373,18 @@ public class PlayState extends State {
                 helpingMove = null;
             }
         } else if (!activegame) { // TODO: Actual result
-            Result result1 = Result.DRAW;
-            Result result2 = Result.DRAW;
 
+            Result result1;
+            Result result2;
+            if(game.getTurn()) {
+                result1 = Result.LOSS;
+                result2 = Result.WIN;
+            }else{
+                result1 = Result.WIN;
+                result2 = Result.LOSS;
+            }
             game.endGame(result1, result2,playerData);
-            gsm.set(new ShowStatsState(gsm,player1,playerData));
+            gsm.set(new GameDoneState(gsm,result1,result2,game,playerData));
         }
     }
 
