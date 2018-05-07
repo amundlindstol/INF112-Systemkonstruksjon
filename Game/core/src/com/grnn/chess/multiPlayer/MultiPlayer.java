@@ -17,6 +17,7 @@ public class MultiPlayer implements IActor {
     Player thisIsThePlayerAtThisComputer;
     boolean thisIsTheColorOfThePlayerAtThisComputer;
     Connection conn;
+    Move lastMove;
 
     /**
      * Constructur of multiplayer, Should either connect to a Peer of create a new peer
@@ -148,6 +149,29 @@ public class MultiPlayer implements IActor {
             return null;
         }
     }
+
+    public Move nextMove() {
+        String from = "";
+        String to = "";
+        try {
+            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = 'true';";
+            Statement stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            if(res.next()){
+                from = res.getString("FromMove");
+                to = res.getString("ToMove");
+                Move curMove = new Move(from, to);
+                if(curMove.equals(lastMove)) {
+                    return null;
+                }
+                return curMove;
+            }
+        }catch(SQLException e){
+            return null;
+        }
+        return null;
+    }
+
 
     /**
      * Set GameActive to False,

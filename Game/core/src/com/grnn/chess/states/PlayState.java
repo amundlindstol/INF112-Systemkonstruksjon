@@ -142,7 +142,7 @@ public class PlayState extends State {
             player2Name = ((Player) player2).name;
         } else if (onlineGame) {
             if(opponent.isWhite()) {
-                player1Name = opponent.getOpponentName(player1Name);
+                player1Name = opponent.getOpponent(player1Name);
                 player2Name = ((Player) player1).name;
             }
         } else {
@@ -273,6 +273,16 @@ public class PlayState extends State {
                 }
             }
         }
+
+        if(mpOpponent != null && mpOpponent.isWhite() == game.getTurn()) {
+            Move mpMove = mpOpponent.nextMove();
+            if(mpMove != null) {
+
+                AbstractChessPiece movingPiece = board.getPieceAt(mpMove.getFromPos());
+                board.movePiece(mpMove.getFromPos(), mpMove.getToPos());
+                movingPiece.startMoving();
+            }
+        }
         stage.draw();
     }
 
@@ -293,8 +303,6 @@ public class PlayState extends State {
                     } else {
                         board.movePiece(piecePos, prevAImove.getToPos());
                     }
-                } else if (mpOpponent != null && mpOpponent.isWhite() == isWhite) {
-
                 } else {
                     if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)) {
                         board.movePiece(piecePos, prevMove);
@@ -324,6 +332,7 @@ public class PlayState extends State {
             animationIndex = 0;
             game.playSound("movePiece.wav");
         }
+
     }
 
     private void generateAnimationPath(Position startPos, Position endPos) {
