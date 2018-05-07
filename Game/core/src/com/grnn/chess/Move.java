@@ -47,6 +47,15 @@ public class Move {
     public AbstractChessPiece getPiece() { return piece; }
 
     @Override
+    public boolean equals(Object other){
+        if(other == null ) return false;
+        Move otherMove = (Move) other;
+        boolean posequals = (this.fromPos.equals(otherMove.toPos) && this.toPos.equals(otherMove.fromPos));
+        if(this.piece==null && otherMove==null) return posequals;
+        else return (posequals && this.piece.equals(otherMove.piece));
+
+    }
+    @Override
     public String toString() {
         return "Move from pos " + fromPos + " to " + toPos + " with piece: " + piece;
 
