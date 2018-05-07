@@ -15,6 +15,7 @@ import com.grnn.chess.*;
 import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
+import com.grnn.chess.multiPlayer.MultiPlayer;
 import com.grnn.chess.objects.*;
 //import javafx.geometry.Pos;
 
@@ -66,6 +67,7 @@ public class PlayState extends State {
 
     private Player player1;
     private Player player2;
+    private MultiPlayer mpOpponent;
 
     /**
      * @param gsm      Game state
@@ -80,13 +82,13 @@ public class PlayState extends State {
 
     /**
      *
-     * @param gsm
+     * @param gsm same as above
      * @param aiPlayer
      * @param player1
      * @param player2
      * @param playerData
      * @param onlineGame true if game is online
-     * @param OpponentName name of the opponent
+     * @param opponent name of the opponent
      */
     public PlayState(GameStateManager gsm,
                      int aiPlayer,
@@ -94,14 +96,24 @@ public class PlayState extends State {
                      IActor player2,
                      PlayerData playerData,
                      boolean onlineGame,
-                     String OpponentName) {
+                     MultiPlayer opponent) {
         super(gsm);
+        mpOpponent = opponent;
 
-        if( player1 instanceof Player) {
-            this.player1 = (Player) player1;
-        }
-        if(player2 instanceof Player) {
-            this.player2 = (Player) player2;
+
+        if(onlineGame) {
+            if(opponent.isWhite()) {
+                player2 = player1;
+            } else {
+                player1 = player1;
+            }
+        } else {
+            if (player1 instanceof Player) {
+                this.player1 = (Player) player1;
+            }
+            if (player2 instanceof Player) {
+                this.player2 = (Player) player2;
+            }
         }
 
         //textures
@@ -128,6 +140,11 @@ public class PlayState extends State {
         player1Name = ((Player) player1).name;
         if (player2 instanceof Player) {
             player2Name = ((Player) player2).name;
+        } else if (onlineGame) {
+            if(opponent.isWhite()) {
+                player1Name = opponent.getOpponentName(player1Name);
+                player2Name = ((Player) player1).name;
+            }
         } else {
             player2Name = "Datamaskin";
         }
@@ -186,13 +203,6 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
 
-        if (removedPieces[5] == 1) {
-            text = "Du vant " + player1Name + ", gratulerer!";
-            activegame = false;
-        } else if (removedPieces[11] == 1) {
-            text = "Du vant " + player1Name + ", du må nok øve mer..."; //TODO wrong output
-            activegame = false;
-        }
 
         fontText.draw(batch, text, 645, 334);
 
@@ -224,9 +234,9 @@ public class PlayState extends State {
             if (piece != null && piece.isMoving()) { //should this piece change its location?
                 if (game.isAi() && game.getTurn()) { //ai piece
                     if (prevAImove == null) prevAImove = game.getAiMove();
-                    animatePiece(piece, piecePos, pos, true);
+                    animatePiece(piece, piecePos, pos, true, game.getTurn());
                 } else
-                    animatePiece(piece, piecePos, pos, false);
+                    animatePiece(piece, piecePos, pos, false, game.getTurn());
             }
 
             if (piece != null) {
@@ -267,7 +277,7 @@ public class PlayState extends State {
     }
 
 
-    private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
+    private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai, boolean isWhite) {
         if (pieceIsMoving && piece.isMoving()) {
             if (animationIndex == animationPath.size() && animationPath.size() > 0) { //reached end of list
                 piece.stopMoving();
@@ -283,6 +293,8 @@ public class PlayState extends State {
                     } else {
                         board.movePiece(piecePos, prevAImove.getToPos());
                     }
+                } else if (mpOpponent != null && mpOpponent.isWhite() == isWhite) {
+
                 } else {
                     if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)) {
                         board.movePiece(piecePos, prevMove);

@@ -1,5 +1,6 @@
 package com.grnn.chess.multiPlayer;
 
+import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.Move;
 
@@ -10,19 +11,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MultiPlayer {
+public class MultiPlayer implements IActor {
 
     int GameID;
-
     Connection conn;
     /**
      * Constructur of multiplayer, Should either connect to a Peer of create a new peer
      */
+
     public MultiPlayer(boolean peerOne){{
         if(peerOne){
-            createPeer();
+            //createPeer();
         }else{
-            createPeer();
+            //createPeer();
         }
     }
 
@@ -41,7 +42,7 @@ public class MultiPlayer {
             while(res.next()){
                 availableGames.add(res.getString("GameId"));
             }
-            return availableGames;
+            return null;//return availableGames;
         }catch(SQLException e){
             return null;
         }
@@ -55,9 +56,9 @@ public class MultiPlayer {
     public boolean createGame(Player player1){
         //TODO create peer
         try {
-            String query = "INSERT INTO Games (IPAdress, Avalible) VALUES ('"+getIP()+"', '"+"');";
+            //String query = "INSERT INTO Games (IPAdress, Avalible) VALUES ('"+getIP()+"', '"+"');";
             Statement stmt = conn.createStatement();
-            int res = stmt.executeUpdate(query);
+            //int res = stmt.executeUpdate(query);
         }catch(SQLException e){
             return false;
         }
@@ -69,8 +70,8 @@ public class MultiPlayer {
      * Connect to peer
      */
     public boolean joinGame(Player player2, String gameId ){
-        String Ip = getPeerIP(nr);
-
+        //String Ip = getPeerIP(nr);
+        return false;
     }
 
     /**
@@ -79,7 +80,7 @@ public class MultiPlayer {
      * @return true if succesfull, otherwise false
      */
     public boolean makeMove(Move move){
-
+        return false;
     }
 
     /**
