@@ -182,12 +182,20 @@ public class Board {
     public void setPiece(AbstractChessPiece piece, int x, int y) {
         if (pawnCanPromote(piece, y)) {
             piece = new Queen(piece.isWhite());
+            System.out.println("Trying to promote");
+        }
+        if(y >= 7) {
+            System.out.println("x: " + x + " y: " + y + " piece:" + piece);
+            System.out.println(this.toString());
         }
         grid.get(y).set(x, piece);
     }
 
     private boolean pawnCanPromote(AbstractChessPiece piece, int y) {
+        
         if (piece instanceof Pawn) {
+            if(y == 7)
+                System.out.println("debug");
             if ((piece.isWhite() && y == size() - 1)
                     || (!piece.isWhite() && y == 0)) {
                 return true;
@@ -366,6 +374,9 @@ public class Board {
         for (int i = 0; i < possibleMoves.size(); i++) {
             Board boardCopy = copyBoard();
             Position p = piece.getPosition(this);
+            System.out.println("index: " + i + " trying to move to: " + possibleMoves.get(i));
+            if(piece.isWhite() && p.getY() >= 6)
+                System.out.println("Piece pos: " + p);
             boardCopy.setPiece(piece, possibleMoves.get(i));
             boardCopy.setPiece(null, p);
             if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite()))) {

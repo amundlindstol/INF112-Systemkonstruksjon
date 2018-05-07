@@ -35,6 +35,7 @@ public class Pawn extends AbstractChessPiece {
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 		//Get the position of the pawn
 		Position pawnPos = getPosition(board);
+		System.out.println("is white: " + isWhite());
 		if(isWhite){
 			if(board.getPieceAt(pawnPos.north())==null) {
 				if (!hasMoved && board.getPieceAt(pawnPos.north(2)) == null) {
