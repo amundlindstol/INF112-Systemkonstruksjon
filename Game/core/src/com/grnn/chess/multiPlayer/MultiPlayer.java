@@ -61,7 +61,7 @@ public class MultiPlayer implements IActor {
             String query = "INSERT INTO GameManager (Player1ID, GameActive, Turn) VALUES ('"+player1.name+"', 'true', 'true');";
             Statement stmt = conn.createStatement();
             int res = stmt.executeUpdate(query);
-            thisIsThePlayerAtThisComputer = player1.name;
+            thisIsThePlayerAtThisComputer = player1;
             thisIsTheColorOfThePlayerAtThisComputer = true;
         }catch(SQLException e){
             return false;
