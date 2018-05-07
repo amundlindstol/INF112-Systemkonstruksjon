@@ -14,6 +14,32 @@ public class Move {
         this.piece = piece;
     }
 
+    public Move(String from, String to){
+        int x = from.charAt(0)-'0';
+        int y = from.charAt(1)-'0';
+        this.fromPos = new Position(x,y);
+
+        x = from.charAt(0)-'0';
+        y = from.charAt(1)-'1';
+        this.toPos = new Position(x,y);
+
+        piece = null;
+    }
+
+    public String getFromPosInDatabaseFormat(){
+        int x = fromPos.getX();
+        int y = fromPos.getY();
+
+        return Integer.toString(x)+Integer.toString(y);
+    }
+
+    public String getToPosInDatabaseFormat(){
+        int x = toPos.getX();
+        int y = toPos.getY();
+
+        return Integer.toString(x)+Integer.toString(y);    }
+
+
     public Position getToPos(){ return toPos; }
 
     public Position getFromPos() { return fromPos; }
