@@ -50,12 +50,8 @@ public class SelectPlayerOnlineState extends State {
         stage.addActor(menuButton);
         stage.addActor(createGameBtn);
 
-        multiplayer = new MultiPlayer(playerData);
-        gameList = new ArrayList<ArrayList<String>>();
-        gameList.add(new ArrayList<String>());
-        gameList.get(0).add("1");
-        gameList.get(0).add("Knut Roger");
-        gameList.get(0).add("player2ID");
+        multiplayer = new MultiPlayer(playerData.getConnection());
+        gameList = multiplayer.getGames();
         fontText = new BitmapFont();
     }
 
@@ -82,7 +78,7 @@ public class SelectPlayerOnlineState extends State {
         if(gameList.size() > 0) {
 
             for (int i = 0, k = 350; i < gameList.size(); i++, k -= 30) {
-                for (int j = 0, o = 470; j < gameList.get(i).size()-1; j++, o += 100) {
+                for (int j = 0, o = 470; j < gameList.get(i).size(); j++, o += 100) {
                     fontText.draw(sb, gameList.get(i).get(j), o, k);
                 }
             }
