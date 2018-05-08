@@ -14,10 +14,12 @@ import com.grnn.chess.multiPlayer.MultiPlayer;
 
 public class WaitForPlayerState extends State{
 
+    private boolean gameIsCreated;
     private Skin skin;
     private Stage stage;
     private Texture background;
     private Player currentPlayer;
+    private String player2Name;
     private TextButton menuButton;
     private int xPos;
     private int yPos;
@@ -37,6 +39,9 @@ public class WaitForPlayerState extends State{
 
         this.playerData = playerData;
         this.currentPlayer = currentPlayer;
+
+        this.multiPlayer = new MultiPlayer(playerData.getConnection());
+        gameIsCreated = multiPlayer.createGame(currentPlayer);
 
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
@@ -90,11 +95,16 @@ public class WaitForPlayerState extends State{
         if (menuButton.isPressed()) {
             gsm.set(new StartGameState(gsm, currentPlayer, playerData));
         }
+
     }
 
     @Override
     public void update(float dt) {
         handleInput();
+        player2Name = multiPlayer.player2Connected();
+        if (player2Name.length() > 0) {
+            gsm.set(new PlayState(gsm, 0, currentPlayer, null, playerData, true, multiPlayer));
+        }
     }
 
     @Override

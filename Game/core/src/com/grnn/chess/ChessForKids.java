@@ -5,8 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.grnn.chess.Actors.Player;
 import com.grnn.chess.states.GameStateManager;
 import com.grnn.chess.states.MainMenuState;
+import com.grnn.chess.states.SelectPlayerOnlineState;
 
 public class ChessForKids extends ApplicationAdapter {
 	GameStateManager gsm;
