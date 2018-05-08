@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Actors.Player;
+import com.grnn.chess.PlayerData;
 import com.grnn.chess.multiPlayer.MultiPlayer;
 //import com.grnn.chess.multiPlayer.MultiPlayer;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 public class SelectPlayerOnlineState extends State {
 
+    PlayerData playerData;
     private MultiPlayer multiplayer;
     private Skin skin;
     private Stage stage;
@@ -29,9 +31,10 @@ public class SelectPlayerOnlineState extends State {
     private ArrayList<ArrayList<String>> gameList;
     private BitmapFont fontText;
 
-    public SelectPlayerOnlineState(GameStateManager gsm, Player currentPlayer) {
+    public SelectPlayerOnlineState(GameStateManager gsm, Player currentPlayer, PlayerData playerData) {
         super(gsm);
         this.currentPlayer = currentPlayer;
+        this.playerData = playerData;
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
@@ -47,7 +50,7 @@ public class SelectPlayerOnlineState extends State {
         stage.addActor(menuButton);
         stage.addActor(createGameBtn);
 
-//        multiplayer = new MultiPlayer();
+        multiplayer = new MultiPlayer(playerData);
         gameList = new ArrayList<ArrayList<String>>();
         gameList.add(new ArrayList<String>());
         gameList.get(0).add("1");
@@ -61,14 +64,14 @@ public class SelectPlayerOnlineState extends State {
         if (menuButton.isPressed()) {
 
         } else if (createGameBtn.isPressed()) {
-//            gsm.set(gsm, new WaitForPlayerState(gsm, currentPlayer));
+            gsm.set(new WaitForPlayerState(gsm, currentPlayer, playerData));
         }
     }
 
     @Override
     public void update(float dt) {
         handleInput();
-//        gameList = multiplayer.getGames();
+        gameList = multiplayer.getGames();
     }
 
     @Override
@@ -84,7 +87,7 @@ public class SelectPlayerOnlineState extends State {
                 }
             }
         } else {
-           fontText.draw(sb, "You are not connected to the database", Gdx.graphics.getWidth()/2-110,350);
+           fontText.draw(sb, "There is no active games", Gdx.graphics.getWidth()/2-80,350);
         }
 
         sb.end();
