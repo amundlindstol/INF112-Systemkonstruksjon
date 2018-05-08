@@ -71,7 +71,7 @@ public class StartGameState extends State {
         } else if(statsBtn.isPressed()) {
             gsm.set(new ShowStatsState(gsm, currentPlayer, playerData));
         } else if(playOnlineBtn.isPressed()) {
-            gsm.set(new WaitForPlayerState(gsm, currentPlayer, playerData));
+            gsm.set(new SelectPlayerOnlineState(gsm, currentPlayer, playerData));
         }
     }
 
