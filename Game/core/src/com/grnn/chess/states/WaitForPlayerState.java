@@ -32,11 +32,12 @@ public class WaitForPlayerState extends State{
     private boolean isOkToSwitchState;
     private MultiPlayer multiPlayer;
 
-    public WaitForPlayerState(GameStateManager gsm, Player currentPlayer, PlayerData playerData){
+    public WaitForPlayerState(GameStateManager gsm, Player currentPlayer, PlayerData playerData, MultiPlayer multiplayer){
         super(gsm);
 
         this.playerData = playerData;
         this.currentPlayer = currentPlayer;
+        this.multiPlayer = multiplayer;
 
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
@@ -58,6 +59,7 @@ public class WaitForPlayerState extends State{
         // finalGearImg is used to determine when the animation is complete
         finalGearImg = gearAnimation.getKeyFrames()[gearAnimation.getKeyFrames().length-1];
 
+        multiplayer.createGame(currentPlayer);
 
         fontText = new BitmapFont();
         fontText.setColor(Color.WHITE);
@@ -88,6 +90,7 @@ public class WaitForPlayerState extends State{
     @Override
     protected void handleInput() {
         if (menuButton.isPressed()) {
+            multiPlayer.endGame();
             gsm.set(new StartGameState(gsm, currentPlayer, playerData));
         }
     }
@@ -114,6 +117,7 @@ public class WaitForPlayerState extends State{
 
     @Override
     public void dispose() {
+        multiPlayer.endGame();
         stage.dispose();
         background.dispose();
         fontText.dispose();

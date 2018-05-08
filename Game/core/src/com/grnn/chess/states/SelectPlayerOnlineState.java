@@ -60,8 +60,7 @@ public class SelectPlayerOnlineState extends State {
         if (menuButton.isPressed()) {
 
         } else if (createGameBtn.isPressed()) {
-            multiplayer.createGame(currentPlayer);
-            gsm.set(new WaitForPlayerState(gsm, currentPlayer, playerData));
+            gsm.set(new WaitForPlayerState(gsm, currentPlayer, playerData, multiplayer));
         }
     }
 
