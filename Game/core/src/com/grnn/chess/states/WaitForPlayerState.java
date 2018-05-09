@@ -41,7 +41,7 @@ public class WaitForPlayerState extends State{
         this.currentPlayer = currentPlayer;
         this.multiPlayer = multiplayer;
 
-        this.multiPlayer = new MultiPlayer(playerData.getConnection());
+        this.multiPlayer = multiplayer;
         gameIsCreated = multiPlayer.createGame(currentPlayer);
 
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
@@ -105,8 +105,9 @@ public class WaitForPlayerState extends State{
     public void update(float dt) {
         handleInput();
         player2Name = multiPlayer.player2Connected();
+        Player player2 = playerData.getPlayer(player2Name);
         if (player2Name.length() > 0) {
-            gsm.set(new PlayState(gsm, 0, currentPlayer, null, playerData, true, multiPlayer));
+            gsm.set(new PlayState(gsm, 0, currentPlayer, player2, playerData, true, multiPlayer));
         }
     }
 
@@ -127,7 +128,6 @@ public class WaitForPlayerState extends State{
 
     @Override
     public void dispose() {
-        multiPlayer.endGame();
         stage.dispose();
         background.dispose();
         fontText.dispose();
