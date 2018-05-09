@@ -144,6 +144,12 @@ public class MultiPlayer implements IActor {
                 if(res.next()){
                     return res.getString("Player2ID");
                 }
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("waiting for player");
             }
         }catch(SQLException e){
             return null;
