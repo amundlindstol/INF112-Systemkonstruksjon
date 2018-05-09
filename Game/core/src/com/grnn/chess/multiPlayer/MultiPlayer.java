@@ -184,7 +184,7 @@ public class MultiPlayer implements IActor {
         String from = "";
         String to = "";
         try {
-            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = true;";
+            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = true AND FromMove IS NOTNULL AND ToMove IS NOTNULL;";
             Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery(query);
             if(res.next()){
