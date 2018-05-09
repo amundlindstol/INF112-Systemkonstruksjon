@@ -276,8 +276,9 @@ public class PlayState extends State {
             }
         }
 
-        if(mpOpponent != null && mpOpponent.isWhite() == game.getTurn()) {
+        if(mpOpponent != null && mpOpponent.isWhite() != game.getTurn()) {
             Move mpMove = mpOpponent.nextMove();
+            System.out.println(mpMove);
             if(mpMove != null) {
 
                 AbstractChessPiece movingPiece = board.getPieceAt(mpMove.getFromPos());
@@ -411,6 +412,7 @@ public class PlayState extends State {
             else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
                 Position potentialPos = translator.toCellPos(x, y);
                 game.moveFirstSelectedPieceTo(potentialPos);
+                mpOpponent.makeMove(new Move(selected,potentialPos));
                 prevMove = potentialPos;
                 helpingMove = null;
             }

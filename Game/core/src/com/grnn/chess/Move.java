@@ -19,11 +19,17 @@ public class Move {
         int y = from.charAt(1)-'0';
         this.fromPos = new Position(x,y);
 
-        x = from.charAt(0)-'0';
-        y = from.charAt(1)-'1';
+        x = to.charAt(0)-'0';
+        y = to.charAt(1)-'1';
         this.toPos = new Position(x,y);
 
         piece = null;
+    }
+
+    public Move(Position toPos, Position fromPos){
+        this.toPos = toPos;
+        this.fromPos = fromPos;
+        this.piece = null;
     }
 
     public String getFromPosInDatabaseFormat(){
