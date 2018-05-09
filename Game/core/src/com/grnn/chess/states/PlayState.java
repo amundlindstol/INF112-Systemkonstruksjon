@@ -276,7 +276,7 @@ public class PlayState extends State {
             }
         }
 
-        if(mpOpponent != null && mpOpponent.isWhite() == game.getTurn()) {
+        if(mpOpponent != null && mpOpponent.isWhite() != game.getTurn()) {
             Move mpMove = mpOpponent.nextMove();
             if(mpMove != null) {
 
