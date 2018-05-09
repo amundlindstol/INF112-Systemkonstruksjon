@@ -35,15 +35,13 @@ public class MultiPlayer implements IActor {
     public ArrayList<ArrayList<String>> getGames() {
         ArrayList<ArrayList<String>> availableGames = new ArrayList<ArrayList<String>>();
         try{
-            String query = "SELECT * FROM GameManager WHERE Player2ID IS NULL;";
+            String query = "SELECT * FROM GameManager WHERE Player2ID IS NULL AND GameActive= true;";
             Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery(query);
             while(res.next()){
                 ArrayList<String> game = new ArrayList<String>();
                 Integer gameId = res.getInt("GameID");
-                System.out.println(gameId);
                 String player1 = res.getString("Player1ID");
-                System.out.println(player1);
                 game.add(Integer.toString(gameId));
                 game.add(player1);
                 availableGames.add(game);
@@ -54,6 +52,26 @@ public class MultiPlayer implements IActor {
         }
     }
 
+    /**
+     * Get the gameId of the game the player has created or joined
+     * @return the gameid
+     */
+    public int getGameID(Player player1){
+        try{
+            String query = "SELECT GameID FROM GameManager WHERE Player1ID='"+player1.name+"';";
+            Statement stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while(res.next()) {
+                gameId = res.getInt("GameID");
+                System.out.println(gameId);
+            }
+            return gameId;
+        }catch(SQLException e){
+            System.out.println("Error in getGameID");
+            System.out.println(e.getErrorCode());
+        }
+        return -1;
+    }
 
     /**
      * Create a new Game in the database, adds player1
@@ -61,12 +79,15 @@ public class MultiPlayer implements IActor {
      */
     public boolean createGame(Player player1){
         try {
-            String query = "INSERT INTO GameManager (Player1ID, GameActive, Turn) VALUES ('"+player1.name+"', 'true', 'true');";
+            String query = "INSERT INTO GameManager (Player1ID, GameActive, Turn) VALUES ('"+player1.name+"', true, true);";
             Statement stmt = conn.createStatement();
-            int res = stmt.executeUpdate(query);
+            stmt.executeUpdate(query);
+            System.out.println("Created new game with "+player1.name+" as host");
+            gameId = getGameID(player1);
             thisIsThePlayerAtThisComputer = player1;
             thisIsTheColorOfThePlayerAtThisComputer = true;
         }catch(SQLException e){
+            System.out.println(e);
             return false;
         }
         return true;
@@ -124,6 +145,12 @@ public class MultiPlayer implements IActor {
                 if(res.next()){
                     return res.getString("Player2ID");
                 }
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("waiting for player");
             }
         }catch(SQLException e){
             return null;
@@ -138,7 +165,7 @@ public class MultiPlayer implements IActor {
         String from = "";
         String to = "";
         try {
-            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = 'true';";
+            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = true;";
             Statement stmt = conn.createStatement();
             while(true) {
                 ResultSet res = stmt.executeQuery(query);
@@ -157,7 +184,7 @@ public class MultiPlayer implements IActor {
         String from = "";
         String to = "";
         try {
-            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = 'true';";
+            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = true;";
             Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery(query);
             if(res.next()){
@@ -181,11 +208,12 @@ public class MultiPlayer implements IActor {
      */
     public void endGame(){
         try {
-            String query = "UPDATE GameManager SET GameActive='false' WHERE GameId='"+gameId+"';";
+            String query = "UPDATE GameManager SET GameActive=false WHERE GameId='"+gameId+"';";
             Statement stmt = conn.createStatement();
             int res = stmt.executeUpdate(query);
+            System.out.println("Ended game "+gameId);
         }catch(SQLException e){
-
+            System.out.println(e);
         }
     }
 

@@ -14,10 +14,12 @@ import com.grnn.chess.multiPlayer.MultiPlayer;
 
 public class WaitForPlayerState extends State{
 
+    private boolean gameIsCreated;
     private Skin skin;
     private Stage stage;
     private Texture background;
     private Player currentPlayer;
+    private String player2Name;
     private TextButton menuButton;
     private int xPos;
     private int yPos;
@@ -32,11 +34,15 @@ public class WaitForPlayerState extends State{
     private boolean isOkToSwitchState;
     private MultiPlayer multiPlayer;
 
-    public WaitForPlayerState(GameStateManager gsm, Player currentPlayer, PlayerData playerData){
+    public WaitForPlayerState(GameStateManager gsm, Player currentPlayer, PlayerData playerData, MultiPlayer multiplayer){
         super(gsm);
 
         this.playerData = playerData;
         this.currentPlayer = currentPlayer;
+        this.multiPlayer = multiplayer;
+
+        this.multiPlayer = multiplayer;
+        gameIsCreated = multiPlayer.createGame(currentPlayer);
 
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
@@ -58,6 +64,7 @@ public class WaitForPlayerState extends State{
         // finalGearImg is used to determine when the animation is complete
         finalGearImg = gearAnimation.getKeyFrames()[gearAnimation.getKeyFrames().length-1];
 
+        multiplayer.createGame(currentPlayer);
 
         fontText = new BitmapFont();
         fontText.setColor(Color.WHITE);
@@ -88,13 +95,20 @@ public class WaitForPlayerState extends State{
     @Override
     protected void handleInput() {
         if (menuButton.isPressed()) {
+            multiPlayer.endGame();
             gsm.set(new StartGameState(gsm, currentPlayer, playerData));
         }
+
     }
 
     @Override
     public void update(float dt) {
         handleInput();
+        player2Name = multiPlayer.player2Connected();
+        Player player2 = playerData.getPlayer(player2Name);
+        if (player2Name.length() > 0) {
+            gsm.set(new PlayState(gsm, 0, currentPlayer, player2, playerData, true, multiPlayer));
+        }
     }
 
     @Override
