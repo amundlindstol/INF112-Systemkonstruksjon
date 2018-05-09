@@ -26,6 +26,12 @@ public class Move {
         piece = null;
     }
 
+    public Move(Position toPos, Position fromPos){
+        this.toPos = toPos;
+        this.fromPos = fromPos;
+        this.piece = null;
+    }
+
     public String getFromPosInDatabaseFormat(){
         int x = fromPos.getX();
         int y = fromPos.getY();
