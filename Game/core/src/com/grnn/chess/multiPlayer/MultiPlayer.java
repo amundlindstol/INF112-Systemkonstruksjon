@@ -105,6 +105,7 @@ public class MultiPlayer implements IActor {
             Statement stmt = conn.createStatement();
             int res = stmt.executeUpdate(query);
         }catch(SQLException e){
+            e.printStackTrace();
             return false;
         }
         return true;
