@@ -14,8 +14,12 @@ import com.grnn.chess.PlayerData;
 import com.grnn.chess.multiPlayer.MultiPlayer;
 //import com.grnn.chess.multiPlayer.MultiPlayer;
 
+import javax.xml.soap.Text;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 
 public class SelectPlayerOnlineState extends State {
@@ -35,6 +39,7 @@ public class SelectPlayerOnlineState extends State {
     private BitmapFont fontText;
     private int searchForGameCnt;
     private Player p;
+    private Map<String, TextButton> hash;
 
     public SelectPlayerOnlineState(GameStateManager gsm, Player currentPlayer, PlayerData playerData) {
         super(gsm);
@@ -58,6 +63,7 @@ public class SelectPlayerOnlineState extends State {
         createGameBtn.setSize(createGameBtn.getWidth(),60);
         stage.addActor(menuButton);
         stage.addActor(createGameBtn);
+        hash = new HashMap<String, TextButton>();
 
         multiplayer = new MultiPlayer(playerData.getConnection());
         gameList = multiplayer.getGames();
@@ -71,6 +77,14 @@ public class SelectPlayerOnlineState extends State {
 
         } else if (createGameBtn.isPressed()) {
             gsm.set(new WaitForPlayerState(gsm, currentPlayer, playerData, multiplayer));
+        }
+        for (Map.Entry<String, TextButton> entry : hash.entrySet()) {
+            TextButton btn = entry.getValue();
+            String value = entry.getKey();
+
+            if (btn.isPressed()){
+                multiplayer.joinGame(currentPlayer, value);
+            }
         }
     }
 
@@ -89,10 +103,11 @@ public class SelectPlayerOnlineState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0,0);
-
+        hash.clear();
         if(gameList.size() > 0) {
 
             for (int i = 0, k = 350; i < gameList.size(); i++, k -= 30) {
+                hash.put(gameList.get(i).get(0), new TextButton("join", skin));
                 for (int j = 0, o = 470; j < gameList.get(i).size(); j++, o += 100) {
                     fontText.draw(sb, gameList.get(i).get(j), o, k);
                 }
@@ -110,6 +125,14 @@ public class SelectPlayerOnlineState extends State {
             fontText.draw(sb, "Du er ikke tilkoblet databasen", Gdx.graphics.getWidth()/2-80,350);
         } else {
            fontText.draw(sb, "Det er ingen aktive spill", Gdx.graphics.getWidth()/2-80,350);
+        }
+        int y = 330;
+        for (TextButton btn : hash.values()){
+            btn.getLabel().setFontScale(0.5f);
+            btn.setSize(120, 30);
+            btn.setPosition(800, y);
+            stage.addActor(btn);
+            y -= 30;
         }
 
         sb.end();
