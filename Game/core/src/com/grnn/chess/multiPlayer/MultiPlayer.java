@@ -143,7 +143,9 @@ public class MultiPlayer implements IActor {
             while(true) {
                 ResultSet res = stmt.executeQuery(query);
                 if(res.next()){
-                    return res.getString("Player2ID");
+                    String player2Id = res.getString("Player2ID");
+                    System.out.println(player2Id);
+                    return player2Id;
                 }
                 try {
                     Thread.sleep(300);
