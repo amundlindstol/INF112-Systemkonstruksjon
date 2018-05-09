@@ -84,6 +84,10 @@ public class SelectPlayerOnlineState extends State {
 
             if (btn.isPressed()){
                 multiplayer.joinGame(currentPlayer, value);
+                String player1name = multiplayer.getOpponent(currentPlayer.name);
+                Player player1 = playerData.getPlayer(player1name);
+                gsm.set(new PlayState(gsm, 0, player1, currentPlayer, playerData, true, multiplayer));
+
             }
         }
     }

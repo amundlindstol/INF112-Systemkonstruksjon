@@ -64,7 +64,6 @@ public class WaitForPlayerState extends State{
         // finalGearImg is used to determine when the animation is complete
         finalGearImg = gearAnimation.getKeyFrames()[gearAnimation.getKeyFrames().length-1];
 
-        multiplayer.createGame(currentPlayer);
 
         fontText = new BitmapFont();
         fontText.setColor(Color.WHITE);

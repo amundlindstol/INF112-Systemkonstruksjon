@@ -226,10 +226,15 @@ public class MultiPlayer implements IActor {
             String query = "SELECT "+opponent+" FROM GameManager WHERE GameId='"+gameId+"';";
             Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery(query);
-            return res.getString(opponent);
+            while(res.next()) {
+                String name = res.getString(opponent);
+                System.out.println(name);
+                return name;
+            }
         }catch(SQLException e){
             return null;
         }
+        return null;
     }
 
     /**
