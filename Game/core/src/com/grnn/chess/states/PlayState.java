@@ -104,8 +104,10 @@ public class PlayState extends State {
         if(onlineGame) {
             if(opponent.isWhite()) {
                 this.player2 = (Player) player1;
+                this.player1 = (Player) player2;
             } else {
                 this.player1 = (Player) player1;
+                this.player2 = (Player) player2;
             }
         } else {
             if (player1 instanceof Player) {
