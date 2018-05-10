@@ -122,11 +122,11 @@ public class PlayerData {
 				String query = "SELECT * FROM Users WHERE Name = '"+playerName+"';";
 				Statement stmt = conn.createStatement();
 				ResultSet res = stmt.executeQuery(query);
-				return new Player(res.getString("Name"), res.getString("Password"), res.getInt("Wins"), res.getInt("Losses"), res.getInt("Rating"),res.getInt("Rating"));
-			} catch (SQLException e){
+				return new Player(res.getString("Name"), res.getString("Password"), res.getInt("Wins"), res.getInt("Losses"), res.getInt("Draws"),res.getInt("Rating"));
+			} catch (SQLException e) {
 				return null;
 			}
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -244,5 +244,12 @@ public class PlayerData {
 
         }
     }
+
+	/**
+	 * get the connection
+	 */
+	public Connection getConnection(){
+		return conn;
+	}
 
 }
