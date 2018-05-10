@@ -417,8 +417,7 @@ public class PlayState extends State {
                     int index = game.getIndexOfPiece(pieceFromPocket);
                     if (!pieceFromPocket.isEmpty() && index != -1 && removedPieces[index] > 0) {
                         game.playSound("selectPiece.wav");
-                        game.selectedFromPocket = pieceFromPocket;
-                        game.validMoves = board.findEmptySquares(pieceFromPocket);
+                        game.selectFirstPieceFromPocket(pieceFromPocket);
                     }
                 }
                 else { game.reset(); }

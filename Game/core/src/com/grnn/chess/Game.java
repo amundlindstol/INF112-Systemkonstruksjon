@@ -172,18 +172,27 @@ public class    Game {
 
     public boolean movePieceFromPocketTo(Position secondPosition){
         if (validMoves.contains(secondPosition)) {
-            firstPiece = createNewPieceFromPocket();
             board.setPiece(firstPiece, secondPosition);
             if (selectedFromPocket!=null)
                 removedPieces[getIndexOfPiece(selectedFromPocket)]--;
             if (!handleCheckChecking(secondPosition))
                 return false;
+            reset();
+            turn = !turn;
+            removed = false;
         }
-        reset();
-        turn = !turn;
-        removed = false;
-
+        else {
+            reset();
+            //turn = !turn;
+            removed = false;
+        }
         return true;
+    }
+
+    public void selectFirstPieceFromPocket(String p){
+        selectedFromPocket = p;
+        firstPiece = createNewPieceFromPocket();
+        validMoves = board.removeMovesThatWillPutOwnKingInCheck(firstPiece, board.findEmptySquares(selectedFromPocket));
     }
 
     /**
