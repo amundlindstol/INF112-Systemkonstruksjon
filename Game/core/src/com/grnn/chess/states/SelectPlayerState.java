@@ -70,14 +70,14 @@ public class SelectPlayerState extends State {
         playBtn2 = new TextButton("middels", skin);
         playBtn3 = new TextButton("vanskelig", skin);
         playBtn4 = new TextButton("ok", skin);
-        playBtn3.setSize(playBtn3.getWidth(), 50);
+        playBtn3.setSize(playBtn3.getWidth()-20, 50);
         playBtn.setSize(playBtn3.getWidth(), 50);
         playBtn2.setSize(playBtn3.getWidth(), 50);
-        playBtn4.setSize(playBtn3.getWidth()-70, 50);
-        playBtn.setPosition(xPlay, yPlay);
-        playBtn2.setPosition(xPlay, yPlay-70);
-        playBtn3.setPosition(xPlay, yPlay-140);
-        playBtn4.setPosition(xPlay+375, yPlay - 140);
+        playBtn4.setSize(playBtn3.getWidth()-120, 50);
+        playBtn.setPosition(xPlay + 10, yPlay);
+        playBtn2.setPosition(xPlay + 10, yPlay-70);
+        playBtn3.setPosition(xPlay + 10, yPlay-140);
+        playBtn4.setPosition(xPlay + 410, yPlay - 140);
 
 
         if(!playerData.isOffline()) {
