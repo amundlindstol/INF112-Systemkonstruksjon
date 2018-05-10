@@ -16,14 +16,8 @@ import com.grnn.chess.PlayerData;
  */
 public class StartGameState extends State {
     private Texture background, pieces;
-<<<<<<< HEAD
     private TextButton playBtn, statsBtn, crazyHouseBtn;
     private int xPosPlayBtn, yPosPlayBtn, Count;
-=======
-    private TextButton playLocalBtn, playOnlineBtn,statsBtn;
-    private int xPosOnlineBtn, yPosOnlineBtn, Count;
-    private int xPosLocalBtn, yPosLocalBtn;
->>>>>>> MultiP
     private int xPosStatsBtn, yPosStatsBtn;
     private Player currentPlayer;
 
@@ -48,19 +42,12 @@ public class StartGameState extends State {
         this.currentPlayer = player;
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
-<<<<<<< HEAD
         crazyHouseBtn = new TextButton("Crazyhouse", skin);
         crazyHouseBtn.setSize(crazyHouseBtn.getWidth(), crazyHouseBtn.getHeight()/2);
         crazyHouseBtn.setPosition(Gdx.graphics.getWidth()/2-crazyHouseBtn.getWidth()/2, Gdx.graphics.getHeight()-160);
         playBtn = new TextButton("Spill", skin);
         stage.addActor(crazyHouseBtn);
         stage.addActor(playBtn);
-=======
-        playLocalBtn = new TextButton("local", skin);
-        playOnlineBtn = new TextButton("online", skin);
-        stage.addActor(playLocalBtn);
-        stage.addActor(playOnlineBtn);
->>>>>>> MultiP
 
         statsBtn = new TextButton("Statistikk", skin);
 
@@ -70,27 +57,20 @@ public class StartGameState extends State {
 
         stage.addActor(statsBtn);
 
-        xPosLocalBtn = (int) (Gdx.graphics.getWidth()/2 - playLocalBtn.getWidth());
-        yPosLocalBtn = 340;
-        xPosOnlineBtn = (int) (xPosLocalBtn + playLocalBtn.getWidth());
-        yPosOnlineBtn = 340;
+        xPosPlayBtn = (int) (Gdx.graphics.getWidth()/2 - playBtn.getWidth()/2 - 10);
+        yPosPlayBtn = 340;
         Count = 20;
         currentPlayer = player;
     }
 
     @Override
     public void handleInput() {
-        if (playLocalBtn.isPressed()) {
+        if (playBtn.isPressed()) {
             gsm.set(new SelectPlayerState(gsm, currentPlayer, playerData));
         } else if(statsBtn.isPressed()) {
             gsm.set(new ShowStatsState(gsm, currentPlayer, playerData));
-<<<<<<< HEAD
         } else if (crazyHouseBtn.isPressed()) {
             gsm.set(new PlayState(gsm, 0, currentPlayer, new Player("CrazyPlayer", "", false), playerData, "crazyhouse"));
-=======
-        } else if(playOnlineBtn.isPressed()) {
-            gsm.set(new SelectPlayerOnlineState(gsm, currentPlayer, playerData));
->>>>>>> MultiP
         }
     }
 
@@ -115,12 +95,10 @@ public class StartGameState extends State {
     private void animate() {
         Count++;
         if (Count <= 40 ) {
-            playLocalBtn.setPosition(++xPosLocalBtn, yPosLocalBtn);
-            playOnlineBtn.setPosition(++xPosOnlineBtn, yPosOnlineBtn);
+            playBtn.setPosition(++xPosPlayBtn, yPosPlayBtn);
         }
         else if (Count <= 80){
-            playLocalBtn.setPosition(--xPosLocalBtn, yPosLocalBtn);
-            playOnlineBtn.setPosition(--xPosOnlineBtn, yPosOnlineBtn);
+            playBtn.setPosition(--xPosPlayBtn, yPosPlayBtn);
         }
         else {
             Count = 0;

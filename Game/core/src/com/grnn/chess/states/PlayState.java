@@ -14,7 +14,6 @@ import com.grnn.chess.*;
 import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
-import com.grnn.chess.multiPlayer.MultiPlayer;
 import com.grnn.chess.objects.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -62,7 +61,6 @@ public class PlayState extends State {
 
     private Player player1;
     private Player player2;
-    private MultiPlayer mpOpponent;
 
 
     // piece animation
@@ -88,59 +86,15 @@ public class PlayState extends State {
      * @param player1  Should always be player
      * @param player2  Either AI or Player
      */
-<<<<<<< HEAD
     public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData, String gameMode) {
-=======
-
-    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
-        this(gsm, aiPlayer, player1, player2, playerData, false, null);
-    }
-
-    /**
-     *
-     * @param gsm same as above
-     * @param aiPlayer
-     * @param player1
-     * @param player2
-     * @param playerData
-     * @param onlineGame true if game is online
-     * @param opponent name of the opponent
-     */
-    public PlayState(GameStateManager gsm,
-                     int aiPlayer,
-                     IActor player1,
-                     IActor player2,
-                     PlayerData playerData,
-                     boolean onlineGame,
-                     MultiPlayer opponent) {
->>>>>>> MultiP
         super(gsm);
-        mpOpponent = opponent;
 
 
-<<<<<<< HEAD
         if (player1 instanceof Player) {
             this.player1 = (Player) player1;
         }
         if(player2 instanceof Player) {
             this.player2 = (Player) player2;
-=======
-        if(onlineGame) {
-            if(opponent.isWhite()) {
-                this.player2 = (Player) player1;
-                this.player1 = (Player) player2;
-            } else {
-                this.player1 = (Player) player1;
-                this.player2 = (Player) player2;
-            }
-        } else {
-            if (player1 instanceof Player) {
-                this.player1 = (Player) player1;
-            }
-            if (player2 instanceof Player) {
-                this.player2 = (Player) player2;
-            }
->>>>>>> MultiP
         }
 
         //textures
@@ -171,11 +125,6 @@ public class PlayState extends State {
         player1Name = ((Player) player1).name;
         if (player2 instanceof Player) {
             player2Name = ((Player) player2).name;
-        } else if (onlineGame) {
-            if(opponent.isWhite()) {
-                player1Name = opponent.getOpponent(player1Name);
-                player2Name = ((Player) player1).name;
-            }
         } else {
             player2Name = "Datamaskin";
         }
@@ -260,7 +209,6 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
 
-<<<<<<< HEAD
         if(game.getText().contains("Uff"))
             text = game.getText();
 
@@ -271,8 +219,6 @@ public class PlayState extends State {
             text = "Du vant " + player1Name + ", du må nok øve mer..."; //TODO wrong output
             activegame = false;
         }
-=======
->>>>>>> MultiP
 
         fontText.draw(batch, text, 645, 334);
 
@@ -302,9 +248,9 @@ public class PlayState extends State {
             if (piece != null && piece.isMoving()) { //should this piece change its location?
                 if (game.isAi() && game.getTurn()) { //ai piece
                     if (prevAImove == null) prevAImove = game.getAiMove();
-                    animatePiece(piece, piecePos, pos, true, game.getTurn());
+                    animatePiece(piece, piecePos, pos, true);
                 } else
-                    animatePiece(piece, piecePos, pos, false, game.getTurn());
+                    animatePiece(piece, piecePos, pos, false);
             }
 
             if (piece != null) {
@@ -349,19 +295,6 @@ public class PlayState extends State {
             }
         }
 
-<<<<<<< HEAD
-=======
-        if(mpOpponent != null && mpOpponent.isWhite() != game.getTurn()) {
-            Move mpMove = mpOpponent.nextMove();
-            System.out.println(mpMove);
-            if(mpMove != null) {
-
-                AbstractChessPiece movingPiece = board.getPieceAt(mpMove.getFromPos());
-                board.movePiece(mpMove.getFromPos(), mpMove.getToPos());
-                movingPiece.startMoving();
-            }
-        }
->>>>>>> MultiP
         stage.draw();
     }
 
@@ -477,7 +410,7 @@ public class PlayState extends State {
         return s+name;
     }
 
-    private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai, boolean isWhite) {
+    private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
         if (pieceIsMoving && piece.isMoving()) {
             if (animationIndex == animationPath.size() && animationPath.size() > 0) { //reached end of list
                 piece.stopMoving();
@@ -504,6 +437,7 @@ public class PlayState extends State {
                     } else {
                         board.movePiece(piecePos, prevMove);
                     }
+
                 }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
@@ -523,7 +457,6 @@ public class PlayState extends State {
             animationIndex = 0;
             game.playSound("movePiece.wav");
         }
-
     }
 
     private void generateAnimationPath(Position startPos, Position endPos) {
@@ -623,23 +556,6 @@ public class PlayState extends State {
             for (int j = 0; j < frameColums; j++) {
                 animationFrames[index++] = tmp[i][j];
             }
-<<<<<<< HEAD
-=======
-            //second selected piece
-            else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
-                Position potentialPos = translator.toCellPos(x, y);
-                game.moveFirstSelectedPieceTo(potentialPos);
-                mpOpponent.makeMove(new Move(,potentialPos));
-                prevMove = potentialPos;
-                helpingMove = null;
-            }
-        } else if (!activegame) { // TODO: Actual result
-            Result result1 = Result.DRAW;
-            Result result2 = Result.DRAW;
-
-            game.endGame(result1, result2,playerData);
-            gsm.set(new ShowStatsState(gsm,player1,playerData));
->>>>>>> MultiP
         }
         return new Animation<TextureRegion>(duration, animationFrames);
     }

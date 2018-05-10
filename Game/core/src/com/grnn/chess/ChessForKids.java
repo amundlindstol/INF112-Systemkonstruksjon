@@ -8,11 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.states.GameStateManager;
 import com.grnn.chess.states.MainMenuState;
-<<<<<<< HEAD
 import com.grnn.chess.states.PlayState;
-=======
-import com.grnn.chess.states.SelectPlayerOnlineState;
->>>>>>> MultiP
 
 public class ChessForKids extends ApplicationAdapter {
 	GameStateManager gsm;
