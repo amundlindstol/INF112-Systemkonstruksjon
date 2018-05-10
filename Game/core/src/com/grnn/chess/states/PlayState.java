@@ -297,6 +297,66 @@ public class PlayState extends State {
         stage.draw();
     }
 
+    public void handleInput() {
+        int x = Math.abs(Gdx.input.getX());
+        int y = Math.abs(Gdx.input.getY());
+        Boolean notSelected = game.pieceHasNotBeenSelected();
+        if (resignBtn.isPressed() && activegame) {
+            game.endGame(Result.DRAW, Result.DRAW,playerData);
+            gsm.set(new ShowStatsState(gsm, player1, playerData));
+        }
+        if(helpBtn.isPressed() && activegame){
+            helpingMove = game.getHelpingMove();
+            System.out.println(helpingMove);
+        }
+
+        if (activegame && !pieceIsMoving ) {
+            if ((x > 40 && x < 560 && y > 40 && y < 560) ) {
+                //AI
+                if (!game.getTurn() && game.isAi()) {
+                    prevAImove = game.aiMove();
+                    return;
+                }
+
+                //first selected piece
+                Position selected = null;
+                if (Gdx.input.justTouched() && notSelected) {
+                    game.playSound("selectPiece.wav");
+                    selected = translator.toCellPos(x, y);
+                    game.selectFirstPiece(selected);
+                }
+                //second selected piece
+                else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
+                    Position potentialPos = translator.toCellPos(x, y);
+                    activegame = game.moveFirstSelectedPieceTo(potentialPos);
+                    prevMove = potentialPos;
+                    helpingMove = null;
+                }
+                else if (Gdx.input.justTouched() && !game.selectedFromPocket.isEmpty()){
+
+                }
+            }
+            else if (Gdx.input.justTouched() && playingCH){ //From pocket
+                String pieceFromPocket = getPieceFromPocket(x, y, game.getTurn());
+                if (!pieceFromPocket.isEmpty()) {
+                    int index = game.getIndexOfPiece(pieceFromPocket);
+                    if (!pieceFromPocket.isEmpty() && index != -1 && removedPieces[index] > 0) {
+                        game.playSound("selectPiece.wav");
+                        game.selectedFromPocket = pieceFromPocket;
+                        game.validMoves = board.findEmptySquares(pieceFromPocket);
+                    }
+                }
+                else { game.reset(); }
+            }
+        } else if (!activegame) { // TODO: Actual result
+            Result result1 = Result.DRAW;
+            Result result2 = Result.DRAW;
+
+            game.endGame(result1, result2,playerData);
+            gsm.set(new ShowStatsState(gsm,player1,playerData));
+        }
+    }
+
     private void endGameAction(SpriteBatch batch) {
         Result result1;
         Result result2;
@@ -416,8 +476,8 @@ public class PlayState extends State {
             animationPath.add(new Position(startPixelPos[0], startPixelPos[1]));
         }
     }
-
     //is it shorter distance? 1=yes -1=no 0=same
+
     private int shorterDistTo(boolean changeInXaxis, int[] startPixelPo, int variance, int[] endPixelPo) {
         double startVal = Math.sqrt((Math.pow(Math.abs(startPixelPo[0] - endPixelPo[0]), 2)) + (Math.pow(startPixelPo[1] - endPixelPo[1], 2)));
         double nextVal;
@@ -439,66 +499,6 @@ public class PlayState extends State {
         return 0;
     }
 
-
-    public void handleInput() {
-        int x = Math.abs(Gdx.input.getX());
-        int y = Math.abs(Gdx.input.getY());
-        Boolean notSelected = game.pieceHasNotBeenSelected();
-        if (resignBtn.isPressed() && activegame) {
-                game.endGame(Result.DRAW, Result.DRAW,playerData);
-                gsm.set(new ShowStatsState(gsm, player1, playerData));
-        }
-        if(helpBtn.isPressed() && activegame){
-            helpingMove = game.getHelpingMove();
-            System.out.println(helpingMove);
-        }
-
-        if (activegame && !pieceIsMoving ) {
-            if ((x > 40 && x < 560 && y > 40 && y < 560) ) {
-                //AI
-                if (!game.getTurn() && game.isAi()) {
-                    prevAImove = game.aiMove();
-                    return;
-                }
-
-                //first selected piece
-                Position selected = null;
-                if (Gdx.input.justTouched() && notSelected) {
-                    game.playSound("selectPiece.wav");
-                    selected = translator.toCellPos(x, y);
-                    game.selectFirstPiece(selected);
-                }
-                //second selected piece
-                else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
-                    Position potentialPos = translator.toCellPos(x, y);
-                    activegame = game.moveFirstSelectedPieceTo(potentialPos);
-                    prevMove = potentialPos;
-                    helpingMove = null;
-                }
-                else if (Gdx.input.justTouched() && !game.selectedFromPocket.isEmpty()){
-
-                }
-            }
-            else if (Gdx.input.justTouched() && playingCH){ //From pocket
-                String pieceFromPocket = getPieceFromPocket(x, y, game.getTurn());
-                if (!pieceFromPocket.isEmpty()) {
-                    int index = game.getIndexOfPiece(pieceFromPocket);
-                    if (!pieceFromPocket.isEmpty() && index != -1 && removedPieces[index] > 0) {
-                        game.playSound("selectPiece.wav");
-                        game.selectedFromPocket = pieceFromPocket;
-                        game.validMoves = board.findEmptySquares(pieceFromPocket);
-                    }
-                }
-                else { game.reset(); }
-            }
-        } else if (!activegame) { // TODO: Actual result
-            Result result1 = Result.DRAW;
-            Result result2 = Result.DRAW;
-
-            game.endGame(result1, result2,playerData);
-            gsm.set(new ShowStatsState(gsm,player1,playerData));
-        }
-    }
 
 
     public String getPieceFromPocket(int x, int y, boolean turn){
