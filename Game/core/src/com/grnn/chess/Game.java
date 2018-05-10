@@ -443,7 +443,7 @@ public class    Game {
                     text = "Uff, du mistet en brikke. Venter på at du skal gjøre neste trekk.";
 
                 else if(removed && !playerLostPiece )
-                    text = "Bra jobbet! Du tok en brikke. Venter på at du skal gjøre neste trekk.";
+                    text = "Bra! Du tok en brikke. Venter på at du skal gjøre neste trekk.";
 
                 else
                     text = "Venter på at du skal gjøre neste trekk.";
@@ -460,7 +460,7 @@ public class    Game {
             }
             else{
                 if(removed)
-                    text = "Bra jobbet! Du tok en brikke. Venter på at vennen din skal gjøre neste trekk.";
+                    text = "Bra! Du tok en brikke. Venter på at vennen din skal gjøre neste trekk.";
                 else
                     text = "Venter på at vennen din skal gjøre neste trekk.";
             }
