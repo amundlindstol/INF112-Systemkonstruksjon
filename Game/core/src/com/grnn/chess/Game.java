@@ -117,6 +117,7 @@ public class    Game {
             if(victim !=null){
                 board.removePiece(victim);
                 updatePieceCounter(victim);
+                playSound("lostPiece.wav");
             }
             aiMove.getPiece().startMoving();
             handleCheckChecking();
@@ -165,7 +166,7 @@ public class    Game {
                     if(turn) playSound("takePiece.wav");
 
                     else playSound("lostPiece.wav");
-                    //board.movePiece(board.getPosition(firstPiece), secondPosition);
+
                     firstPiece.startMoving();
                     handleCheckChecking();
                     turn = !turn;
