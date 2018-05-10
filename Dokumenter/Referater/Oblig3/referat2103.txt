@@ -1,0 +1,26 @@
+
+Oppmøte
+	- Amund Lundstøl
+	- Alise Haukenes
+	- Eivind Dagsland Halderaker
+	- Helge Mikael Ladro
+	- Håkon Osland
+	- Magnus Flatheim Jensem
+	- Simon Telle Riple
+
+Gjort:
+	- Klasser for lagre ting til fil
+	- Oppdatere spillhistorikken og brukerne
+	- Lage sekvensdiagram
+	- Fikset lovlig trekk dronning
+	- Fikset pawn klassen
+	- Fikset bug med at programmet sluttet å fungere etter 5 min
+	- Java Doc (Simon)
+	- Implementere rokade
+	- State for log in
+	- Videreutviklet GUI slik at GUI snakker med spiller
+
+Til neste gang:
+	- Fikse lovlig trekk for kongen (når kongen er i sjakk)
+	- Oppdatere team plan
+	- Lage presentasjon

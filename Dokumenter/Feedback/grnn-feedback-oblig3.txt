@@ -1,0 +1,50 @@
+Feedback INF112 spring 2018 - Oblig.3
+
+Group: Grnn
+
+Overall feedback
+
+Update diagrams/documents
+- Good job
+
+Minutes
+- Looks much better this time around
+
+Issue-tracker
+- Good use of issues
+- Looks like you are using it actively and well 
+
+Team plan
+- The team plan has been updated nicely with the risk analysis and the repo structure
+
+Design model
+- UML class diagram is well done but is missing multiplicity some places (should be stated unless there is inheritance)
+- Good description of the model 
+
+Sequence diagrams
+- Good
+
+Source code
+- You need to specify which license you will be using for the assets you have created and your game/source code
+- The quality of the code seems good (Readability, javadoc etc.) 
+- Had some issues with numberformatexception when running your application (due to csv data files)
+- There is seemingly no way of accessing statistics in the game
+- Tests looks decent
+- overall well done
+
+Process and project plan
+- Process: Seems like you have thought through what you need to improve the workflow
+- Organization: If you decide to increase the number of meetings remember to write minutes for these :)
+Retrospective: Good
+
+Other stuff:
+- Messy repository
+
+Overall good job! Looks like you are well on your way to developing a great chess application
+
+Y U NO GREEN! :c
+
+Score: 94 (of 100)
+Evaluation: PASS
+
+Graded by ÿyvind Skeie Liland and Dan Zhang, Bergen 05.04.2018
