@@ -34,6 +34,7 @@ public class    Game {
 
     private boolean blackPutInCheck;
     private boolean whitePutInCheck;
+    private Position selectedPosition;
 
     private int gameId;
 
@@ -52,9 +53,12 @@ public class    Game {
         if(player2 instanceof Player) {
             this.player2 = player2;
             player2 = new Player("Spiller2", "asd", !player1.isWhite());
-
         } else {
             aiPlayer = (AI) player2;
+        }
+
+        if(multiPlayer != null) {
+            onlinePlayer = multiPlayer;
         }
 
         gameId = ++currid;
@@ -149,6 +153,7 @@ public class    Game {
      * @return A list of lists of valid positions. In the first position validmoves, second position capturemoves and third castlingmoves
      */
     public void selectFirstPiece(Position selectedPosition){
+        this.selectedPosition = selectedPosition;
         firstPiece = board.getPieceAt(selectedPosition);
         System.out.println("first piece: " + firstPiece);
         if(firstPiece != null && firstPiece.isWhite() == turn){
@@ -229,6 +234,15 @@ public class    Game {
             Boolean validMove = validMoves.contains(secondPosition) || captureMoves.contains(secondPosition) || castlingMoves.contains(secondPosition);
             if (potentialPiece != null) {
                 if (validMove) {
+    public Position getSelectedPosition() {
+        return selectedPosition;
+    }
+
+    public void moveFirstSelectedPieceTo(Position secondPosition){
+        potentialPiece = board.getPieceAt(secondPosition);
+        Boolean validMove = validMoves.contains(secondPosition) || captureMoves.contains(secondPosition) || castlingMoves.contains(secondPosition);
+        if(potentialPiece != null) {
+                if(validMove) {
                     board.removePiece(potentialPiece);
                     removed = true;
                     updatePieceCounter(potentialPiece);
