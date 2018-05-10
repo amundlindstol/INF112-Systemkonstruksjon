@@ -213,8 +213,6 @@ public class Board {
             for (int x = 0; x < size(); x++) {
                 Position p = new Position(x, y);
                 AbstractChessPiece testPiece = getPieceAt(p);
-                if(p.equals(new Position(6,0)))
-                    System.out.println("piece " + testPiece + " at position: " + p + " is equal: "); // + testPiece.equals(piece));
                 if (testPiece != null && testPiece.equals(piece))
                     return p;
             }
