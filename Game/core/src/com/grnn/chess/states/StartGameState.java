@@ -16,7 +16,7 @@ import com.grnn.chess.PlayerData;
  */
 public class StartGameState extends State {
     private Texture background, pieces;
-    private TextButton playBtn, statsBtn;
+    private TextButton playBtn, statsBtn, crazyHouseBtn;
     private int xPosPlayBtn, yPosPlayBtn, Count;
     private int xPosStatsBtn, yPosStatsBtn;
     private Player currentPlayer;
@@ -42,7 +42,11 @@ public class StartGameState extends State {
         this.currentPlayer = player;
         background = new Texture("Graphics/Menu/Menu_background.png");
         pieces = new Texture("Graphics/Menu/Menu_pieces.png");
+        crazyHouseBtn = new TextButton("Crazyhouse", skin);
+        crazyHouseBtn.setSize(crazyHouseBtn.getWidth(), crazyHouseBtn.getHeight()/2);
+        crazyHouseBtn.setPosition(Gdx.graphics.getWidth()/2-crazyHouseBtn.getWidth()/2, Gdx.graphics.getHeight()-160);
         playBtn = new TextButton("Spill", skin);
+        stage.addActor(crazyHouseBtn);
         stage.addActor(playBtn);
 
         statsBtn = new TextButton("Statistikk", skin);
@@ -65,6 +69,8 @@ public class StartGameState extends State {
             gsm.set(new SelectPlayerState(gsm, currentPlayer, playerData));
         } else if(statsBtn.isPressed()) {
             gsm.set(new ShowStatsState(gsm, currentPlayer, playerData));
+        } else if (crazyHouseBtn.isPressed()) {
+            gsm.set(new PlayState(gsm, 0, currentPlayer, new Player("CrazyPlayer", "", false), playerData, "crazyhouse"));
         }
     }
 
