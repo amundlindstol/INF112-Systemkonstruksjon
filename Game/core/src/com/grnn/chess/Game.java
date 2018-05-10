@@ -126,6 +126,7 @@ public class    Game {
                 playSound("lostPiece.wav");
             }
             aiMove.getPiece().startMoving();
+        //    firstPiece = board.getPieceAt(aiMove.getFromPos());
             handleCheckChecking(aiMove.getToPos());
             turn = !turn;
             return aiMove;
@@ -320,8 +321,7 @@ public class    Game {
             Board bc = board.copyBoard();
             if (selectedFromPocket==null) {
                 System.out.println("first piece: " + firstPiece);
-                System.out.println(firstPiece.getPosition(bc));
-                bc.movePiece(firstPiece.getPosition(bc), secondPosition);
+                bc.movePiece(firstPiece.getPosition(board), secondPosition);
             }
             King king = (King) bc.getPieceAt(kingPos);
             king.isInCheck = king.willThisKingBePutInCheckByMoveTo(bc, kingPos);
