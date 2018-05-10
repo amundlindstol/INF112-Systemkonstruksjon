@@ -57,9 +57,7 @@ public class    Game {
             aiPlayer = (AI) player2;
         }
 
-        if(multiPlayer != null) {
-            onlinePlayer = multiPlayer;
-        }
+
 
         gameId = ++currid;
 
@@ -227,6 +225,10 @@ public class    Game {
         return newPiece;
     }
 
+    public Position getSelectedPosition() {
+        return selectedPosition;
+    }
+
     public boolean moveFirstSelectedPieceTo(Position secondPosition){
         if (selectedFromPocket!=null) return movePieceFromPocketTo(secondPosition);
         else {
@@ -234,25 +236,14 @@ public class    Game {
             Boolean validMove = validMoves.contains(secondPosition) || captureMoves.contains(secondPosition) || castlingMoves.contains(secondPosition);
             if (potentialPiece != null) {
                 if (validMove) {
-    public Position getSelectedPosition() {
-        return selectedPosition;
-    }
-
-    public void moveFirstSelectedPieceTo(Position secondPosition){
-        potentialPiece = board.getPieceAt(secondPosition);
-        Boolean validMove = validMoves.contains(secondPosition) || captureMoves.contains(secondPosition) || castlingMoves.contains(secondPosition);
-        if(potentialPiece != null) {
-                if(validMove) {
                     board.removePiece(potentialPiece);
                     removed = true;
                     updatePieceCounter(potentialPiece);
 
-                    if(turn) {
+                    if (turn) {
                         playSound("takePiece.wav");
                         playerLostPiece = false;
-                    }
-
-                    else {
+                    } else {
                         playSound("lostPiece.wav");
                         playerLostPiece = true;
                     }
@@ -270,19 +261,20 @@ public class    Game {
                     removed = false;
                     reset();
                 }
-        } else if(potentialPiece == null && validMove){
+            } else if (potentialPiece == null && validMove) {
 
-            firstPiece.startMoving();
-            if (!handleCheckChecking(secondPosition))
+                firstPiece.startMoving();
+                if (!handleCheckChecking(secondPosition))
                     return false;
-            reset();
-            turn = !turn;
-            removed = false;
-        } else {
-            reset();
-            removed = false;}
+                reset();
+                turn = !turn;
+                removed = false;
+            } else {
+                reset();
+                removed = false;
+            }
+            return true;
         }
-        return true;
     }
 
     public void reset(){

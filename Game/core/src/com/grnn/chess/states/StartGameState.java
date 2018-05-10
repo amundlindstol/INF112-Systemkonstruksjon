@@ -16,7 +16,7 @@ import com.grnn.chess.PlayerData;
  */
 public class StartGameState extends State {
     private Texture background, pieces;
-    private TextButton playBtn, statsBtn, crazyHouseBtn;
+    private TextButton playBtn, statsBtn, crazyHouseBtn, playOnlineBtn;
     private int xPosPlayBtn, yPosPlayBtn, Count;
     private int xPosStatsBtn, yPosStatsBtn;
     private Player currentPlayer;
@@ -61,6 +61,11 @@ public class StartGameState extends State {
         yPosPlayBtn = 340;
         Count = 20;
         currentPlayer = player;
+
+        playOnlineBtn = new TextButton("online", skin);
+
+        stage.addActor(playOnlineBtn);
+
     }
 
     @Override
@@ -71,6 +76,9 @@ public class StartGameState extends State {
             gsm.set(new ShowStatsState(gsm, currentPlayer, playerData));
         } else if (crazyHouseBtn.isPressed()) {
             gsm.set(new PlayState(gsm, 0, currentPlayer, new Player("CrazyPlayer", "", false), playerData, "crazyhouse"));
+        } else if (playOnlineBtn.isPressed()) {
+            gsm.set(new SelectPlayerOnlineState(gsm, currentPlayer, playerData));
+
         }
     }
 

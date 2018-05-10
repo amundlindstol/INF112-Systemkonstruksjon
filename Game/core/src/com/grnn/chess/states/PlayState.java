@@ -14,6 +14,7 @@ import com.grnn.chess.*;
 import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
+import com.grnn.chess.multiPlayer.MultiPlayer;
 import com.grnn.chess.objects.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -68,11 +69,7 @@ public class PlayState extends State {
     private MultiPlayer multiPlayer;
 
 
-    // piece animation
-    private ArrayList<Position> animationPath;
-    private int animationIndex;
-    private boolean pieceIsMoving;
-    private Move prevAImove;
+
     // victory animation
     private float frameCounter;
     private Animation<TextureRegion> confettiAnimation; // Must declare frame type (TextureRegion)
@@ -92,9 +89,21 @@ public class PlayState extends State {
      * @param player2  Either AI or Player
      */
 
-    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
-        this(gsm, aiPlayer, player1, player2, playerData, false, null);
+    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData, String gameMode) {
+        this(gsm, aiPlayer, player1, player2, playerData, false, null, gameMode);
     }
+
+    public PlayState(GameStateManager gsm,
+                     int aiPlayer,
+                     IActor player1,
+                     IActor player2,
+                     PlayerData playerData,
+                     boolean onlineGame,
+                     MultiPlayer multiPlayer) {
+        this(gsm, aiPlayer, player1, player2, playerData, onlineGame, multiPlayer, "classic");
+    }
+
+
 
     /**
      *
@@ -112,8 +121,9 @@ public class PlayState extends State {
                      IActor player2,
                      PlayerData playerData,
                      boolean onlineGame,
-                     MultiPlayer multiPlayer) {
-    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData, String gameMode) {
+                     MultiPlayer multiPlayer,
+                     String gameMode
+                     ) {
         super(gsm);
         this.multiPlayer = multiPlayer;
 
@@ -366,7 +376,7 @@ public class PlayState extends State {
         }
 
         if (activegame && !pieceIsMoving ) {
-            if ((x > 40 && x < 560 && y > 40 && y < 560) ) {
+            if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving && game.getTurn() == multiPlayer.isWhite()) {
                 //AI
                 if (!game.getTurn() && game.isAi()) {
                     prevAImove = game.aiMove();
@@ -383,6 +393,11 @@ public class PlayState extends State {
                 //second selected piece
                 else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
                     Position potentialPos = translator.toCellPos(x, y);
+
+                    //send move to database
+                    if(multiPlayer != null && game.getTurn() == multiPlayer.isWhite()) {
+                        multiPlayer.makeMove(new Move(game.getSelectedPosition(), potentialPos));
+                    }
                     activegame = game.moveFirstSelectedPieceTo(potentialPos);
                     prevMove = potentialPos;
                     helpingMove = null;
@@ -589,35 +604,11 @@ public class PlayState extends State {
             if (x>1016 && x<1060)
                 piece = "k";
         }
-        if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving && (multiPlayer == null || game.getTurn() == multiPlayer.isWhite())) {
 
         return piece;
     }
 
-            //first selected piece
-            Position selected = null;
-            if (Gdx.input.justTouched() && notSelected) {
-                game.playSound("selectPiece.wav");
-                selected = translator.toCellPos(x, y);
-                game.selectFirstPiece(selected);
-            }
-            //second selected piece
-            else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
-                Position potentialPos = translator.toCellPos(x, y);
 
-                //send move to database
-                if(multiPlayer != null && game.getTurn() == multiPlayer.isWhite()) {
-                    multiPlayer.makeMove(new Move(game.getSelectedPosition(), potentialPos));
-                }
-
-
-                game.moveFirstSelectedPieceTo(potentialPos);
-                prevMove = potentialPos;
-                helpingMove = null;
-            }
-        } else if (!activegame) { // TODO: Actual result
-            Result result1 = Result.DRAW;
-            Result result2 = Result.DRAW;
     private Animation<TextureRegion> createAnimation(Texture textureSheet, int frameColums, int frameRows, float duration) {
 
         // Use the split utility method to create a 2D array of TextureRegions. This is

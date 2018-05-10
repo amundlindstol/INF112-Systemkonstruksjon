@@ -245,4 +245,8 @@ public class PlayerData {
         }
     }
 
+    public Connection getConnection(){
+    	return conn;
+	}
+
 }
