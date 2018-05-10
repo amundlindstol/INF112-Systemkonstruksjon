@@ -1,8 +1,10 @@
 package com.grnn.chess.multiPlayer;
 
+import com.badlogic.gdx.Gdx;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.Move;
+import com.grnn.chess.states.WaitForPlayerState;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,22 +12,25 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
-public class MultiPlayer implements IActor {
+public class MultiPlayer implements IActor, Runnable {
 
     int gameId;
     Player thisIsThePlayerAtThisComputer;
     boolean thisIsTheColorOfThePlayerAtThisComputer;
     Connection conn;
     Move lastMove;
+    private ConnectionListener listener;
+    private String p2Name;
 
     /**
      * Constructur of multiplayer, Should either connect to a Peer of create a new peer
      */
-    public MultiPlayer(Connection conn){{
+    public MultiPlayer(Connection conn) {{
         this.conn = conn;
     }
-
     }
 
     /**
@@ -136,27 +141,29 @@ public class MultiPlayer implements IActor {
      * Waiting for player 2 to join your game
      * @return name of player2 when player 2 joins
      */
-    public String player2Connected(){
+    public void run(){
         try {
             String query = "SELECT * FROM GameManager WHERE GameId='"+gameId+"' AND Player2ID IS NOT NULL;";
             Statement stmt = conn.createStatement();
             while(true) {
                 ResultSet res = stmt.executeQuery(query);
                 if(res.next()){
-                    String player2Id = res.getString("Player2ID");
-                    System.out.println(player2Id);
-                    return player2Id;
+                   // return res.getString("Player2ID");
+                    p2Name = res.getString("Player2ID");
+                    break;
                 }
                 try {
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                   // e.printStackTrace();
+                    return;
                 }
                 System.out.println("waiting for player");
             }
         }catch(SQLException e){
-            return null;
+           return;
         }
+        notifyListener();
     }
 
     /**
@@ -246,5 +253,17 @@ public class MultiPlayer implements IActor {
     @Override
     public boolean isWhite() {
         return thisIsTheColorOfThePlayerAtThisComputer;
+    }
+
+    private void notifyListener() {
+        listener.workDone(this);
+    }
+
+    public void registerWorkerListener(ConnectionListener listener) {
+        this.listener = listener;
+    }
+
+    public String getP2Name() {
+        return p2Name;
     }
 }

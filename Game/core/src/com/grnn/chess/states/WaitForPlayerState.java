@@ -10,7 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.PlayerData;
+import com.grnn.chess.multiPlayer.ConnectionListener;
 import com.grnn.chess.multiPlayer.MultiPlayer;
+
+import java.util.Iterator;
 
 public class WaitForPlayerState extends State{
 
@@ -33,6 +36,8 @@ public class WaitForPlayerState extends State{
     private float gearX;
     private boolean isOkToSwitchState;
     private MultiPlayer multiPlayer;
+    private boolean foundPlayer = false;
+    private Thread thread;
 
     public WaitForPlayerState(GameStateManager gsm, Player currentPlayer, PlayerData playerData, MultiPlayer multiplayer){
         super(gsm);
@@ -41,7 +46,7 @@ public class WaitForPlayerState extends State{
         this.currentPlayer = currentPlayer;
         this.multiPlayer = multiplayer;
 
-        this.multiPlayer = multiplayer;
+        this.multiPlayer = new MultiPlayer(playerData.getConnection());
         gameIsCreated = multiPlayer.createGame(currentPlayer);
 
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
@@ -68,6 +73,24 @@ public class WaitForPlayerState extends State{
         fontText = new BitmapFont();
         fontText.setColor(Color.WHITE);
         stage.addActor(menuButton);
+
+        // Register anonymous listener class
+         multiPlayer.registerWorkerListener(new ConnectionListener() {
+            public void workDone(MultiPlayer multi) {
+                System.out.println("Found player");
+                player2Name = multi.getP2Name();
+                foundPlayer = true;
+            }
+        });
+         thread = new Thread(multiPlayer);
+         thread.start();
+    }
+
+    public void pushState(){
+        Player player2 = playerData.getPlayer(player2Name);
+        if (player2Name.length() > 0) {
+            gsm.set(new PlayState(gsm, 0, currentPlayer, player2, playerData, true, multiPlayer));
+        }
     }
 
 
@@ -103,11 +126,8 @@ public class WaitForPlayerState extends State{
     @Override
     public void update(float dt) {
         handleInput();
-        player2Name = multiPlayer.player2Connected();
-        Player player2 = playerData.getPlayer(player2Name);
-        if (player2Name.length() > 0) {
-            gsm.set(new PlayState(gsm, 0, currentPlayer, player2, playerData, true, multiPlayer));
-        }
+        if (foundPlayer) pushState();
+
     }
 
     @Override
@@ -127,6 +147,7 @@ public class WaitForPlayerState extends State{
 
     @Override
     public void dispose() {
+        thread.interrupt();
         stage.dispose();
         background.dispose();
         fontText.dispose();
