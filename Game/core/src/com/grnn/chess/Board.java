@@ -439,15 +439,15 @@ public class Board {
         ArrayList<Position> emptySquares = new ArrayList<Position>();
         int s=0;
         int end=size;
-        if (piece=="P")
-                end--;
         if (piece=="p")
+                end--;
+        if (piece=="P")
             s++;
 
 
         for (int i=s; i < end; i++) {
             for (int j = 0; j < size; j++) {
-                Position pos = new Position(i, j);
+                Position pos = new Position(j, i);
                 if (getPieceAt(pos)==null)
                     emptySquares.add(pos);
             }

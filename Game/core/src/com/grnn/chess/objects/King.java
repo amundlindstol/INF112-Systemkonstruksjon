@@ -43,7 +43,7 @@ public class King extends AbstractChessPiece {
                 Board bc = board.copyBoard(board);
                 bc.movePiece(this.getPosition(board), pos);
                 if (!willThisKingBePutInCheckByMoveTo(bc, pos))
-                validMoves.add(pos);
+                    validMoves.add(pos);
             }
         }
 
@@ -215,7 +215,7 @@ public class King extends AbstractChessPiece {
                        if (getNeighbourSquares(board, pos).contains(otherPiece.getPosition(board)))
                            return true;
                    }
-                   else {
+                   else { if (otherPiece instanceof Queen) System.out.println("possible moves queen "+otherPiece.getPossibleMovesIgnoringCheck(board));
                        if (otherPiece.getPossibleMovesIgnoringCheck(board).contains(pos)){
                            return true;
                        }

@@ -19,7 +19,7 @@ public class    Game {
     private AI aiPlayer;
     private boolean turn;
     private AbstractChessPiece firstPiece;
-    private ArrayList<Position> validMoves;
+    public ArrayList<Position> validMoves;
     private ArrayList<Position> captureMoves;
     private ArrayList<Position> castlingMoves;
     private AbstractChessPiece potentialPiece;
@@ -95,7 +95,7 @@ public class    Game {
         return turn;
     }
     public Boolean pieceHasNotBeenSelected(){
-        if (selectedFromPocket==null) return false;
+        if (selectedFromPocket!=null) return false;
         return (firstPiece==null);
     }
 
@@ -148,6 +148,23 @@ public class    Game {
         }
     }
 
+    public int getIndexOfPiece(String p){ System.out.println("GET INDEX "+p); System.out.flush();
+        char a = p.charAt(0);
+        switch (a){
+            case 'p' : return 0;
+            case 'b' : return 1;
+            case 'h' : return 2;
+            case 'r' : return 3;
+            case 'q' : return 4;
+            case 'P' : return 6;
+            case 'B' : return 7;
+            case 'H' : return 8;
+            case 'R' : return 9;
+            case 'Q' : return 10;
+            default: return -1;
+        }
+    }
+
     /**
      * Method for selecting the first piece
      * @param selectedPosition
@@ -167,10 +184,11 @@ public class    Game {
     }
 
     public boolean movePieceFromPocketTo(Position secondPosition){
-        validMoves = board.findEmptySquares(selectedFromPocket);
         if (validMoves.contains(secondPosition)) {
             firstPiece = createNewPieceFromPocket();
-            board.putNewPieceOnBoard(firstPiece, secondPosition);
+            board.putNewPieceOnBoard(firstPiece, secondPosition); System.out.println("WALLA"+board.toString());
+            if (selectedFromPocket!=null)
+                removedPieces[getIndexOfPiece(selectedFromPocket)]--;
             if (!handleCheckChecking(secondPosition))
                 return false;
         }
@@ -183,18 +201,18 @@ public class    Game {
 
     public AbstractChessPiece createNewPieceFromPocket(){
         AbstractChessPiece newPiece = null;
-        char c = selectedFromPocket.toLowerCase().charAt(0);
+        char c = selectedFromPocket.toLowerCase().charAt(0); System.out.println("THIS IS C "+c);
         switch (c){
-            case 'p': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Pawn(true) : new Pawn(false);}
-            case 'b': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Bishop(true) : new Bishop(false);}
-            case 'h': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Knight(true) : new Knight(false);}
-            case 'r': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Rook(true) : new Rook(false);}
-            case 'q': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Queen(true) : new Queen(false);}
+            case 'p': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Pawn(true) : new Pawn(false); break;}
+            case 'b': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Bishop(true) : new Bishop(false); break;}
+            case 'h': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Knight(true) : new Knight(false); break;}
+            case 'r': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Rook(true) : new Rook(false); break;}
+            case 'q': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Queen(true) : new Queen(false); break;}
         }
         return newPiece;
     }
 
-    public boolean moveFirstSelectedPieceTo(Position secondPosition){
+    public boolean moveFirstSelectedPieceTo(Position secondPosition){ System.out.println("FIRST PEACE "+selectedFromPocket);
         if (selectedFromPocket!=null) return movePieceFromPocketTo(secondPosition);
         else {
             potentialPiece = board.getPieceAt(secondPosition);
@@ -238,7 +256,7 @@ public class    Game {
         return true;
     }
 
-    private void reset(){
+    public void reset(){
         firstPiece = null;
         selectedFromPocket = null;
         validMoves.clear();
@@ -280,11 +298,11 @@ public class    Game {
         Position kingPos = board.getKingPos(!turn);
         if(kingPos != null){
             Board bc = board.copyBoard(board);
-            if (fromPocket)
-                bc.movePiece(firstPiece.getPosition(board), secondPosition);
-            King king = (King) board.getPieceAt(kingPos);
+            if (selectedFromPocket==null)
+                bc.movePiece(firstPiece.getPosition(bc), secondPosition); System.out.println("fp "+bc.toString());
+            King king = (King) bc.getPieceAt(kingPos);
             king.isInCheck = king.willThisKingBePutInCheckByMoveTo(bc, kingPos);
-            boolean otherPlayerHasNoValidMoves=noValidMoves(bc);
+            boolean otherPlayerHasNoValidMoves=noValidMoves(bc); System.out.println("has valid moves " +otherPlayerHasNoValidMoves);
             if(king.isInCheck){
                 if(turn){
                     blackPutInCheck = true;
@@ -306,11 +324,12 @@ public class    Game {
     }
 
     public boolean noValidMoves(Board b){
-        for (int i=0; i<board.size(); i++){
-            for (int j=0; j<board.size(); j++){
+        for (int i=0; i<b.size(); i++){
+            for (int j=0; j<b.size(); j++){
                 AbstractChessPiece piece = b.getPieceAt(new Position(i,j));
                 if (piece !=null && piece.isWhite()==!turn){
                     if(!piece.getValidMoves(b).isEmpty()) {
+                        System.out.println("Valid move "+piece.getPosition(b)+ " "+piece.getValidMoves(b) + b.toString());
                         return false;
                     }
                 }

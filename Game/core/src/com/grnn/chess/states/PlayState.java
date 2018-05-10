@@ -68,6 +68,8 @@ public class PlayState extends State {
     private Player player1;
     private Player player2;
 
+    boolean playingCH;
+
     /**
      * @param gsm      Game state
      * @param aiPlayer Level of AI player
@@ -85,7 +87,8 @@ public class PlayState extends State {
         }
 
         //textures
-        bg = new Texture("Graphics/GUI/GUI.png");
+        if (playingCH) bg = new Texture("Graphics/GUI/GUICrazyhouse.png");
+        else bg = new Texture("Graphics/GUI/GUI.png");
         bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
@@ -349,13 +352,13 @@ public class PlayState extends State {
 
                 //first selected piece
                 Position selected = null;
-                if (Gdx.input.justTouched() && notSelected) {
+                if (Gdx.input.justTouched() && notSelected) { System.out.println("LOL");
                     game.playSound("selectPiece.wav");
                     selected = translator.toCellPos(x, y);
                     game.selectFirstPiece(selected);
                 }
                 //second selected piece
-                else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
+                else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) { System.out.println("LOL2");
                     Position potentialPos = translator.toCellPos(x, y);
                     activegame = game.moveFirstSelectedPieceTo(potentialPos);
                     prevMove = potentialPos;
@@ -365,15 +368,17 @@ public class PlayState extends State {
 
                 }
             }
-            else if (Gdx.input.justTouched()){ //From pocket
+            else if (Gdx.input.justTouched() && playingCH){ //From pocket
                 String pieceFromPocket = getPieceFromPocket(x, y, game.getTurn()); System.out.println("PIECE FROM "+pieceFromPocket);
                 if (!pieceFromPocket.isEmpty()) {
-                    int index = getIndexOfPiece(pieceFromPocket);
+                    int index = game.getIndexOfPiece(pieceFromPocket);
                     if (!pieceFromPocket.isEmpty() && index != -1 && removedPieces[index] > 0) {
                         game.playSound("selectPiece.wav");
-                        game.selectedFromPocket = pieceFromPocket;
+                        game.selectedFromPocket = pieceFromPocket; System.out.println(pieceFromPocket+ " piecefp");
+                        game.validMoves = board.findEmptySquares(pieceFromPocket);
                     }
                 }
+                else { game.reset(); }
             }
         } else if (!activegame) { // TODO: Actual result
             Result result1 = Result.DRAW;
@@ -384,41 +389,10 @@ public class PlayState extends State {
         }
     }
 
-    int getIndexOfPiece(String p){ System.out.println("GET INDEX "+p); System.out.flush();
-        char a = p.charAt(0);
-        switch (a){
-            case 'p' : return 0;
-            case 'b' : return 1;
-            case 'h' : return 2;
-            case 'r' : return 3;
-            case 'q' : return 4;
-            case 'P' : return 6;
-            case 'B' : return 7;
-            case 'H' : return 8;
-            case 'R' : return 9;
-            case 'Q' : return 10;
-            default: return -1;
-        }
-    }
 
     public String getPieceFromPocket(int x, int y, boolean turn){ System.out.println("x "+x+" "+y);
         String piece ="";
         if (y<489 && y>415){
-            if (!turn) return piece;
-            if (x>660 && x<695)
-                piece = "p";
-            if (x>722 && x<765)
-                piece = "b";
-            if (x>786 && x<837)
-                piece = "h";
-            if (x>869 && x<904)
-                piece = "r";
-            if (x>943 && x<982)
-                piece = "q";
-            if (x>1016 && x<1060)
-                piece = "k";
-        }
-        else if (y>100 && y<175){
             if (turn) return piece;
             if (x>660 && x<695)
                 piece = "P";
@@ -432,6 +406,21 @@ public class PlayState extends State {
                 piece = "Q";
             if (x>1016 && x<1060)
                 piece = "K";
+        }
+        else if (y>100 && y<175){
+            if (!turn) return piece;
+            if (x>660 && x<695)
+                piece = "p";
+            if (x>722 && x<765)
+                piece = "b";
+            if (x>786 && x<837)
+                piece = "h";
+            if (x>869 && x<904)
+                piece = "r";
+            if (x>943 && x<982)
+                piece = "q";
+            if (x>1016 && x<1060)
+                piece = "k";
         }
         if (!piece.isEmpty())
             System.out.println("NOT EMPTY "+piece);
