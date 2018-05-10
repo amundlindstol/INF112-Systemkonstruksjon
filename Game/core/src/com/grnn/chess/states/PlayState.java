@@ -76,10 +76,11 @@ public class PlayState extends State {
      * @param player1  Should always be player
      * @param player2  Either AI or Player
      */
-    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
+    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData, String gameMode) {
         super(gsm);
 
-        if( player1 instanceof Player) {
+
+        if (player1 instanceof Player) {
             this.player1 = (Player) player1;
         }
         if(player2 instanceof Player) {
@@ -87,7 +88,10 @@ public class PlayState extends State {
         }
 
         //textures
-        if (playingCH) bg = new Texture("Graphics/GUI/GUICrazyhouse.png");
+        if (gameMode == "crazyhouse") {
+            playingCH = true;
+            bg = new Texture("Graphics/GUI/GUICrazyhouse.png");
+        }
         else bg = new Texture("Graphics/GUI/GUI.png");
         bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
