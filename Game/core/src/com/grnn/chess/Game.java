@@ -17,11 +17,12 @@ public class    Game {
     private AI aiPlayer;
     private boolean turn;
     private AbstractChessPiece firstPiece;
-    public ArrayList<Position> validMoves;
+    private ArrayList<Position> validMoves;
     private ArrayList<Position> captureMoves;
     private ArrayList<Position> castlingMoves;
     private AbstractChessPiece potentialPiece;
     private Move aiMove;
+    private Boolean playerLostPiece = false;
     public boolean fromPocket;
     public String selectedFromPocket;
 
@@ -118,12 +119,14 @@ public class    Game {
             aiMove = aiPlayer.calculateBestMove(board);
             AbstractChessPiece victim = board.getPieceAt(aiMove.getToPos());
             if(victim !=null){
+                removed = true;
+                playerLostPiece = true;
                 board.removePiece(victim);
                 updatePieceCounter(victim);
                 playSound("lostPiece.wav");
             }
             aiMove.getPiece().startMoving();
-            handleCheckChecking(aiMove.getToPos());
+            handleCheckChecking();
             turn = !turn;
             return aiMove;
         }
@@ -137,34 +140,6 @@ public class    Game {
     public Move getAiMove() {
         if (aiMove == null) aiMove = aiPlayer.calculateBestMove(board);
         return aiMove;
-    }
-
-    /**
-     *
-     * @param piece
-     */
-    public void findPossibleMoves(AbstractChessPiece piece){
-        if (piece.isWhite()==turn) {
-            validMoves = board.findEmptySquares(selectedFromPocket);
-            firstPiece = piece;
-        }
-    }
-
-    public int getIndexOfPiece(String p){ System.out.println("GET INDEX "+p); System.out.flush();
-        char a = p.charAt(0);
-        switch (a){
-            case 'p' : return 0;
-            case 'b' : return 1;
-            case 'h' : return 2;
-            case 'r' : return 3;
-            case 'q' : return 4;
-            case 'P' : return 6;
-            case 'B' : return 7;
-            case 'H' : return 8;
-            case 'R' : return 9;
-            case 'Q' : return 10;
-            default: return -1;
-        }
     }
 
     /**
@@ -225,9 +200,15 @@ public class    Game {
                     removed = true;
                     updatePieceCounter(potentialPiece);
 
-                    if (turn) playSound("takePiece.wav");
+                    if(turn) {
+                        playSound("takePiece.wav");
+                        playerLostPiece = false;
+                    }
 
-                    else playSound("lostPiece.wav");
+                    else {
+                        playSound("lostPiece.wav");
+                        playerLostPiece = true;
+                    }
 
                     firstPiece.startMoving();
                     if (!handleCheckChecking(secondPosition))
@@ -242,18 +223,17 @@ public class    Game {
                     removed = false;
                     reset();
                 }
-            } else if (potentialPiece == null && validMove) {
-                //board.movePiece(board.getPosition(firstPiece), secondPosition);
-                firstPiece.startMoving();
-                if (!handleCheckChecking(secondPosition))
+        } else if(potentialPiece == null && validMove){
+
+            firstPiece.startMoving();
+            if (!handleCheckChecking(secondPosition))
                     return false;
-                reset();
-                turn = !turn;
-                removed = false;
-            } else {
-                reset();
-                removed = false;
-            }
+            reset();
+            turn = !turn;
+            removed = false;
+        } else {
+            reset();
+            removed = false;}
         }
         return true;
     }
@@ -414,31 +394,34 @@ public class    Game {
 
     public String getText(){
         String text = "";
-        if(aiPlayer!=null){
-            if (turn) {
-                text = "Venter på at du skal gjøre neste trekk.";
-                if (removed) {
-                    text = "Bra jobbet! Du tok en brikke.";
-                }
-            } else {
-                if(removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg.";
-                }
+
+        // AI mode
+        if(aiPlayer != null){
+            if(turn){
+                if(removed && playerLostPiece )
+                    text = "Uff, du mistet en brikke. Venter på at du skal gjøre neste trekk.";
+
+                else if(removed && !playerLostPiece )
+                    text = "Bra jobbet! Du tok en brikke. Venter på at du skal gjøre neste trekk.";
+
+                else
+                    text = "Venter på at du skal gjøre neste trekk.";
             }
         }
+
+        // Friend mode
         else{
-            if (turn) {
-                text = "Venter på at du skal gjøre neste trekk.";
-                if (removed) {
-                    text = "Uff. Du mistet en brikke. Det er din tur.";
-                }
-
-            } else {
-                text = "Venter på at vennen din skal gjøre neste trekk.";
-
-                if (removed) {
-                    text = "Bra jobbet! Du tok en brikke. Det er vennen din sin tur.";
-                }
+            if(turn){
+                if(removed)
+                    text = "Uff, du mistet en brikke. Venter på at du skal gjøre neste trekk.";
+                else
+                    text = "Venter på at du skal gjøre neste trekk.";
+            }
+            else{
+                if(removed)
+                    text = "Bra jobbet! Du tok en brikke. Venter på at vennen din skal gjøre neste trekk.";
+                else
+                    text = "Venter på at vennen din skal gjøre neste trekk.";
             }
         }
         return text;

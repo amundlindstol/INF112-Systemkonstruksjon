@@ -209,6 +209,9 @@ public class PlayState extends State {
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
 
+        if(game.getText().contains("Uff"))
+            text = game.getText();
+
         if (removedPieces[5] == 1) {
             text = "Du vant " + player1Name + ", gratulerer!";
             activegame = false;
