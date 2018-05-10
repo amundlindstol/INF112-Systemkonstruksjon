@@ -6,18 +6,17 @@ import com.grnn.chess.Position;
 //import javafx.geometry.Pos;
 //import javafx.geometry.Pos;
 
-import java.lang.reflect.Array;
+//import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class King extends AbstractChessPiece {
-    private final int value = Integer.MAX_VALUE;
+    private final int value = 900;
     public boolean isInCheck;
     String letterRepresentation = "k";
-    private boolean hasMoved;
 
-    public King(boolean w) {
+    public King(boolean w, boolean hasMoved) {
         super(w);
+        this.hasMoved = hasMoved;
         setImage("King");
     }
 
@@ -38,16 +37,16 @@ public class King extends AbstractChessPiece {
         ArrayList<Position> validMoves = new ArrayList<Position>();
         Position kingPos = getPosition(board);
         ArrayList<Position> neighbourSquares = getNeighbourSquares(board, kingPos);
+        validMoves.addAll(getCastlingMoves(board, kingPos));
         for (Position pos : neighbourSquares){
             if ((board.getPieceAt(pos)==null || !isSameColor(board.getPieceAt(pos)))) {
-                Board bc = board.copyBoard(board);
+                Board bc = board.copyBoard();
                 bc.movePiece(this.getPosition(board), pos);
                 if (!willThisKingBePutInCheckByMoveTo(bc, pos))
                     validMoves.add(pos);
             }
         }
 
-        validMoves.addAll(getCastlingMoves(board, kingPos));
 
         return validMoves;
     }
@@ -113,8 +112,12 @@ public class King extends AbstractChessPiece {
         }
 
         for (Position posToCheck = kingPos.west(); posToCheck.getX() > 0; posToCheck = posToCheck.west()) {
-            if (board.getPieceAt(posToCheck) != null)
+            if (board.getPieceAt(posToCheck) != null) {
                 return false;
+            }
+            else if (willThisKingBePutInCheckByMoveTo(board, posToCheck)) {
+                return false;
+            }
         }
 
         return pieceWestCorner != null && pieceWestCorner instanceof Rook && !((Rook) pieceWestCorner).hasMoved();
@@ -178,8 +181,12 @@ public class King extends AbstractChessPiece {
 
         for (Position posToCheck = kingPos.east(); posToCheck.getX() < board.size() - 1; posToCheck = posToCheck.east()) {
             if (board.getPieceAt(posToCheck) != null) {
+                    return false;
+            }
+            else if (willThisKingBePutInCheckByMoveTo(board, posToCheck)) {
                 return false;
             }
+
         }
         return pieceEastCorner != null && pieceEastCorner instanceof Rook && !((Rook) pieceEastCorner).hasMoved();
     }

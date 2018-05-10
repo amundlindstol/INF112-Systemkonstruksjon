@@ -15,8 +15,10 @@ public class Pawn extends AbstractChessPiece {
      * Consturtur of pawn, will set image to "Pawn"
      * @param isWhite
      */
-	public Pawn(boolean isWhite) {
+	public Pawn(boolean isWhite, boolean hasMoved) {
 		super(isWhite);
+		this.hasMoved = hasMoved;
+
 		setImage("Pawn");
 	}
 
@@ -24,30 +26,46 @@ public class Pawn extends AbstractChessPiece {
 		return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
 	}
 
+	
 	@Override
 	public ArrayList<Position> getValidMoves(Board board) {
 		return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
 	}
-
+	
 	public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
+		Position pawnPos = getPosition(board);
+		if(pawnPos.equals(new Position(4,6)) || pawnPos.equals(new Position(5,5))
+				|| pawnPos.equals(new Position(4,4)) || pawnPos.equals(new Position(4,3))) {
+			System.out.println(board.toString());
+			System.out.println("Calculating piece at position: " + this.getPosition(board));
+			System.out.println("is white: " + isWhite());
+			System.out.println("This has moved: " + hasMoved);
+		}
+	//public ArrayList<Position> getValidMoves(Board board){
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 		//Get the position of the pawn
-		Position pawnPos = getPosition(board);
 		if(isWhite){
 			if(board.getPieceAt(pawnPos.north())==null) {
 				if (!hasMoved && board.getPieceAt(pawnPos.north(2)) == null) {
+					//System.out.println("Trying to move two steps north");
 					validMoves.add(pawnPos.north(2));
 				}
+				//System.out.println("Trying to move one step north");
 				validMoves.add(pawnPos.north());
 			}
 			if(board.getPieceAt(pawnPos.east().north())!=null && !isSameColor(board.getPieceAt(pawnPos.east().north()))){
+				//System.out.println("Trying to move one step northeast");
+
 				validMoves.add(pawnPos.east().north());
 			}
 			if(board.getPieceAt(pawnPos.west().north())!=null && !isSameColor(board.getPieceAt(pawnPos.west().north()))){
+				//System.out.println("Trying to move one step northwest");
+
 				validMoves.add(pawnPos.west().north());
 			}
 
 		}else {
+			//System.out.println("not the case");
 			if(board.getPieceAt(pawnPos.south())==null) {
 				if (!hasMoved && board.getPieceAt(pawnPos.south(2)) == null) {
 					validMoves.add(pawnPos.south(2));

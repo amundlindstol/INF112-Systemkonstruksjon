@@ -20,11 +20,12 @@ public class Bishop extends AbstractChessPiece {
 	}
 
 	//TODO: actually implement this
+	
 	public ArrayList<Position> getValidMoves(Board board) {
 		return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
 	}
-
 	public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
+	//public ArrayList<Position> getValidMoves(Board board){
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 
 		//Get the position of the rook
@@ -33,7 +34,6 @@ public class Bishop extends AbstractChessPiece {
 		validMoves.addAll(getValidMovesSouthWest(board));
 		validMoves.addAll(getValidMovesSouthEast(board));
 		return validMoves;
-
 	}
 
 	private ArrayList<Position> getValidMovesSouthEast(Board board) {

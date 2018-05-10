@@ -27,6 +27,7 @@ public abstract class AbstractChessPiece {
      * @param isWhite
      */
     public AbstractChessPiece(boolean isWhite) {
+
         this.isWhite = isWhite;
     }
     /**
@@ -71,7 +72,8 @@ public abstract class AbstractChessPiece {
      * @param board The board that the piece is on
      * @return A list of positions that the piece can capture the opponents piece on
      */
-    public ArrayList<Position> getCaptureMoves(Board board) {
+
+    public ArrayList<Position> getCaptureMoves(Board board) { //System.out.println("get capture!");
 
         List<Position> captureMoves = new ArrayList<Position>();
         List<Position> validMoves = getValidMoves(board);
@@ -82,7 +84,6 @@ public abstract class AbstractChessPiece {
                 captureMoves.add(position);
             }
         }
-
         return (ArrayList<Position>) captureMoves;
     }
 
@@ -146,5 +147,9 @@ public abstract class AbstractChessPiece {
         }
 
         return imageS + ".png";
+    }
+
+    public int getValue() {
+        return value;
     }
 }

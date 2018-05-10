@@ -354,7 +354,8 @@ public class PlayState extends State {
             if (animationIndex == animationPath.size() && animationPath.size() > 0) { //reached end of list
                 piece.stopMoving();
                 pieceIsMoving = false;
-                //THIS IS WHERE THE ACTUAL MOVING HAPPENS TODO CLEAN MESS
+                //THIS IS WHERE THE ACTUAL MOVING HAPPENS
+
                 if (ai) {
                     if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevAImove.getToPos())) {
                         board.movePiece(piecePos, prevAImove.getToPos());
@@ -557,6 +558,7 @@ public class PlayState extends State {
         }
         return new Animation<TextureRegion>(duration, animationFrames);
     }
+
 
     @Override
     public void dispose() {

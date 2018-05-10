@@ -149,6 +149,7 @@ public class    Game {
      */
     public void selectFirstPiece(Position selectedPosition){
         firstPiece = board.getPieceAt(selectedPosition);
+        System.out.println("first piece: " + firstPiece);
         if(firstPiece != null && firstPiece.isWhite() == turn){
             validMoves = firstPiece.getValidMoves(board);
             captureMoves = firstPiece.getCaptureMoves(board);
@@ -167,6 +168,7 @@ public class    Game {
 
     public boolean movePieceFromPocketTo(Position secondPosition){
         if (validMoves.contains(secondPosition)) {
+            System.out.println("first piece: " + firstPiece);
             firstPiece = createNewPieceFromPocket();
             board.setPiece(firstPiece, secondPosition);
             if (selectedFromPocket!=null)
@@ -210,10 +212,10 @@ public class    Game {
         AbstractChessPiece newPiece = null;
         char c = selectedFromPocket.toLowerCase().charAt(0);
         switch (c){
-            case 'p': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Pawn(true) : new Pawn(false); break;}
+            case 'p': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Pawn(true, true) : new Pawn(false, true); break;}
             case 'b': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Bishop(true) : new Bishop(false); break;}
             case 'h': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Knight(true) : new Knight(false); break;}
-            case 'r': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Rook(true) : new Rook(false); break;}
+            case 'r': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Rook(true, true) : new Rook(false, true); break;}
             case 'q': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Queen(true) : new Queen(false); break;}
         }
         return newPiece;
@@ -315,9 +317,12 @@ public class    Game {
     public boolean handleCheckChecking(Position secondPosition){
         Position kingPos = board.getKingPos(!turn);
         if(kingPos != null){
-            Board bc = board.copyBoard(board);
-            if (selectedFromPocket==null)
+            Board bc = board.copyBoard();
+            if (selectedFromPocket==null) {
+                System.out.println("first piece: " + firstPiece);
+                System.out.println(firstPiece.getPosition(bc));
                 bc.movePiece(firstPiece.getPosition(bc), secondPosition);
+            }
             King king = (King) bc.getPieceAt(kingPos);
             king.isInCheck = king.willThisKingBePutInCheckByMoveTo(bc, kingPos);
             boolean otherPlayerHasNoValidMoves=noValidMoves(bc);
@@ -340,6 +345,7 @@ public class    Game {
         }
         return true;
     }
+
 
 
     /**
@@ -473,8 +479,8 @@ public class    Game {
             File f = new File("Sound/"+url);
             Clip clip = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream( f );
-            clip.open(ais);
-            clip.start(); // TODO: Uncomment code.
+//            clip.open(ais);
+  //          clip.start(); // TODO: Uncomment code.
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (IOException e) {

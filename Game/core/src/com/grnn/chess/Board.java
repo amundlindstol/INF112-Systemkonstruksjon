@@ -1,7 +1,7 @@
 package com.grnn.chess;
 
-import com.grnn.chess.exceptions.IllegalMoveException;
 import com.grnn.chess.objects.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +12,13 @@ import java.util.List;
 
 public class Board {
 
+    public ArrayList<Position> positions;
     // Variables
     private int size = 8;
     private ArrayList<ArrayList<AbstractChessPiece>> grid = new ArrayList<ArrayList<AbstractChessPiece>>(size);
     private ArrayList<AbstractChessPiece> removedPieces;
     private ArrayList<Move> moveHistory;
     private int halfmoveNumber;
-
-    public ArrayList<Position> positions;
 
     public Board() {
         moveHistory = new ArrayList<Move>();
@@ -51,6 +50,8 @@ public class Board {
         //if (isValidMove(startPos, endPos)) {
         setPiece(piece, endPos);
         setPiece(null, startPos);
+
+
         piece.move();
         moveHistory.add(new Move(endPos, startPos, piece));
         enPassant();
@@ -77,10 +78,11 @@ public class Board {
     }
 
     public Position getKingPos(boolean kingIsWhite) {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (getPieceAt(new Position(i, j)) instanceof King && getPieceAt(new Position(i, j)).isWhite() == kingIsWhite) {
-                    return new Position(i, j);
+
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                if (getPieceAt(new Position(x, y)) instanceof King && getPieceAt(new Position(x, y)).isWhite() == kingIsWhite) {
+                    return new Position(x, y);
                 }
             }
         }
@@ -146,15 +148,15 @@ public class Board {
     public void initializeBoard() {
 
         for (int i = 0; i < size(); i++) {
-            setPiece(new Pawn(true), i, 1);
-            setPiece(new Pawn(false), i, 6);
+            setPiece(new Pawn(true, false), i, 1);
+            setPiece(new Pawn(false, false), i, 6);
         }
 
-        setPiece(new Rook(true), 0, 0);
-        setPiece(new Rook(true), 7, 0);
+        setPiece(new Rook(true, false), 0, 0);
+        setPiece(new Rook(true, false), 7, 0);
 
-        setPiece(new Rook(false), 0, 7);
-        setPiece(new Rook(false), 7, 7);
+        setPiece(new Rook(false, false), 0, 7);
+        setPiece(new Rook(false, false), 7, 7);
 
         setPiece(new Knight(true), 1, 0);
         setPiece(new Knight(true), 6, 0);
@@ -170,8 +172,8 @@ public class Board {
         setPiece(new Queen(true), 3, 0);
         setPiece(new Queen(false), 3, 7);
 
-        setPiece(new King(true), 4, 0);
-        setPiece(new King(false), 4, 7);
+        setPiece(new King(true, false), 4, 0);
+        setPiece(new King(false, false), 4, 7);
     }
 
     public void setPiece(AbstractChessPiece piece, Position pos) {
@@ -182,11 +184,15 @@ public class Board {
         if (pawnCanPromote(piece, y)) {
             piece = new Queen(piece.isWhite());
         }
+
         grid.get(y).set(x, piece);
     }
 
     private boolean pawnCanPromote(AbstractChessPiece piece, int y) {
+        
         if (piece instanceof Pawn) {
+            if(y == 7)
+                System.out.println("debug");
             if ((piece.isWhite() && y == size() - 1)
                     || (!piece.isWhite() && y == 0)) {
                 return true;
@@ -206,7 +212,10 @@ public class Board {
         for (int y = 0; y < size(); y++) {
             for (int x = 0; x < size(); x++) {
                 Position p = new Position(x, y);
-                if (getPieceAt(p) != null && getPieceAt(p).equals(piece))
+                AbstractChessPiece testPiece = getPieceAt(p);
+                if(p.equals(new Position(6,0)))
+                    System.out.println("piece " + testPiece + " at position: " + p + " is equal: "); // + testPiece.equals(piece));
+                if (testPiece != null && testPiece.equals(piece))
                     return p;
             }
         }
@@ -362,10 +371,11 @@ public class Board {
      */
     public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> possibleMoves) {
         for (int i = 0; i < possibleMoves.size(); i++) {
-            Board boardCopy = copyBoard(this);
+            Board boardCopy = copyBoard();
             Position p = piece.getPosition(this);
-            boardCopy.setPiece(piece, possibleMoves.get(i));
-            boardCopy.setPiece(null, p);
+            Position piecePos = piece.getPosition(this);
+            Position endPos = possibleMoves.get(i);
+            boardCopy.movePiece(piecePos, endPos);
             if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite()))) {
                 System.out.println(possibleMoves.get(i));
                 possibleMoves.remove(i);
@@ -375,22 +385,77 @@ public class Board {
         return possibleMoves;
     }
 
-    public Board copyBoard(Board board) {
+
+    /**
+     * Making a copy of the current board
+     * @return A copy of the board
+     */
+    public Board copyBoard() {
         Board boardCopy = new Board();
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 Position pos = new Position(i, j);
-                AbstractChessPiece p = board.getPieceAt(pos);
-                boardCopy.setPiece(p, pos);
+                AbstractChessPiece piece = getPieceAt(pos);
+
+                if (piece instanceof Bishop) {
+                    piece = new Bishop(piece.isWhite());
+                } else if (piece instanceof King) {
+                    piece = new King(piece.isWhite(), piece.hasMoved);
+                } else if (piece instanceof Knight) {
+                    piece = new Knight(piece.isWhite());
+                } else if (piece instanceof Pawn) {
+                    piece = new Pawn(piece.isWhite(), piece.hasMoved);
+                } else if (piece instanceof Queen) {
+                    piece = new Queen(piece.isWhite());
+                } else if (piece instanceof Rook) {
+                    piece = new Rook(piece.isWhite(), piece.hasMoved);
+                }
+
+                boardCopy.setPiece(piece, pos);
             }
         }
         return boardCopy;
     }
 
+    /**
+     * Evaluate the board.
+     * @param isWhite Whether the actor is white or not.
+     * @return The value of the board.
+     */
     public int calculateBoardForActor(boolean isWhite) {
-        // TODO: implement
-        return 0;
+        int sum = 0;
+
+        sum += getBoardValue(isWhite);
+        sum -= getBoardValue(!isWhite);
+
+        return sum;
+    }
+
+    /**
+     * Evaluate the board for a specific actor.
+     * @param isWhite Whether the actor is white or not.
+     * @return The value of the board.
+     */
+    public int getBoardValue(boolean isWhite) {
+        int sum = 0;
+        // value of your chess pieces
+        for (AbstractChessPiece piece : getSpesificPlayersPieces(isWhite)) {
+            if (piece instanceof Bishop) {
+                sum += ((Bishop) piece).getValue();
+            } else if (piece instanceof King) {
+                sum += ((King) piece).getValue();
+            } else if (piece instanceof Knight) {
+                sum += ((Knight) piece).getValue();
+            } else if (piece instanceof Pawn) {
+                sum += ((Pawn) piece).getValue();
+            } else if (piece instanceof Queen) {
+                sum += ((Queen) piece).getValue();
+            } else if (piece instanceof Rook) {
+                sum += ((Rook) piece).getValue();
+            }
+        }
+        return sum;
     }
 
     /**
@@ -433,9 +498,9 @@ public class Board {
         ArrayList<Position> emptySquares = new ArrayList<Position>();
         int s=0;
         int end=size;
-        if (piece=="p")
+        if (piece.equals("p"))
                 end--;
-        if (piece=="P")
+        if (piece.equals("P"))
             s++;
 
 

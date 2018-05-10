@@ -4,8 +4,6 @@ import com.grnn.chess.Board;
 import com.grnn.chess.Position;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Rook extends AbstractChessPiece {
 	private final int value = 5;
@@ -13,7 +11,7 @@ public class Rook extends AbstractChessPiece {
 	protected String image = "ChessPieces/Rook";
 	private boolean hasMoved;
 
-	public Rook(boolean isWhite) {
+	public Rook(boolean isWhite, boolean hasMoved) {
 		super(isWhite);
 		setImage("Rook");
 	}
@@ -27,12 +25,14 @@ public class Rook extends AbstractChessPiece {
 	}
 
 	//TODO: actually implement this
+    
     public ArrayList<Position> getValidMoves(Board board) {
         return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
     }
 
     public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
-		ArrayList<Position> validMoves = new ArrayList<Position>();
+    //public ArrayList<Position> getValidMoves(Board board){
+        ArrayList<Position> validMoves = new ArrayList<Position>();
 
 		//Get the position of the rook
 		Position rookPos = getPosition(board);
