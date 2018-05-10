@@ -142,7 +142,7 @@ public class PlayState extends State {
         stage.addActor(resignBtn);
 
         //help button
-        helpBtn = new TextButton("Hjelp", skin);
+        helpBtn = new TextButton("Tips", skin);
         helpBtn.setSize(helpBtn.getWidth(),60);
         helpBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-helpBtn.getWidth()+10,(resignBtn.getY()));
         stage.addActor(helpBtn);
@@ -343,7 +343,7 @@ public class PlayState extends State {
         } else if(result1 == Result.LOSS) {
             victoryMsg = "Gratulerer\n" + appendSpaces(game.getPlayer2().name) + "\n  du vant!";
         } else if(result1 == Result.DRAW) {
-            victoryMsg = "Uavgjordt!";
+            victoryMsg = "Uavgjort!";
         }
         batch.draw(victoryTex, bgBoard.getWidth() / 2 - victoryTex.getWidth() / 2, Gdx.graphics.getHeight() / 2 - victoryTex.getHeight() / 2);
         victoryLabel.setText(victoryMsg);

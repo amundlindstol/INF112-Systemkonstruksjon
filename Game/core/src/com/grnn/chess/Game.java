@@ -4,8 +4,6 @@ import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
-//import javafx.geometry.Pos;
-
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -222,7 +220,6 @@ public class    Game {
         System.out.println("new:  " + player.getRating() + "  " + opponent.getRating());
 
         //Saving to database
-
         if(!playerData.isOffline()) {
             playerData.updatePlayers(player1, player2);
         }
@@ -280,7 +277,6 @@ public class    Game {
         l[1] = rookNewPos;
         return l;
     }
-
 
     /**
      * Method to update the counter for removed pieces
@@ -472,8 +468,6 @@ public class    Game {
         out += " " + getEnPassantSquare();
         out += " " + halfMoveNumber();
         out += " " + fullMoveNumber();
-
-
 
         return out;
     }
