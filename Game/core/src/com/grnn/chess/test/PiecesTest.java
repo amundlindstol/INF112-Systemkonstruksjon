@@ -1,10 +1,12 @@
 package com.grnn.chess.test;
 
 import com.grnn.chess.Board;
+import com.grnn.chess.Move;
 import com.grnn.chess.Position;
 import com.grnn.chess.exceptions.IllegalMoveException;
 import com.grnn.chess.objects.*;
 //import javafx.geometry.Pos;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,7 +55,7 @@ public class PiecesTest {
 	@Test
 	public void rookValidMoveTest() {
 		Board board = new Board();
-		Rook r = new Rook(true);
+		Rook r = new Rook(true, false);
 		board.setPiece(r, 0, 0);
 
 		assertTrue(r.getValidMoves(board).contains(new Position(0, 3)));
@@ -63,7 +65,7 @@ public class PiecesTest {
 	@Test
 	public void rookInvalidMoveTest() {
 		Board board = new Board();
-		Rook r = new Rook(true);
+		Rook r = new Rook(true, false);
 		board.setPiece(r, 1, 1);
 
 
@@ -121,8 +123,8 @@ public class PiecesTest {
 	public void kingCanCastleWhenNotMoved() {
 		Board board = new Board();
 		King r = new King(true, false);
-		Rook rook = new Rook(true);
-		Rook rightRook = new Rook(true);
+		Rook rook = new Rook(true, false);
+		Rook rightRook = new Rook(true, false);
 		board.setPiece(r, 4, 0);
 		board.setPiece(rook, 0, 0);
 		board.setPiece(rightRook, 7, 0);
@@ -170,5 +172,23 @@ public class PiecesTest {
 		} catch (IllegalMoveException e) {
 			// should throw this exception
 		}
+	}
+
+	@Test
+	public void KingCantMoveOutsideOfBoard() {
+		Board board = new Board();
+
+
+		King whiteKing = new King(true, true);
+		Position whiteKingPos = new Position(6, 0);
+
+		Rook whiteRook = new Rook(true, false);
+		Position whiteRookPos = new Position(7,0);
+
+		board.setPiece(whiteKing, whiteKingPos);
+		board.setPiece(whiteRook, whiteRookPos);
+
+		assertFalse(whiteKing.getValidMoves(board).contains(new Position(8,0)));
+
 	}
 }

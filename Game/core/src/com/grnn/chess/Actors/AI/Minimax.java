@@ -13,7 +13,7 @@ import static com.grnn.chess.Actors.AI.IAUtils.iterableToSortedList;
 public class Minimax implements IA<Move> {
 
     private Board board;
-    private final long threeSeconds = 3 * (long) Math.pow(10, 9);
+    private final long threeSeconds = 3 * (long) Math.pow(10, 3);
     private long startTime;
 
 
@@ -27,7 +27,7 @@ public class Minimax implements IA<Move> {
         if (depth <= 0) {
             throw new IllegalArgumentException("Search depth MUST be > 0");
         }
-        startTime = System.nanoTime();
+        startTime = System.currentTimeMillis();
         List<Move> orderedMoves = iterableToSortedList(possibleMoves);
         minimax(orderedMoves, depth, 1);
         Collections.sort(orderedMoves);
@@ -66,10 +66,11 @@ public class Minimax implements IA<Move> {
         //System.out.println(board.toString());
         boolean isWhite = who > 0;
 
-        long timeUsedThisFar = System.nanoTime() - startTime;
+        long timeUsedThisFar = System.currentTimeMillis() - startTime;
         System.out.println(timeUsedThisFar);
         if (depth == 0 || isOver(isWhite) || timeUsedThisFar >= threeSeconds) {
             System.out.println("depth: " + depth);
+
             return who * board.calculateBoardForActor(isWhite);
         }
         Iterator<Move> moves = (initialMoves != null ? initialMoves : board.getPossibleAIMoves(isWhite)).iterator();

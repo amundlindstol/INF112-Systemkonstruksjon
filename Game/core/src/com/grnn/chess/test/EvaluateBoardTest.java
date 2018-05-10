@@ -17,8 +17,8 @@ public class EvaluateBoardTest {
 
         King whiteKing = new King(true, true);
         Queen whiteQueen = new Queen(true);
-        Rook firstWhiteRook = new Rook(true);
-        Rook secondWhiteRook = new Rook(true);
+        Rook firstWhiteRook = new Rook(true, false);
+        Rook secondWhiteRook = new Rook(true, false);
 
         King blackKing = new King(false, true);
 

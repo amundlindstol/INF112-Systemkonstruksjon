@@ -2,6 +2,7 @@ package com.grnn.chess;
 
 import com.grnn.chess.objects.*;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -150,11 +151,11 @@ public class Board {
             setPiece(new Pawn(false, false), i, 6);
         }
 
-        setPiece(new Rook(true), 0, 0);
-        setPiece(new Rook(true), 7, 0);
+        setPiece(new Rook(true, false), 0, 0);
+        setPiece(new Rook(true, false), 7, 0);
 
-        setPiece(new Rook(false), 0, 7);
-        setPiece(new Rook(false), 7, 7);
+        setPiece(new Rook(false, false), 0, 7);
+        setPiece(new Rook(false, false), 7, 7);
 
         setPiece(new Knight(true), 1, 0);
         setPiece(new Knight(true), 6, 0);
@@ -380,7 +381,11 @@ public class Board {
         }
         return possibleMoves;
     }
-
+    
+    /**
+     * Making a copy of the current board
+     * @return A copy of the board
+     */
     public Board copyBoard() {
         Board boardCopy = new Board();
 
@@ -400,7 +405,7 @@ public class Board {
                 } else if (piece instanceof Queen) {
                     piece = new Queen(piece.isWhite());
                 } else if (piece instanceof Rook) {
-                    piece = new Rook(piece.isWhite());
+                    piece = new Rook(piece.isWhite(), piece.hasMoved);
                 }
 
                 boardCopy.setPiece(piece, pos);

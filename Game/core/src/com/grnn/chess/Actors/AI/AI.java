@@ -65,11 +65,14 @@ public class AI implements IActor{
         List<Move> sortedMoves = minimax.getBestMoves(5, moves);
 
         if (sortedMoves.isEmpty()) return null;
+    
+        System.out.println("Value first move: " + sortedMoves.get(0).value);
+        System.out.println("First move is: " + sortedMoves.get(0));
+        System.out.println("Value last move: " + sortedMoves.get(sortedMoves.size()-1).value);
+        System.out.println("Last move is: " + sortedMoves.get(sortedMoves.size()-1));
 
-        System.out.println("First move: " + sortedMoves.get(0).value);
-        System.out.println("Last move: " + sortedMoves.get(sortedMoves.size() - 1).value);
-        //sortedMoves.get(0);//
-        return sortedMoves.get(sortedMoves.size()-1);
+
+        return sortedMoves.get(sortedMoves.size()-1); //sortedMoves.get(0);
     }
 
         @Override
