@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.grnn.chess.*;
-import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.multiPlayer.MultiPlayer;
@@ -67,7 +66,7 @@ public class PlayState extends State {
 
     private Player player1;
     private Player player2;
-    private MultiPlayer mpOpponent;
+    private MultiPlayer multiPlayer;
 
     /**
      * @param gsm      Game state
@@ -88,7 +87,7 @@ public class PlayState extends State {
      * @param player2
      * @param playerData
      * @param onlineGame true if game is online
-     * @param opponent name of the opponent
+     * @param multiPlayer name of the multiPlayer
      */
     public PlayState(GameStateManager gsm,
                      int aiPlayer,
@@ -96,18 +95,18 @@ public class PlayState extends State {
                      IActor player2,
                      PlayerData playerData,
                      boolean onlineGame,
-                     MultiPlayer opponent) {
+                     MultiPlayer multiPlayer) {
         super(gsm);
-        mpOpponent = opponent;
+        this.multiPlayer = multiPlayer;
 
 
         if(onlineGame) {
-            if(opponent.isWhite()) {
-                this.player2 = (Player) player1;
-                this.player1 = (Player) player2;
-            } else {
-                this.player1 = (Player) player1;
+            if(multiPlayer.isWhite()) {
                 this.player2 = (Player) player2;
+                this.player1 = (Player) player1;
+            } else {
+                this.player1 = (Player) player2;
+                this.player2 = (Player) player1;
             }
         } else {
             if (player1 instanceof Player) {
@@ -143,8 +142,8 @@ public class PlayState extends State {
         if (player2 instanceof Player) {
             player2Name = ((Player) player2).name;
         } else if (onlineGame) {
-            if(opponent.isWhite()) {
-                player1Name = opponent.getOpponent(player1Name);
+            if(multiPlayer.isWhite()) {
+                player1Name = multiPlayer.getOpponent(player1Name);
                 player2Name = ((Player) player1).name;
             }
         } else {
@@ -276,14 +275,15 @@ public class PlayState extends State {
             }
         }
 
-        if(mpOpponent != null && mpOpponent.isWhite() != game.getTurn()) {
-            Move mpMove = mpOpponent.nextMove();
+        if(multiPlayer != null && multiPlayer.isWhite() != game.getTurn() && !pieceIsMoving) {
+            Move mpMove = multiPlayer.nextMove();
             System.out.println(mpMove);
             if(mpMove != null) {
 
                 AbstractChessPiece movingPiece = board.getPieceAt(mpMove.getFromPos());
-                board.movePiece(mpMove.getFromPos(), mpMove.getToPos());
-                movingPiece.startMoving();
+                game.selectFirstPiece(mpMove.getFromPos());
+                game.moveFirstSelectedPieceTo(mpMove.getToPos());
+                prevMove = mpMove.getToPos();
             }
         }
         stage.draw();
@@ -393,7 +393,7 @@ public class PlayState extends State {
             helpingMove = game.getHelpingMove();
             System.out.println(helpingMove);
         }
-        if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
+        if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving && game.getTurn() == multiPlayer.isWhite()) {
 
             //AI
             if (!game.getTurn() && game.isAi()) {
@@ -412,7 +412,7 @@ public class PlayState extends State {
             else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
                 Position potentialPos = translator.toCellPos(x, y);
                 game.moveFirstSelectedPieceTo(potentialPos);
-                mpOpponent.makeMove(new Move(selected,potentialPos));
+                multiPlayer.makeMove(new Move(game.getSelectedPosition(),potentialPos));
                 prevMove = potentialPos;
                 helpingMove = null;
             }

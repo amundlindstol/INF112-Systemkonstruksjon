@@ -26,7 +26,7 @@ public class Move {
         piece = null;
     }
 
-    public Move(Position toPos, Position fromPos){
+    public Move(Position fromPos, Position toPos){
         this.toPos = toPos;
         this.fromPos = fromPos;
         this.piece = null;

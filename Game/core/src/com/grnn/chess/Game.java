@@ -34,6 +34,7 @@ public class    Game {
 
     private boolean blackPutInCheck;
     private boolean whitePutInCheck;
+    private Position selectedPosition;
 
     private int gameId;
 
@@ -149,6 +150,7 @@ public class    Game {
      * @return A list of lists of valid positions. In the first position validmoves, second position capturemoves and third castlingmoves
      */
     public void selectFirstPiece(Position selectedPosition){
+        this.selectedPosition = selectedPosition;
         firstPiece = board.getPieceAt(selectedPosition);
         if(firstPiece != null && firstPiece.isWhite() == turn){
             validMoves = firstPiece.getValidMoves(board);
@@ -159,6 +161,10 @@ public class    Game {
         } else {
             firstPiece = null;
         }
+    }
+
+    public Position getSelectedPosition() {
+        return selectedPosition;
     }
 
     public void moveFirstSelectedPieceTo(Position secondPosition){
