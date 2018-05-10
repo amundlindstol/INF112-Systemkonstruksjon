@@ -235,7 +235,7 @@ public class    Game {
     public boolean handleCheckChecking(Position secondPosition){
         Position kingPos = board.getKingPos(!turn);
         if(kingPos != null){
-            Board bc = board.copyBoard(board);
+            Board bc = board.copyBoard();
             bc.movePiece(firstPiece.getPosition(board), secondPosition);
             King king = (King) board.getPieceAt(kingPos);
             king.isInCheck = king.willThisKingBePutInCheckByMoveTo(bc, kingPos);
