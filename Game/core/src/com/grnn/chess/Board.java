@@ -2,7 +2,7 @@ package com.grnn.chess;
 
 import com.grnn.chess.exceptions.IllegalMoveException;
 import com.grnn.chess.objects.*;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -382,7 +382,11 @@ public class Board {
         }
         return possibleMoves;
     }
-
+    
+    /**
+     * Making a copy of the current board
+     * @return A copy of the board
+     */
     public Board copyBoard() {
         Board boardCopy = new Board();
 

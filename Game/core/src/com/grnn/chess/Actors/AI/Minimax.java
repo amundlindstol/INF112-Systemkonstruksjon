@@ -62,7 +62,7 @@ public class Minimax implements IA<Move> {
         boolean isWhite = who > 0;
 
         if (depth == 0 || isOver(isWhite)) {
-            return who * board.getBoardValue(isWhite);
+            return who * board.calculateBoardForActor(isWhite);
         }
         Iterator<Move> moves = (initialMoves != null ? initialMoves : board.getPossibleAIMoves(isWhite)).iterator();
         if (!moves.hasNext()) {
