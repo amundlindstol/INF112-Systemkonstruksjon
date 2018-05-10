@@ -4,8 +4,6 @@ import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
 import com.grnn.chess.objects.*;
-//import javafx.geometry.Pos;
-
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -106,7 +104,10 @@ public class    Game {
     public ArrayList<Position> getCaptureMoves() {
         return captureMoves;
     }
+
     public boolean isAi() {return aiPlayer != null;}
+
+    public AI getAiPlayer() {return aiPlayer;}
 
     /**
      * ai's move method
@@ -119,6 +120,7 @@ public class    Game {
             if(victim !=null){
                 board.removePiece(victim);
                 updatePieceCounter(victim);
+                playSound("lostPiece.wav");
             }
             aiMove.getPiece().startMoving();
             handleCheckChecking(aiMove.getToPos());
@@ -129,7 +131,7 @@ public class    Game {
     }
 
     /**
-     * used once, do not use this method
+     * used once when move is not initiated
      * @return aiMove
      */
     public Move getAiMove() {
@@ -226,7 +228,7 @@ public class    Game {
                     if (turn) playSound("takePiece.wav");
 
                     else playSound("lostPiece.wav");
-                    //board.movePiece(board.getPosition(firstPiece), secondPosition);
+
                     firstPiece.startMoving();
                     if (!handleCheckChecking(secondPosition))
                         return false;
@@ -278,13 +280,14 @@ public class    Game {
         int newElo = elo.getNewRating(res, opponent.getRating());
         int newElo2 = elo2.getNewRating(res2, player.getRating());
 
+        player.registrerResult(res);
+        opponent.registrerResult(res2);
         player.setRating(newElo);
         opponent.setRating(newElo2);
 
         System.out.println("new:  " + player.getRating() + "  " + opponent.getRating());
 
         //Saving to database
-
         if(!playerData.isOffline()) {
             playerData.updatePlayers(player1, player2);
         }
@@ -370,7 +373,6 @@ public class    Game {
         l[1] = rookNewPos;
         return l;
     }
-
 
     /**
      * Method to update the counter for removed pieces
@@ -563,8 +565,28 @@ public class    Game {
         out += " " + halfMoveNumber();
         out += " " + fullMoveNumber();
 
-
-
         return out;
+    }
+
+    /**
+     * Get player one
+     * @return Player one if player1 is instance of player, null otherwise (e.g. if AI)
+     */
+    public Player getPlayer1(){
+        if(player1 instanceof Player) {
+            return (Player) player1;
+        }
+        return null;
+    }
+
+    /**
+     * Get player two
+     * @return Player two if player1 is instance of player, null otherwise (e.g. if AI)
+     */
+    public Player getPlayer2(){
+        if(player2 instanceof Player) {
+            return (Player) player2;
+        }
+        return null;
     }
 }
