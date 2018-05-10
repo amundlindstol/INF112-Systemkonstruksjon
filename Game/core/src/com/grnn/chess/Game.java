@@ -440,10 +440,10 @@ public class    Game {
         if(aiPlayer != null){
             if(turn){
                 if(removed && playerLostPiece )
-                    text = "Uff, du mistet en brikke. Venter på at du skal gjøre neste trekk.";
+                    text = "Uff, du mistet en brikke. Venter på ditt neste trekk.";
 
                 else if(removed && !playerLostPiece )
-                    text = "Bra! Du tok en brikke. Venter på at du skal gjøre neste trekk.";
+                    text = "Bra! Du tok en brikke. Venter på ditt neste trekk.";
 
                 else
                     text = "Venter på at du skal gjøre neste trekk.";
@@ -454,13 +454,13 @@ public class    Game {
         else{
             if(turn){
                 if(removed)
-                    text = "Uff, du mistet en brikke. Venter på at du skal gjøre neste trekk.";
+                    text = "Uff, du mistet en brikke. Venter på ditt neste trekk.";
                 else
                     text = "Venter på at du skal gjøre neste trekk.";
             }
             else{
                 if(removed)
-                    text = "Bra! Du tok en brikke. Venter på at vennen din skal gjøre neste trekk.";
+                    text = "Bra! Du tok en brikke. Venter på at vennen din sitt neste trekk.";
                 else
                     text = "Venter på at vennen din skal gjøre neste trekk.";
             }
