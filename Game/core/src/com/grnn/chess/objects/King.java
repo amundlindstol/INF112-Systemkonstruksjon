@@ -39,8 +39,11 @@ public class King extends AbstractChessPiece {
         Position kingPos = getPosition(board);
         ArrayList<Position> neighbourSquares = getNeighbourSquares(board, kingPos);
         for (Position pos : neighbourSquares){
-            if ((board.getPieceAt(pos)==null || !isSameColor(board.getPieceAt(pos))) && !willThisKingBePutInCheckByMoveTo(board, pos)) {
-                validMoves.add(pos);
+            if ((board.getPieceAt(pos)==null || !isSameColor(board.getPieceAt(pos)))) {
+                Board bc = board.copyBoard(board);
+                bc.movePiece(this.getPosition(board), pos);
+                if (!willThisKingBePutInCheckByMoveTo(bc, pos))
+                    validMoves.add(pos);
             }
         }
 
