@@ -22,6 +22,7 @@ public class    Game {
     private ArrayList<Position> castlingMoves;
     private AbstractChessPiece potentialPiece;
     private Move aiMove;
+    private Boolean playerLostPiece = false;
 
     //Helper-ai
     private AI helper;
@@ -115,6 +116,8 @@ public class    Game {
             aiMove = aiPlayer.calculateBestMove(board);
             AbstractChessPiece victim = board.getPieceAt(aiMove.getToPos());
             if(victim !=null){
+                removed = true;
+                playerLostPiece = true;
                 board.removePiece(victim);
                 updatePieceCounter(victim);
                 playSound("lostPiece.wav");
@@ -163,9 +166,15 @@ public class    Game {
                     removed = true;
                     updatePieceCounter(potentialPiece);
 
-                    if(turn) playSound("takePiece.wav");
+                    if(turn) {
+                        playSound("takePiece.wav");
+                        playerLostPiece = false;
+                    }
 
-                    else playSound("lostPiece.wav");
+                    else {
+                        playSound("lostPiece.wav");
+                        playerLostPiece = true;
+                    }
 
                     firstPiece.startMoving();
                     handleCheckChecking();
@@ -180,7 +189,6 @@ public class    Game {
                     reset();
                 }
         } else if(potentialPiece == null && validMove){
-            //board.movePiece(board.getPosition(firstPiece), secondPosition);
             firstPiece.startMoving();
             handleCheckChecking();
             reset();
@@ -319,33 +327,37 @@ public class    Game {
 
     public String getText(){
         String text = "";
-        if(aiPlayer!=null){
-            if (turn) {
-                text = "Venter på at du skal gjøre neste trekk.";
-                if (removed) {
-                    text = "Bra jobbet! Du tok en brikke.";
-                }
-            } else {
-                if(removed) {
-                    text = "Uff. Datamaskinen tok en brikke av deg.";
-                }
+
+        // AI mode
+        if(aiPlayer != null){
+            if(turn){
+                if(removed && playerLostPiece )
+                    text = "Uff, du mistet en brikke. Venter på at du skal gjøre neste trekk.";
+
+                else if(removed && !playerLostPiece )
+                    text = "Bra jobbet! Du tok en brikke. Venter på at du skal gjøre neste trekk.";
+
+                else
+                    text = "Venter på at du skal gjøre neste trekk.";
             }
         }
+
+        // Friend mode
         else{
-            if (turn) {
-                text = "Venter på at du skal gjøre neste trekk.";
-                if (removed) {
-                    text = "Uff. Du mistet en brikke. Det er din tur.";
-                }
-
-            } else {
-                text = "Venter på at vennen din skal gjøre neste trekk.";
-
-                if (removed) {
-                    text = "Bra jobbet! Du tok en brikke. Det er vennen din sin tur.";
-                }
+            if(turn){
+                if(removed)
+                    text = "Uff, du mistet en brikke. Venter på at du skal gjøre neste trekk.";
+                else
+                    text = "Venter på at du skal gjøre neste trekk.";
+            }
+            else{
+                if(removed)
+                    text = "Bra jobbet! Du tok en brikke. Venter på at vennen din skal gjøre neste trekk.";
+                else
+                    text = "Venter på at vennen din skal gjøre neste trekk.";
             }
         }
+
         return text;
     }
 
