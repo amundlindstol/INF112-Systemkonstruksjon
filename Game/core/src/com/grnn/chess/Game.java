@@ -126,7 +126,7 @@ public class    Game {
                 playSound("lostPiece.wav");
             }
             aiMove.getPiece().startMoving();
-        //    firstPiece = board.getPieceAt(aiMove.getFromPos());
+            firstPiece = board.getPieceAt(aiMove.getFromPos());
             handleCheckChecking(aiMove.getToPos());
             turn = !turn;
             return aiMove;
