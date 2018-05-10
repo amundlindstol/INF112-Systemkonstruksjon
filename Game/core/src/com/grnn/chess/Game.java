@@ -211,6 +211,8 @@ public class    Game {
         int newElo = elo.getNewRating(res, opponent.getRating());
         int newElo2 = elo2.getNewRating(res2, player.getRating());
 
+        player.registrerResult(res);
+        opponent.registrerResult(res2);
         player.setRating(newElo);
         opponent.setRating(newElo2);
 

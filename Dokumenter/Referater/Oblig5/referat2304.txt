@@ -1,0 +1,29 @@
+Oppmøte:
+    Alise
+    Simon
+    Magnus
+    Agnete
+    Amund
+
+Aktivitet 1:
+Utnytte menneskelige ressurser og utviklingsverktøy bedre
+    Bedre bruk av git issues
+    Flere tester på back-end
+    Dele opp oppgavene tydeligere hver mandag og deligere.
+    
+
+Tilpasse teamets arbeidsflyt så den utnytter mulighetene til git og byggeverktøy bedre
+    Bruke git branches til å jobbe sammen om features eller oppgaver som tar lang tid.
+    
+Mangler fra forrige iterasjon: 
+    AI
+    Hjelp-knapp
+    Hvem-som-vant-skjerm
+
+Aktivitet 2:
+    Flerspill over nett
+    Crazy house 
+    Fikse animasjoner (f. eks. konfetti)    
+    Potensielt gjøre Chess Tutor, hvis mulig
+    
+Sjekker hvor vanskelig disse kravene er å implementere

@@ -43,7 +43,7 @@ public class GameDoneState extends State {
         fontText = new BitmapFont();
         fontText.setColor(Color.WHITE);
 
-        statButton = new TextButton("Se statestikk", skin);
+        statButton = new TextButton("Se statistikk", skin);
         statButton.setSize(420,60);
 
         statButton.setPosition(background.getWidth()/2-210, background.getHeight()/2 - 200);
