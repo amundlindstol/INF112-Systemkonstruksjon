@@ -393,7 +393,7 @@ public class PlayState extends State {
             helpingMove = game.getHelpingMove();
             System.out.println(helpingMove);
         }
-        if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving && game.getTurn() == multiPlayer.isWhite()) {
+        if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving && (multiPlayer == null || game.getTurn() == multiPlayer.isWhite())) {
 
             //AI
             if (!game.getTurn() && game.isAi()) {
@@ -411,8 +411,14 @@ public class PlayState extends State {
             //second selected piece
             else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
                 Position potentialPos = translator.toCellPos(x, y);
+
+                //send move to database
+                if(multiPlayer != null && game.getTurn() == multiPlayer.isWhite()) {
+                    multiPlayer.makeMove(new Move(game.getSelectedPosition(), potentialPos));
+                }
+
+
                 game.moveFirstSelectedPieceTo(potentialPos);
-                multiPlayer.makeMove(new Move(game.getSelectedPosition(),potentialPos));
                 prevMove = potentialPos;
                 helpingMove = null;
             }
