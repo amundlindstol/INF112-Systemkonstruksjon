@@ -146,7 +146,7 @@ public class PlayState extends State {
         }
 
         //textures
-        if (gameMode == "crazyhouse") {
+        if (gameMode.equals("crazyhouse")) {
             playingCH = true;
             bg = new Texture("Graphics/GUI/GUICrazyhouse.png");
         }
@@ -615,16 +615,11 @@ public class PlayState extends State {
 
 
     private Animation<TextureRegion> createAnimation(Texture textureSheet, int frameColums, int frameRows, float duration) {
-
-        // Use the split utility method to create a 2D array of TextureRegions. This is
-        // possible because this sprite sheet contains frames of equal size and they are
-        // all aligned.
+        // 2D array of TextureRegions
         TextureRegion[][] tmp = TextureRegion.split(textureSheet,
                 textureSheet.getWidth() / frameColums,
                 textureSheet.getHeight() / frameRows);
-
-        // Place the regions into a 1D array in the correct order, starting from the top
-        // left, going across first. The Animation constructor requires a 1D array.
+        // 1D array in the correct order
         TextureRegion[] animationFrames = new TextureRegion[frameColums * frameRows];
         int index = 0;
         for (int i = 0; i < frameRows; i++) {
