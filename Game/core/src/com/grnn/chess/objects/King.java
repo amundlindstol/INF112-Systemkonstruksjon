@@ -221,7 +221,7 @@ public class King extends AbstractChessPiece {
                        if (getNeighbourSquares(board, pos).contains(otherPiece.getPosition(board)))
                            return true;
                    }
-                   else { if (otherPiece instanceof Queen)
+                   else {
                        if (otherPiece.getPossibleMovesIgnoringCheck(board).contains(pos)){
                            return true;
                        }

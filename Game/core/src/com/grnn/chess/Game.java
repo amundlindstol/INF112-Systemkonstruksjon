@@ -130,6 +130,7 @@ public class    Game {
             aiMove.getPiece().startMoving();
             firstPiece = board.getPieceAt(aiMove.getFromPos());
             handleCheckChecking(aiMove.getToPos());
+            firstPiece = null;
             turn = !turn;
             return aiMove;
         }
