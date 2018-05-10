@@ -376,7 +376,7 @@ public class PlayState extends State {
         }
 
         if (activegame && !pieceIsMoving ) {
-            if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving && game.getTurn() == multiPlayer.isWhite()) {
+            if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving && (multiPlayer == null || game.getTurn() == multiPlayer.isWhite())) {
                 //AI
                 if (!game.getTurn() && game.isAi()) {
                     prevAImove = game.aiMove();
