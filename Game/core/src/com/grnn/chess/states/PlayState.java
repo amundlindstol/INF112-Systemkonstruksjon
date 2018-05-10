@@ -294,6 +294,7 @@ public class PlayState extends State {
                 }
             }
         }
+
         stage.draw();
     }
 
