@@ -15,12 +15,12 @@ public class EvaluateBoardTest {
     public void evaluateBoard() {
         Board board = new Board();
 
-        King whiteKing = new King(true);
+        King whiteKing = new King(true, true);
         Queen whiteQueen = new Queen(true);
         Rook firstWhiteRook = new Rook(true);
         Rook secondWhiteRook = new Rook(true);
 
-        King blackKing = new King(false);
+        King blackKing = new King(false, true);
 
         board.setPiece(whiteKing, 4, 0);
         board.setPiece(whiteQueen, 3, 0);

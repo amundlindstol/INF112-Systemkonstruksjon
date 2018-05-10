@@ -2,6 +2,7 @@ package com.grnn.chess.Actors.AI;
 
 import com.grnn.chess.Board;
 import com.grnn.chess.Move;
+import com.grnn.chess.objects.King;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -12,6 +13,9 @@ import static com.grnn.chess.Actors.AI.IAUtils.iterableToSortedList;
 public class Minimax implements IA<Move> {
 
     private Board board;
+    private final long threeSeconds = 3 * (long) Math.pow(10, 9);
+    private long startTime;
+
 
     public Minimax(Board board) {
         this.board = board;
@@ -23,6 +27,7 @@ public class Minimax implements IA<Move> {
         if (depth <= 0) {
             throw new IllegalArgumentException("Search depth MUST be > 0");
         }
+        startTime = System.nanoTime();
         List<Move> orderedMoves = iterableToSortedList(possibleMoves);
         minimax(orderedMoves, depth, 1);
         Collections.sort(orderedMoves);
@@ -58,13 +63,23 @@ public class Minimax implements IA<Move> {
      */
     private double minimax(Iterable<Move> initialMoves, final int depth, final int who) {
         System.out.println("Depth: " + depth + " who: " + who);
-        System.out.println(board.toString());
+        //System.out.println(board.toString());
         boolean isWhite = who > 0;
 
-        if (depth == 0 || isOver(isWhite)) {
-            return who * board.getBoardValue(isWhite);
+        long timeUsedThisFar = System.nanoTime() - startTime;
+        System.out.println(timeUsedThisFar);
+        if (depth == 0 || isOver(isWhite) || timeUsedThisFar >= threeSeconds) {
+            System.out.println("depth: " + depth);
+            return who * board.calculateBoardForActor(isWhite);
         }
         Iterator<Move> moves = (initialMoves != null ? initialMoves : board.getPossibleAIMoves(isWhite)).iterator();
+        //while (moves.hasNext()) {
+          //  Move aMove = moves.next();
+            //if (board.getPieceAt(aMove.getFromPos()) instanceof King) {
+              //  System.out.println("Move: " + aMove + " with piece: " + board.getPieceAt(aMove.getFromPos()));
+            //}
+
+        //}
         if (!moves.hasNext()) {
             return minimaxScore(depth, who);
         }
@@ -78,6 +93,7 @@ public class Minimax implements IA<Move> {
                 Board originalBoard = board;
                 makeMove(move);
                 score = minimaxScore(depth, who);
+                System.out.println("score: " + score);
                 board = originalBoard;
 
                 //unmakeMove(move);
@@ -98,6 +114,8 @@ public class Minimax implements IA<Move> {
                 Board originalBoard = board;
                 makeMove(move);
                 score = minimaxScore(depth, who);
+                System.out.println("score: " + score);
+
                 board = originalBoard;
                 if (initialMoves != null) {
                     move.value = score;

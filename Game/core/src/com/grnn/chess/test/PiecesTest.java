@@ -96,7 +96,7 @@ public class PiecesTest {
 	@Test
 	public void kingValidMoveTest() {
 		Board board = new Board();
-		King r = new King(true);
+		King r = new King(true, true);
 		board.setPiece(r, 4, 0);
 
 		System.out.println(r.getValidMoves(board));
@@ -110,7 +110,7 @@ public class PiecesTest {
 	@Test
 	public void kingInvalidMoveTest() {
 		Board board = new Board();
-		King r = new King(true);
+		King r = new King(true, true);
 		board.setPiece(r, 4, 0);
 
 		assertFalse(r.getValidMoves(board).contains(new Position(4, 4)));
@@ -120,7 +120,7 @@ public class PiecesTest {
 	@Test
 	public void kingCanCastleWhenNotMoved() {
 		Board board = new Board();
-		King r = new King(true);
+		King r = new King(true, false);
 		Rook rook = new Rook(true);
 		Rook rightRook = new Rook(true);
 		board.setPiece(r, 4, 0);
@@ -135,7 +135,7 @@ public class PiecesTest {
 	@Test
 	public void kingCantCastleWhenMoved() {
 		Board board = new Board();
-		King r = new King(true);
+		King r = new King(true, true);
 		board.setPiece(r, 4, 0);
 
 		board.movePiece(new Position(4, 0), new Position(4, 1));

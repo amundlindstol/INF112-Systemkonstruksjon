@@ -30,7 +30,6 @@ public class Knight extends AbstractChessPiece {
         ArrayList<Position> validMoves = new ArrayList<Position>();
         Position knightPos = getPosition(board);
         AbstractChessPiece knight = board.getPieceAt(knightPos);
-        King king = new King(knight.isWhite);
         ArrayList<Position> neighbourSquares = getKnightSquares(board, knightPos);
         for (Position pos : neighbourSquares){
             if (board.getPieceAt(pos) == null

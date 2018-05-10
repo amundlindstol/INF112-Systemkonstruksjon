@@ -62,11 +62,13 @@ public class AI implements IActor{
         ArrayList<Move> moves = board.getPossibleAIMoves(isWhite);
         if (moves.isEmpty()) return null;
         Minimax minimax = new Minimax(board);
-        List<Move> sortedMoves = minimax.getBestMoves(3, moves);
+        List<Move> sortedMoves = minimax.getBestMoves(5, moves);
 
         if (sortedMoves.isEmpty()) return null;
 
-
+        System.out.println("First move: " + sortedMoves.get(0).value);
+        System.out.println("Last move: " + sortedMoves.get(sortedMoves.size() - 1).value);
+        //sortedMoves.get(0);//
         return sortedMoves.get(sortedMoves.size()-1);
     }
 

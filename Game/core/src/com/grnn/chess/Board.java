@@ -1,8 +1,6 @@
 package com.grnn.chess;
 
-import com.grnn.chess.exceptions.IllegalMoveException;
 import com.grnn.chess.objects.*;
-import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,10 +77,10 @@ public class Board {
     }
 
     public Position getKingPos(boolean kingIsWhite) {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (getPieceAt(new Position(i, j)) instanceof King && getPieceAt(new Position(i, j)).isWhite() == kingIsWhite) {
-                    return new Position(i, j);
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                if (getPieceAt(new Position(x, y)) instanceof King && getPieceAt(new Position(x, y)).isWhite() == kingIsWhite) {
+                    return new Position(x, y);
                 }
             }
         }
@@ -172,8 +170,8 @@ public class Board {
         setPiece(new Queen(true), 3, 0);
         setPiece(new Queen(false), 3, 7);
 
-        setPiece(new King(true), 4, 0);
-        setPiece(new King(false), 4, 7);
+        setPiece(new King(true, false), 4, 0);
+        setPiece(new King(false, false), 4, 7);
     }
 
     public void setPiece(AbstractChessPiece piece, Position pos) {
@@ -394,7 +392,7 @@ public class Board {
                 if (piece instanceof Bishop) {
                     piece = new Bishop(piece.isWhite());
                 } else if (piece instanceof King) {
-                    piece = new King(piece.isWhite());
+                    piece = new King(piece.isWhite(), piece.hasMoved);
                 } else if (piece instanceof Knight) {
                     piece = new Knight(piece.isWhite());
                 } else if (piece instanceof Pawn) {

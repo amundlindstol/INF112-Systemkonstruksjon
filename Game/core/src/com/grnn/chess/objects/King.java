@@ -8,7 +8,6 @@ import com.grnn.chess.Position;
 
 //import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class King extends AbstractChessPiece {
     private final int value = 900;
@@ -16,7 +15,7 @@ public class King extends AbstractChessPiece {
     String letterRepresentation = "k";
     private boolean hasMoved;
 
-    public King(boolean w) {
+    public King(boolean w, boolean hasMoved) {
         super(w);
         setImage("King");
     }
