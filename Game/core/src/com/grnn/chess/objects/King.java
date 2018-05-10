@@ -190,8 +190,7 @@ public class King extends AbstractChessPiece {
      * @param pos The position to check
      * @return If the king will put himself in check by moving to pos
      */
-    public boolean willThisKingBePutInCheckByMoveTo(Board board, Position pos) { System.out.println("pos "+pos);if (!pos.equals(this.getPosition(board))) System.out.println("kingtest");
-        //System.out.println(board.toString());
+    public boolean willThisKingBePutInCheckByMoveTo(Board board, Position pos) {
        for (int i=0; i<board.size(); i++) {
            for (int j=0; j<board.size(); j++) {
                Position posOtherPiece = new Position(i,j);
@@ -215,14 +214,14 @@ public class King extends AbstractChessPiece {
                        if (getNeighbourSquares(board, pos).contains(otherPiece.getPosition(board)))
                            return true;
                    }
-                   else { if (otherPiece instanceof Queen) System.out.println("possible moves queen "+otherPiece.getPossibleMovesIgnoringCheck(board));
+                   else { if (otherPiece instanceof Queen)
                        if (otherPiece.getPossibleMovesIgnoringCheck(board).contains(pos)){
                            return true;
                        }
                    }
                }
            }
-       } System.out.println("false ye");
+       }
         return false;
     }
 

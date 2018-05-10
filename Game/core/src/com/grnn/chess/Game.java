@@ -17,7 +17,7 @@ public class    Game {
     private AI aiPlayer;
     private boolean turn;
     private AbstractChessPiece firstPiece;
-    private ArrayList<Position> validMoves;
+    public ArrayList<Position> validMoves;
     private ArrayList<Position> captureMoves;
     private ArrayList<Position> castlingMoves;
     private AbstractChessPiece potentialPiece;
@@ -126,7 +126,7 @@ public class    Game {
                 playSound("lostPiece.wav");
             }
             aiMove.getPiece().startMoving();
-            handleCheckChecking();
+            handleCheckChecking(aiMove.getToPos());
             turn = !turn;
             return aiMove;
         }
@@ -160,10 +160,15 @@ public class    Game {
         }
     }
 
+    /**
+     * Instantiates the piece selected from pocket and puts it on the board
+     * @return false if the piece puts the opponent in checkmate or stalemate
+     */
+
     public boolean movePieceFromPocketTo(Position secondPosition){
         if (validMoves.contains(secondPosition)) {
             firstPiece = createNewPieceFromPocket();
-            board.putNewPieceOnBoard(firstPiece, secondPosition); System.out.println("WALLA"+board.toString());
+            board.setPiece(firstPiece, secondPosition);
             if (selectedFromPocket!=null)
                 removedPieces[getIndexOfPiece(selectedFromPocket)]--;
             if (!handleCheckChecking(secondPosition))
@@ -176,9 +181,34 @@ public class    Game {
         return true;
     }
 
+    /**
+     * p The selected piece
+     * @return The piece corresponding index in removedPieces
+     */
+    public int getIndexOfPiece(String p){
+        char a = p.charAt(0);
+        switch (a){
+            case 'p' : return 0;
+            case 'b' : return 1;
+            case 'h' : return 2;
+            case 'r' : return 3;
+            case 'q' : return 4;
+            case 'P' : return 6;
+            case 'B' : return 7;
+            case 'H' : return 8;
+            case 'R' : return 9;
+            case 'Q' : return 10;
+            default: return -1;
+        }
+    }
+
+    /**
+     * Instantiates the piece selected from the pocket
+     * @return A list of positions the piece can legally move to
+     */
     public AbstractChessPiece createNewPieceFromPocket(){
         AbstractChessPiece newPiece = null;
-        char c = selectedFromPocket.toLowerCase().charAt(0); System.out.println("THIS IS C "+c);
+        char c = selectedFromPocket.toLowerCase().charAt(0);
         switch (c){
             case 'p': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Pawn(true) : new Pawn(false); break;}
             case 'b': { newPiece = Character.isLowerCase(selectedFromPocket.charAt(0)) ? new Bishop(true) : new Bishop(false); break;}
@@ -189,7 +219,7 @@ public class    Game {
         return newPiece;
     }
 
-    public boolean moveFirstSelectedPieceTo(Position secondPosition){ System.out.println("FIRST PEACE "+selectedFromPocket);
+    public boolean moveFirstSelectedPieceTo(Position secondPosition){
         if (selectedFromPocket!=null) return movePieceFromPocketTo(secondPosition);
         else {
             potentialPiece = board.getPieceAt(secondPosition);
@@ -277,15 +307,20 @@ public class    Game {
         return null;
     }
 
+    /**
+     *
+     * @param secondPosition position clicked
+     * @return False if the king is in checkmate or stalemate
+     */
     public boolean handleCheckChecking(Position secondPosition){
         Position kingPos = board.getKingPos(!turn);
         if(kingPos != null){
             Board bc = board.copyBoard(board);
             if (selectedFromPocket==null)
-                bc.movePiece(firstPiece.getPosition(bc), secondPosition); System.out.println("fp "+bc.toString());
+                bc.movePiece(firstPiece.getPosition(bc), secondPosition);
             King king = (King) bc.getPieceAt(kingPos);
             king.isInCheck = king.willThisKingBePutInCheckByMoveTo(bc, kingPos);
-            boolean otherPlayerHasNoValidMoves=noValidMoves(bc); System.out.println("has valid moves " +otherPlayerHasNoValidMoves);
+            boolean otherPlayerHasNoValidMoves=noValidMoves(bc);
             if(king.isInCheck){
                 if(turn){
                     blackPutInCheck = true;
@@ -306,6 +341,12 @@ public class    Game {
         return true;
     }
 
+
+    /**
+     *
+     * @param b The board
+     * @return True if the opponent has no valid moves
+     */
     public boolean noValidMoves(Board b){
         for (int i=0; i<b.size(); i++){
             for (int j=0; j<b.size(); j++){

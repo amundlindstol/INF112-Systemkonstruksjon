@@ -463,13 +463,13 @@ public class PlayState extends State {
 
                 //first selected piece
                 Position selected = null;
-                if (Gdx.input.justTouched() && notSelected) { System.out.println("LOL");
+                if (Gdx.input.justTouched() && notSelected) {
                     game.playSound("selectPiece.wav");
                     selected = translator.toCellPos(x, y);
                     game.selectFirstPiece(selected);
                 }
                 //second selected piece
-                else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) { System.out.println("LOL2");
+                else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
                     Position potentialPos = translator.toCellPos(x, y);
                     activegame = game.moveFirstSelectedPieceTo(potentialPos);
                     prevMove = potentialPos;
@@ -480,12 +480,12 @@ public class PlayState extends State {
                 }
             }
             else if (Gdx.input.justTouched() && playingCH){ //From pocket
-                String pieceFromPocket = getPieceFromPocket(x, y, game.getTurn()); System.out.println("PIECE FROM "+pieceFromPocket);
+                String pieceFromPocket = getPieceFromPocket(x, y, game.getTurn());
                 if (!pieceFromPocket.isEmpty()) {
                     int index = game.getIndexOfPiece(pieceFromPocket);
                     if (!pieceFromPocket.isEmpty() && index != -1 && removedPieces[index] > 0) {
                         game.playSound("selectPiece.wav");
-                        game.selectedFromPocket = pieceFromPocket; System.out.println(pieceFromPocket+ " piecefp");
+                        game.selectedFromPocket = pieceFromPocket;
                         game.validMoves = board.findEmptySquares(pieceFromPocket);
                     }
                 }
@@ -501,7 +501,7 @@ public class PlayState extends State {
     }
 
 
-    public String getPieceFromPocket(int x, int y, boolean turn){ System.out.println("x "+x+" "+y);
+    public String getPieceFromPocket(int x, int y, boolean turn){
         String piece ="";
         if (y<489 && y>415){
             if (turn) return piece;
@@ -533,9 +533,7 @@ public class PlayState extends State {
             if (x>1016 && x<1060)
                 piece = "k";
         }
-        if (!piece.isEmpty())
-            System.out.println("NOT EMPTY "+piece);
-        else System.out.println("EMPTY");
+
         return piece;
     }
 

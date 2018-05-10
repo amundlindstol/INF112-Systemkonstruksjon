@@ -62,10 +62,6 @@ public class Board {
         }
     }
 
-    public void putNewPieceOnBoard(AbstractChessPiece piece, Position pos){
-        setPiece(piece, pos);
-    }
-
     public void castle(Position startPos, Position endPos) {
         AbstractChessPiece piece = getPieceAt(startPos);
 
@@ -365,7 +361,6 @@ public class Board {
      * @return A list of positions the piece can legally move to
      */
     public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> possibleMoves) {
-        System.out.println("possible moves 1 " + possibleMoves);
         for (int i = 0; i < possibleMoves.size(); i++) {
             Board boardCopy = copyBoard(this);
             Position p = piece.getPosition(this);
@@ -377,7 +372,6 @@ public class Board {
                 i--;
             }
         }
-        System.out.println("possible moves 2 " + possibleMoves);
         return possibleMoves;
     }
 
