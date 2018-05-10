@@ -30,8 +30,8 @@ public class Minimax implements IA<Move> {
     }
 
     @Override
-    public boolean isOver() { //TODO:
-        return false;
+    public boolean isOver(boolean isWhite) { //TODO:
+        return board.getKingPos(isWhite) == null;
     }
 
     @Override
@@ -57,16 +57,11 @@ public class Minimax implements IA<Move> {
      * @return Best score
      */
     private double minimax(Iterable<Move> initialMoves, final int depth, final int who) {
-        //System.out.println("depth: " + depth);
-        //System.out.println(board.toString());
-        boolean isWhite;
-        if(who > 0) {
-            isWhite = true;
-        } else {
-            isWhite = false;
-        }
+        System.out.println("Depth: " + depth + " who: " + who);
+        System.out.println(board.toString());
+        boolean isWhite = who > 0;
 
-        if (depth == 0 || isOver()) {
+        if (depth == 0 || isOver(isWhite)) {
             return who * board.getBoardValue(isWhite);
         }
         Iterator<Move> moves = (initialMoves != null ? initialMoves : board.getPossibleAIMoves(isWhite)).iterator();
@@ -79,6 +74,7 @@ public class Minimax implements IA<Move> {
             double bestScore = -maxEvaluateValue();
             while (moves.hasNext()) {
                 Move move = moves.next();
+                System.out.println("Move: " + move + " with piece: " + board.getPieceAt(move.getFromPos()));
                 Board originalBoard = board;
                 makeMove(move);
                 score = minimaxScore(depth, who);

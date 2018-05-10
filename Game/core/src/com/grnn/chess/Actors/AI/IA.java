@@ -76,7 +76,7 @@ public interface IA<M extends Move> {
      * @return
      *         True if the game is over
      */
-    boolean isOver();
+    boolean isOver(boolean isWhite);
 
     /**
      * Play the given move and modify the state of the game.<br/>

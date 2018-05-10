@@ -2,6 +2,7 @@ package com.grnn.chess;
 
 import com.grnn.chess.exceptions.IllegalMoveException;
 import com.grnn.chess.objects.*;
+import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +48,10 @@ public class Board {
         AbstractChessPiece piece = getPieceAt(startPos);
         AbstractChessPiece capturePiece = getPieceAt(endPos);
 
-
         //if (isValidMove(startPos, endPos)) {
         setPiece(piece, endPos);
         setPiece(null, startPos);
+
 
         piece.move();
         moveHistory.add(new Move(endPos, startPos, piece));
@@ -147,8 +148,8 @@ public class Board {
     public void initializeBoard() {
 
         for (int i = 0; i < size(); i++) {
-            setPiece(new Pawn(true), i, 1);
-            setPiece(new Pawn(false), i, 6);
+            setPiece(new Pawn(true, false), i, 1);
+            setPiece(new Pawn(false, false), i, 6);
         }
 
         setPiece(new Rook(true), 0, 0);
@@ -182,12 +183,8 @@ public class Board {
     public void setPiece(AbstractChessPiece piece, int x, int y) {
         if (pawnCanPromote(piece, y)) {
             piece = new Queen(piece.isWhite());
-            System.out.println("Trying to promote");
         }
-        if(y >= 7) {
-            System.out.println("x: " + x + " y: " + y + " piece:" + piece);
-            System.out.println(this.toString());
-        }
+
         grid.get(y).set(x, piece);
     }
 
@@ -370,22 +367,19 @@ public class Board {
      * @return A list of positions the piece can legally move to
      */
     public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> possibleMoves) {
-        //System.out.println("possible moves 1 " + possibleMoves);
         for (int i = 0; i < possibleMoves.size(); i++) {
             Board boardCopy = copyBoard();
-            Position p = piece.getPosition(this);
-            System.out.println("index: " + i + " trying to move to: " + possibleMoves.get(i));
-            if(piece.isWhite() && p.getY() >= 6)
-                System.out.println("Piece pos: " + p);
-            boardCopy.setPiece(piece, possibleMoves.get(i));
-            boardCopy.setPiece(null, p);
+            Position piecePos = piece.getPosition(this);
+            Position endPos = possibleMoves.get(i);
+            boardCopy.movePiece(piecePos, endPos);
+            if(getKingPos(piece.isWhite()) == null) {
+                System.out.println("ska ikkje skje?");
+            }
             if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite()))) {
-                //System.out.println(possibleMoves.get(i));
                 possibleMoves.remove(i);
                 i--;
             }
         }
-        //System.out.println("possible moves 2 " + possibleMoves);
         return possibleMoves;
     }
 
@@ -404,7 +398,7 @@ public class Board {
                 } else if (piece instanceof Knight) {
                     piece = new Knight(piece.isWhite());
                 } else if (piece instanceof Pawn) {
-                    piece = new Pawn(piece.isWhite());
+                    piece = new Pawn(piece.isWhite(), piece.hasMoved);
                 } else if (piece instanceof Queen) {
                     piece = new Queen(piece.isWhite());
                 } else if (piece instanceof Rook) {

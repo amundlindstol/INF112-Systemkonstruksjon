@@ -26,6 +26,7 @@ public abstract class AbstractChessPiece {
      * @param isWhite
      */
     public AbstractChessPiece(boolean isWhite) {
+
         this.isWhite = isWhite;
     }
     /**
