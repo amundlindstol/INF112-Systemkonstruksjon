@@ -62,25 +62,13 @@ public class Minimax implements IA<Move> {
      * @return Best score
      */
     private double minimax(Iterable<Move> initialMoves, final int depth, final int who) {
-        System.out.println("Depth: " + depth + " who: " + who);
-        //System.out.println(board.toString());
         boolean isWhite = who > 0;
 
         long timeUsedThisFar = System.currentTimeMillis() - startTime;
-        System.out.println(timeUsedThisFar);
         if (depth == 0 || isOver(isWhite) || timeUsedThisFar >= threeSeconds) {
-            System.out.println("depth: " + depth);
-
             return who * board.calculateBoardForActor(isWhite);
         }
         Iterator<Move> moves = (initialMoves != null ? initialMoves : board.getPossibleAIMoves(isWhite)).iterator();
-        //while (moves.hasNext()) {
-          //  Move aMove = moves.next();
-            //if (board.getPieceAt(aMove.getFromPos()) instanceof King) {
-              //  System.out.println("Move: " + aMove + " with piece: " + board.getPieceAt(aMove.getFromPos()));
-            //}
-
-        //}
         if (!moves.hasNext()) {
             return minimaxScore(depth, who);
         }
@@ -90,11 +78,9 @@ public class Minimax implements IA<Move> {
             double bestScore = -maxEvaluateValue();
             while (moves.hasNext()) {
                 Move move = moves.next();
-                System.out.println("Move: " + move + " with piece: " + board.getPieceAt(move.getFromPos()));
                 Board originalBoard = board;
                 makeMove(move);
                 score = minimaxScore(depth, who);
-                System.out.println("score: " + score);
                 board = originalBoard;
 
                 //unmakeMove(move);
@@ -115,7 +101,6 @@ public class Minimax implements IA<Move> {
                 Board originalBoard = board;
                 makeMove(move);
                 score = minimaxScore(depth, who);
-                System.out.println("score: " + score);
 
                 board = originalBoard;
                 if (initialMoves != null) {

@@ -153,7 +153,6 @@ public class    Game {
     public void selectFirstPiece(Position selectedPosition){
         this.selectedPosition = selectedPosition;
         firstPiece = board.getPieceAt(selectedPosition);
-        System.out.println("first piece: " + firstPiece);
         if(firstPiece != null && firstPiece.isWhite() == turn){
             validMoves = firstPiece.getValidMoves(board);
             captureMoves = firstPiece.getCaptureMoves(board);
@@ -172,7 +171,6 @@ public class    Game {
 
     public boolean movePieceFromPocketTo(Position secondPosition){
         if (validMoves.contains(secondPosition)) {
-            System.out.println("first piece: " + firstPiece);
             firstPiece = createNewPieceFromPocket();
             board.setPiece(firstPiece, secondPosition);
             if (selectedFromPocket!=null)
@@ -326,7 +324,6 @@ public class    Game {
         if(kingPos != null){
             Board bc = board.copyBoard();
             if (selectedFromPocket==null) {
-                System.out.println("first piece: " + firstPiece);
                 bc.movePiece(firstPiece.getPosition(board), secondPosition);
             }
             King king = (King) bc.getPieceAt(kingPos);
@@ -365,7 +362,6 @@ public class    Game {
                 AbstractChessPiece piece = b.getPieceAt(new Position(i,j));
                 if (piece !=null && piece.isWhite()==!turn){
                     if(!piece.getValidMoves(b).isEmpty()) {
-                        System.out.println("Valid move "+piece.getPosition(b)+ " "+piece.getValidMoves(b) + b.toString());
                         return false;
                     }
                 }
