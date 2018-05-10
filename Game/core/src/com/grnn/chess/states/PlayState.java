@@ -367,8 +367,13 @@ public class PlayState extends State {
         int y = Math.abs(Gdx.input.getY());
         Boolean notSelected = game.pieceHasNotBeenSelected();
         if (resignBtn.isPressed() && activegame) {
-            game.endGame(Result.DRAW, Result.DRAW,playerData);
-            gsm.set(new ShowStatsState(gsm, player1, playerData));
+            if(playingCH || player2Name.equals("Datamaskin")){
+                System.out.println("playing ch or ai");
+                gsm.set(new StartGameState(gsm,player1,playerData));
+            }else {
+                game.endGame(Result.DRAW, Result.DRAW, playerData);
+                gsm.set(new ShowStatsState(gsm, player1, playerData));
+            }
         }
         if(helpBtn.isPressed() && activegame){
             helpingMove = game.getHelpingMove();
@@ -633,6 +638,7 @@ public class PlayState extends State {
 
     @Override
     public void dispose() {
+        if(multiPlayer!=null)multiPlayer.endGame();
         bg.dispose();
         bgBoard.dispose();
         for (Texture tex : pieceTexures) {
