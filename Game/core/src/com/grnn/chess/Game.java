@@ -469,7 +469,7 @@ public class    Game {
             }
             else{
                 if(removed)
-                    text = "Bra! Du tok en brikke. Venter på at vennen din sitt neste trekk.";
+                    text = "Bra! Du tok en brikke. Venter på vennen din sitt neste trekk.";
                 else
                     text = "Venter på at vennen din skal gjøre neste trekk.";
             }
