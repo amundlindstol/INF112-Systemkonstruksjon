@@ -277,10 +277,8 @@ public class PlayState extends State {
 
         if(multiPlayer != null && multiPlayer.isWhite() != game.getTurn() && !pieceIsMoving) {
             Move mpMove = multiPlayer.nextMove();
-            System.out.println(mpMove);
             if(mpMove != null) {
 
-                AbstractChessPiece movingPiece = board.getPieceAt(mpMove.getFromPos());
                 game.selectFirstPiece(mpMove.getFromPos());
                 game.moveFirstSelectedPieceTo(mpMove.getToPos());
                 prevMove = mpMove.getToPos();
