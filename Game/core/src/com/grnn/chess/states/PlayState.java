@@ -444,7 +444,7 @@ public class PlayState extends State {
         if (result1 == Result.WIN) { //TODO NEEDS TESTING WITH AI
             victoryMsg = "Gratulerer\n" + appendSpaces(game.getPlayer1().name) + "\n  du vant!";
         } else if (result1 == Result.LOSS && game.isAi() && !game.getAiPlayer().isWhite()) {
-            victoryMsg = "    Oida\n"+ appendSpaces(game.getPlayer1().name) + "\n  AI vant!";
+            victoryMsg = "    Gratulerer\n"+ appendSpaces(game.getPlayer1().name) + "\n  du vant!";
         } else if (result1 == Result.WIN && game.isAi() && game.getAiPlayer().isWhite()) {
             victoryMsg = "    Oida\n"+ appendSpaces(game.getPlayer2().name) + "\n  AI vant!";
         } else if(result1 == Result.LOSS) {
