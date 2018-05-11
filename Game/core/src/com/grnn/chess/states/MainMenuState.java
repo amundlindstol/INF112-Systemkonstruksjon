@@ -58,12 +58,12 @@ public class MainMenuState extends State {
             registerBtn = new TextButton("registrer", skin);
             loginBtn = new TextButton("login", skin);
             registerBtn.setPosition(xPos - registerBtn.getWidth() / 2 - 20, yPos - 50);
+            registerBtn.setSize(registerBtn.getWidth(), registerBtn.getHeight()-15);
             stage.addActor(registerBtn);
         }
         loginBtn.setPosition(xPos - loginBtn.getWidth() / 2 - 20, yPos + loginBtn.getHeight() - 20);
 
         loginBtn.setSize(loginBtn.getWidth(), loginBtn.getHeight()-15);
-        registerBtn.setSize(registerBtn.getWidth(), registerBtn.getHeight()-15);
         stage.addActor(loginBtn);
 
         countKingX = -200;

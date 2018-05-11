@@ -34,11 +34,12 @@ public class PlayState extends State {
     private Texture potentialTex;
     private Texture hintTex;
     private Texture captureTex;
-    private Texture victoryTex;
+    private Texture victoryTex, helpCHTex;
     private ArrayList<Texture> pieceTexures;
     private ArrayList<Position> positions;
     private Position prevMove;
 
+    private int[] removedPieces;
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
     private ArrayList<Position> castlingMoves;
@@ -57,18 +58,13 @@ public class PlayState extends State {
     private String text;
     private String player1Name;
     private String player2Name;
-    private TextButton resignBtn;
-    private TextButton helpBtn;
+    private TextButton resignBtn, helpBtn, helpCHBtn;
     private Stage stage;
     private Skin skin;
-
-    private int[] removedPieces;
 
     private Player player1;
     private Player player2;
     private MultiPlayer multiPlayer;
-
-
 
     // victory animation
     private float frameCounter;
@@ -77,10 +73,11 @@ public class PlayState extends State {
     private TextureRegion finalConfettiImg;
     private float confettiY;
     private float confettiX;
-    private Label victoryLabel;
+    private Label victoryLabel, helpCHlabel;
     private boolean isOkToSwitchState = false;
+    private Label.LabelStyle whiteLabelStyle;
 
-    boolean playingCH;
+    boolean playingCH, displayCHRules;
 
     /**
      * @param gsm      Game state
@@ -145,19 +142,13 @@ public class PlayState extends State {
             }
         }
 
-        //textures
-        if (gameMode.equals("crazyhouse")) {
-            playingCH = true;
-            bg = new Texture("Graphics/GUI/GUICrazyhouse.png");
-        }
-        else bg = new Texture("Graphics/GUI/GUI.png");
-        bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
 
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
+        bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
 
         if (!(player1 instanceof Player)) {
             throw new IllegalArgumentException("player1 should always be of class Player");
@@ -228,6 +219,10 @@ public class PlayState extends State {
         // finalConfettiImg is used to determine when the animation is complete
         finalConfettiImg = confettiAnimation.getKeyFrames()[confettiAnimation.getKeyFrames().length-1];
 
+        //textures
+        if (gameMode.equals("crazyhouse")) {
+            initiateCrazyHouseActors();
+        } else bg = new Texture("Graphics/GUI/GUI.png");
 
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
             for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
@@ -238,6 +233,24 @@ public class PlayState extends State {
 
             }
         }
+    }
+
+    private void initiateCrazyHouseActors() {
+        playingCH = true;
+        displayCHRules = true;
+        bg = new Texture("Graphics/GUI/GUICrazyhouse.png");
+        helpCHBtn = new TextButton("?", skin);
+        helpCHBtn.setSize(helpCHBtn.getWidth()-24, helpCHBtn.getHeight()-30);
+        helpCHBtn.getLabel().setFontScale(0.5f);
+        BitmapFont helpChFont = new BitmapFont( Gdx.files.internal("Skin/raw/font-button-export.fnt"), Gdx.files.internal("Skin/raw/font-button-export.png"), false );
+        whiteLabelStyle = new Label.LabelStyle(helpChFont, Color.WHITE);
+        helpCHBtn.getLabel().setStyle(whiteLabelStyle);
+        helpCHBtn.setPosition(bgBoard.getWidth()-34, 8);
+        helpCHTex = new Texture("Graphics/Menu/victory.png");
+        helpCHlabel = new Label("", skin);
+        helpCHlabel.setPosition(bgBoard.getWidth()/2-150, Gdx.graphics.getHeight()/2-victoryLabel.getHeight());
+        stage.addActor(helpCHlabel);
+        stage.addActor(helpCHBtn);
     }
 
 
@@ -339,7 +352,11 @@ public class PlayState extends State {
             endGameAction(batch);
         }
 
-        batch.end();
+        if (displayCHRules) {
+            batch.draw(helpCHTex, bgBoard.getWidth() / 2 - victoryTex.getWidth() / 2, Gdx.graphics.getHeight() / 2 - victoryTex.getHeight() / 2);
+            helpCHlabel.setText("I dette spillet kan du\nsette ut brikker du har tatt\n men kun når det er din tur");
+        }
+
         if (!pieceTexures.isEmpty()) {
             for (Texture oldTexture : pieceTexures) {
                 if (oldTexture.isManaged()) {
@@ -349,15 +366,15 @@ public class PlayState extends State {
         }
 
         if(multiPlayer != null && multiPlayer.isWhite() != game.getTurn() && !pieceIsMoving) {
-
             Move mpMove = multiPlayer.nextMove();
             if(mpMove != null) {
-
+                AbstractChessPiece movingPiece = board.getPieceAt(mpMove.getFromPos());
                 game.selectFirstPiece(mpMove.getFromPos());
                 game.moveFirstSelectedPieceTo(mpMove.getToPos());
                 prevMove = mpMove.getToPos();
             }
         }
+        batch.end();
         stage.draw();
     }
 
@@ -366,19 +383,25 @@ public class PlayState extends State {
         int y = Math.abs(Gdx.input.getY());
         Boolean notSelected = game.pieceHasNotBeenSelected();
         if (resignBtn.isPressed() && activegame) {
-            if(playingCH || player2Name.equals("Datamaskin")){
+            if(playingCH || player2Name.equals("Datamaskin")) {
                 gsm.set(new StartGameState(gsm,player1,playerData));
             }else {
                 game.endGame(Result.DRAW, Result.DRAW, playerData);
+                if (multiPlayer != null) multiPlayer.endGame();
                 gsm.set(new ShowStatsState(gsm, player1, playerData));
             }
         }
-        if(helpBtn.isPressed() && activegame){
+        if (helpBtn.isPressed() && activegame) {
             helpingMove = game.getHelpingMove();
-        }
+        } else if (helpCHBtn != null && helpCHBtn.isPressed() && activegame) { //display CrazyHouse instructions
+            displayCHRules = true;
+        } else if (displayCHRules && Gdx.input.justTouched()) { //remove CH instructions
+            displayCHRules = false;
+            helpCHlabel.setText("");
+        } else if (activegame && !pieceIsMoving ) {
+            if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving &&
+                    (multiPlayer == null || game.getTurn() == multiPlayer.isWhite())) {
 
-        if (activegame && !pieceIsMoving ) {
-            if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving && (multiPlayer == null || game.getTurn() == multiPlayer.isWhite())) {
                 //AI
                 if (!game.getTurn() && game.isAi()) {
                     prevAImove = game.aiMove();
@@ -407,8 +430,7 @@ public class PlayState extends State {
                 else if (Gdx.input.justTouched() && !game.selectedFromPocket.isEmpty()){
 
                 }
-            }
-            else if (Gdx.input.justTouched() && playingCH){ //From pocket
+            } else if (Gdx.input.justTouched() && playingCH){ //From pocket
                 String pieceFromPocket = getPieceFromPocket(x, y, game.getTurn());
                 if (!pieceFromPocket.isEmpty()) {
                     int index = game.getIndexOfPiece(pieceFromPocket);
@@ -416,8 +438,9 @@ public class PlayState extends State {
                         game.playSound("selectPiece.wav");
                         game.selectFirstPieceFromPocket(pieceFromPocket);
                     }
+                } else {
+                    game.reset();
                 }
-                else { game.reset(); }
             }
         }
     }
@@ -567,7 +590,7 @@ public class PlayState extends State {
 
 
 
-    public String getPieceFromPocket(int x, int y, boolean turn){
+    private String getPieceFromPocket(int x, int y, boolean turn){
         String piece ="";
         if (y<489 && y>415){
             if (turn) return piece;
