@@ -118,6 +118,5 @@ public class StartGameState extends State {
     public void dispose() {
         background.dispose();
         stage.dispose();
-        System.out.println("Menu State Disposed");
     }
 }

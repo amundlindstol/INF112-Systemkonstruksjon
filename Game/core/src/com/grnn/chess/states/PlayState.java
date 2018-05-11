@@ -350,7 +350,6 @@ public class PlayState extends State {
 
         if(multiPlayer != null && multiPlayer.isWhite() != game.getTurn() && !pieceIsMoving) {
             Move mpMove = multiPlayer.nextMove();
-            System.out.println(mpMove);
             if(mpMove != null) {
 
                 AbstractChessPiece movingPiece = board.getPieceAt(mpMove.getFromPos());
@@ -368,7 +367,6 @@ public class PlayState extends State {
         Boolean notSelected = game.pieceHasNotBeenSelected();
         if (resignBtn.isPressed() && activegame) {
             if(playingCH || player2Name.equals("Datamaskin")){
-                System.out.println("playing ch or ai");
                 gsm.set(new StartGameState(gsm,player1,playerData));
             }else {
                 game.endGame(Result.DRAW, Result.DRAW, playerData);
@@ -377,7 +375,6 @@ public class PlayState extends State {
         }
         if(helpBtn.isPressed() && activegame){
             helpingMove = game.getHelpingMove();
-            System.out.println(helpingMove);
         }
 
         if (activegame && !pieceIsMoving ) {
@@ -422,11 +419,6 @@ public class PlayState extends State {
                 }
                 else { game.reset(); }
             }
-        } else if (!activegame) { // TODO: Actual result
-            Result result1 = Result.DRAW;
-            Result result2 = Result.DRAW;
-
-            //game.endGame(result1, result2,playerData);
         }
     }
 
@@ -641,6 +633,5 @@ public class PlayState extends State {
         potentialTex.dispose();
         captureTex.dispose();
         stage.dispose();
-        System.out.println("PlayState Disposed");
     }
 }
