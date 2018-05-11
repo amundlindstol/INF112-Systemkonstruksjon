@@ -56,7 +56,11 @@ public class ShowStatsState extends State {
     @Override
     protected void handleInput() {
         if (menuButton.isPressed()) {
-            gsm.set(new StartGameState(gsm, currentPlayer, playerData));
+            if(playerData.isOffline()){
+                gsm.set(new SelectPlayerState(gsm,new Player("Spiller1","", true),playerData));
+            }else {
+                gsm.set(new StartGameState(gsm, currentPlayer, playerData));
+            }
         }
     }
 
