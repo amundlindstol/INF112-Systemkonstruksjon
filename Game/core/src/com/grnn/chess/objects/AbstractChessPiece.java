@@ -19,6 +19,7 @@ public abstract class AbstractChessPiece {
     protected ArrayList<Position> captureMoves;
     protected String letterRepresentation = "";
     protected String image = "Graphics/ChessPieces/";
+    public boolean fromPocket = false;
     protected final int value = 0; // Should value be set in the abstract class?
 
     /**
@@ -26,6 +27,7 @@ public abstract class AbstractChessPiece {
      * @param isWhite
      */
     public AbstractChessPiece(boolean isWhite) {
+
         this.isWhite = isWhite;
     }
     /**
@@ -70,7 +72,8 @@ public abstract class AbstractChessPiece {
      * @param board The board that the piece is on
      * @return A list of positions that the piece can capture the opponents piece on
      */
-    public ArrayList<Position> getCaptureMoves(Board board) { System.out.println("get capture!");
+
+    public ArrayList<Position> getCaptureMoves(Board board) { //System.out.println("get capture!");
 
         List<Position> captureMoves = new ArrayList<Position>();
         List<Position> validMoves = getValidMoves(board);
@@ -81,8 +84,6 @@ public abstract class AbstractChessPiece {
                 captureMoves.add(position);
             }
         }
-        System.out.print("Valid moves: "+validMoves);
-        System.out.print("Capture moves: "+captureMoves);
         return (ArrayList<Position>) captureMoves;
     }
 
@@ -146,5 +147,9 @@ public abstract class AbstractChessPiece {
         }
 
         return imageS + ".png";
+    }
+
+    public int getValue() {
+        return value;
     }
 }

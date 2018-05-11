@@ -1,6 +1,7 @@
 package com.grnn.chess.Actors;
 
 import com.grnn.chess.Game;
+import com.grnn.chess.Result;
 
 import java.util.ArrayList;
 
@@ -48,6 +49,18 @@ public class Player implements IActor{
         this.rating = rating;
     }
 
+    /**
+     * Method to registrer the result of a game, updatePlayers must be called after this.
+     */
+    public void registrerResult(Result res){
+        if (res == Result.WIN){
+            noOfWins++;
+        }else if(res == Result.DRAW){
+            noOfDraws++;
+        }else if(res == Result.LOSS){
+            noOfLose++;
+        }
+    }
     public String getLevel(){
         return level;
     }

@@ -5,16 +5,10 @@ import com.grnn.chess.Game;
 import java.util.List;
 
 public class Node {
-
-    Game game;
-    List<Node> children;
+    int noOfBones;
+    boolean isMaxPlayer;
     int score;
-
-    public Node(Game game) {
-        game = game;
-    }
-
-    public int getScore() {
-        return score;
-    }
+    List<Node> children;
+    // setters and getters
 }
+

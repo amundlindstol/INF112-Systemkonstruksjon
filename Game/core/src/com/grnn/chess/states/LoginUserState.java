@@ -1,6 +1,7 @@
 package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -86,7 +87,7 @@ public class LoginUserState extends State {
     @Override
     public void handleInput() {
 
-        if (loginButton.isPressed()) {
+        if (loginButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
             String username = usernameField.getText();
             String password = passwordField.getText();
             String checkUsr = username.replaceAll("[^A-Za-z0-9]", "");
