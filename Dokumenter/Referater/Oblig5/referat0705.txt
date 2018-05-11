@@ -1,0 +1,21 @@
+Oppmøte:
+    Alise
+    Simon
+    Magnus
+    Agnete
+    Håkon
+    Eivind
+    Amund
+    Helge Mikael (referent)
+
+
+Vi startet møtet med en stand-up hvor vi gikk gjennom hva som var gjort siden sist, og hva som skulle gjøres i dag.
+
+Siden sist:
+Simon og Magnus har jobbet videre med multiplayer-løsningen. Alise og Eivind jobbet videre med AI.
+
+Til neste samling:
+Debugge AI
+Teste multiplayer-løsning
+Oppdatere klassediagram og andre dokumenter
+Fikse tilbakemeldings-teksten i spillet når du spiller mot AI.
