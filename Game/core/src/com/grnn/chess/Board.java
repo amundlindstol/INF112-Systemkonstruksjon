@@ -368,14 +368,15 @@ public class Board {
      * @return A list of positions the piece can legally move to
      */
     public ArrayList<Position> removeMovesThatWillPutOwnKingInCheck(AbstractChessPiece piece, ArrayList<Position> possibleMoves) {
+
         for (int i = 0; i < possibleMoves.size(); i++) {
             Board boardCopy = copyBoard();
             Position p = piece.getPosition(this);
             Position piecePos = piece.getPosition(this);
             Position endPos = possibleMoves.get(i);
-            boardCopy.movePiece(piecePos, endPos);
+            if (piecePos!=null)
+                boardCopy.movePiece(piecePos, endPos);
             if (((King) getPieceAt(getKingPos(piece.isWhite()))).willThisKingBePutInCheckByMoveTo(boardCopy, getKingPos(piece.isWhite()))) {
-                System.out.println(possibleMoves.get(i));
                 possibleMoves.remove(i);
                 i--;
             }
