@@ -1,6 +1,7 @@
 package com.grnn.chess.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -69,14 +70,14 @@ public class SelectPlayerState extends State {
         playBtn2 = new TextButton("middels", skin);
         playBtn3 = new TextButton("vanskelig", skin);
         playBtn4 = new TextButton("ok", skin);
-        playBtn3.setSize(playBtn3.getWidth(), 50);
+        playBtn3.setSize(playBtn3.getWidth()-20, 50);
         playBtn.setSize(playBtn3.getWidth(), 50);
         playBtn2.setSize(playBtn3.getWidth(), 50);
-        playBtn4.setSize(playBtn3.getWidth()-70, 50);
-        playBtn.setPosition(xPlay, yPlay);
-        playBtn2.setPosition(xPlay, yPlay-70);
-        playBtn3.setPosition(xPlay, yPlay-140);
-        playBtn4.setPosition(xPlay+375, yPlay - 140);
+        playBtn4.setSize(playBtn3.getWidth()-120, 50);
+        playBtn.setPosition(xPlay + 10, yPlay);
+        playBtn2.setPosition(xPlay + 10, yPlay-70);
+        playBtn3.setPosition(xPlay + 10, yPlay-140);
+        playBtn4.setPosition(xPlay + 410, yPlay - 140);
 
 
         if(!playerData.isOffline()) {
@@ -133,17 +134,20 @@ public class SelectPlayerState extends State {
         // Button for play against AI lett
         if (playBtn.isPressed()) {
             player1.setIsWhite(true);
-            gsm.set(new PlayState(gsm, 1, player1, new AI(1, !player1isWhite),playerData));
+            player1isWhite = true;
+            gsm.set(new PlayState(gsm, 1, player1, new AI(1, !player1isWhite),playerData, ""));
         }
         // Button for play against AI medium
         if (playBtn2.isPressed()) {
             player1.setIsWhite(true);
-            gsm.set(new PlayState(gsm, 2, player1, new AI(2, true),playerData));
+            player1isWhite = true;
+            gsm.set(new PlayState(gsm, 2, player1, new AI(2, !player1isWhite),playerData, ""));
         }
         // Button for play against AI vanskelig
         if (playBtn3.isPressed()) {
             player1.setIsWhite(true);
-            gsm.set(new PlayState(gsm, 3, player1, new AI(1, true),playerData));
+            player1isWhite = true;
+            gsm.set(new PlayState(gsm, 3, player1, new AI(3, !player1isWhite),playerData, ""));
         }
 
 
@@ -151,11 +155,11 @@ public class SelectPlayerState extends State {
             // Button for play with a friend
             if (playBtn4.isPressed()) {
                 player1.setIsWhite(player1isWhite);
-                gsm.set(new PlayState(gsm, 0, player1, new Player("Spiller2", "2", !player1isWhite),playerData));  //TODO: should isWhite be initialized here?
+                gsm.set(new PlayState(gsm, 0, player1, new Player("Spiller2", "2", !player1isWhite),playerData, ""));  //TODO: should isWhite be initialized here?
             }
         }
         if(!playerData.isOffline()){
-            if (playBtn4.isPressed()) {
+            if (playBtn4.isPressed() || Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
                 player1.setIsWhite(player1isWhite);
                 String username = usernameField.getText();
                 String password = passwordField.getText();
@@ -176,7 +180,7 @@ public class SelectPlayerState extends State {
                     player2.setIsWhite(!player1isWhite);
                 }
                 if (password.equals(player2.getPassword())) {
-                    gsm.set(new PlayState(gsm,0,player1,player2,playerData));
+                    gsm.set(new PlayState(gsm,0,player1,player2,playerData, ""));
                 } else {
                     message.setText("Feil brukernavn eller passord.");
                 }

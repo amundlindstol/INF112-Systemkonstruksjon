@@ -78,7 +78,6 @@ public class PlayerData {
 				}
 			}
 		}catch (SQLException e){
-			System.out.println("Did not Connect");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -86,7 +85,6 @@ public class PlayerData {
 					stmt.close();
 				}
 			}catch(SQLException e){
-				System.out.println("Kunne ikke koble fra databasen");
 			}
 		}
 
@@ -104,8 +102,6 @@ public class PlayerData {
 			offline = false;
 			return true;
 		}catch(Exception e){
-			System.out.println("not connected");
-			System.out.println(e);
 			offline = true;
 			return false;
 		}
@@ -216,7 +212,8 @@ public class PlayerData {
         }
     }
 
-    /**
+
+	/**
      * method that updates the score for two playors
      * @param player1 an AI or a Player
      * @param player2 an AI or a Player
@@ -243,5 +240,9 @@ public class PlayerData {
 
         }
     }
+
+    public Connection getConnection(){
+    	return conn;
+	}
 
 }

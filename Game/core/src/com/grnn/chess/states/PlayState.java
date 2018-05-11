@@ -4,10 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -15,10 +14,10 @@ import com.grnn.chess.*;
 import com.grnn.chess.Actors.AI.AI;
 import com.grnn.chess.Actors.IActor;
 import com.grnn.chess.Actors.Player;
+import com.grnn.chess.multiPlayer.MultiPlayer;
 import com.grnn.chess.objects.*;
-//import javafx.geometry.Pos;
-
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * @author Amund 15.03.18
@@ -30,15 +29,17 @@ public class PlayState extends State {
     Board board;
     PlayerData playerData;
 
-    Texture bg;
-    Texture bgBoard;
-    Texture potentialTex;
-    Texture captureTex;
-    ArrayList<Texture> pieceTexures;
-    ArrayList<Position> positions;
-    Position prevMove;
+    private Texture bg;
+    private Texture bgBoard;
+    private Texture potentialTex;
+    private Texture hintTex;
+    private Texture captureTex;
+    private Texture victoryTex, helpCHTex;
+    private ArrayList<Texture> pieceTexures;
+    private ArrayList<Position> positions;
+    private Position prevMove;
 
-
+    private int[] removedPieces;
     private ArrayList<Position> potentialMoves;
     private ArrayList<Position> captureMoves;
     private ArrayList<Position> castlingMoves;
@@ -57,15 +58,26 @@ public class PlayState extends State {
     private String text;
     private String player1Name;
     private String player2Name;
-    private TextButton resignBtn;
-    private TextButton helpBtn;
+    private TextButton resignBtn, helpBtn, helpCHBtn;
     private Stage stage;
     private Skin skin;
 
-    private int[] removedPieces;
-
     private Player player1;
     private Player player2;
+    private MultiPlayer multiPlayer;
+
+    // victory animation
+    private float frameCounter;
+    private Animation<TextureRegion> confettiAnimation; // Must declare frame type (TextureRegion)
+    private Texture confettiSheet;
+    private TextureRegion finalConfettiImg;
+    private float confettiY;
+    private float confettiX;
+    private Label victoryLabel, helpCHlabel;
+    private boolean isOkToSwitchState = false;
+    private Label.LabelStyle whiteLabelStyle;
+
+    boolean playingCH, displayCHRules;
 
     /**
      * @param gsm      Game state
@@ -73,25 +85,70 @@ public class PlayState extends State {
      * @param player1  Should always be player
      * @param player2  Either AI or Player
      */
-    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData) {
+
+    public PlayState(GameStateManager gsm, int aiPlayer, IActor player1, IActor player2, PlayerData playerData, String gameMode) {
+        this(gsm, aiPlayer, player1, player2, playerData, false, null, gameMode);
+    }
+
+    public PlayState(GameStateManager gsm,
+                     int aiPlayer,
+                     IActor player1,
+                     IActor player2,
+                     PlayerData playerData,
+                     boolean onlineGame,
+                     MultiPlayer multiPlayer) {
+        this(gsm, aiPlayer, player1, player2, playerData, onlineGame, multiPlayer, "classic");
+    }
+
+
+
+    /**
+     *
+     * @param gsm same as above
+     * @param aiPlayer
+     * @param player1
+     * @param player2
+     * @param playerData
+     * @param onlineGame true if game is online
+     * @param multiPlayer name of the multiPlayer
+     */
+    public PlayState(GameStateManager gsm,
+                     int aiPlayer,
+                     IActor player1,
+                     IActor player2,
+                     PlayerData playerData,
+                     boolean onlineGame,
+                     MultiPlayer multiPlayer,
+                     String gameMode
+                     ) {
         super(gsm);
+        this.multiPlayer = multiPlayer;
 
-        if( player1 instanceof Player) {
-            this.player1 = (Player) player1;
-        }
-        if(player2 instanceof Player) {
-            this.player2 = (Player) player2;
+
+        if(onlineGame) {
+            if(multiPlayer.isWhite()) {
+                this.player2 = (Player) player2;
+                this.player1 = (Player) player1;
+            } else {
+                this.player1 = (Player) player2;
+                this.player2 = (Player) player1;
+            }
+        } else {
+            if (player1 instanceof Player) {
+                this.player1 = (Player) player1;
+            }
+            if (player2 instanceof Player) {
+                this.player2 = (Player) player2;
+            }
         }
 
-        //textures
-        bg = new Texture("Graphics/GUI/GUI.png");
-        bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
         pieceTexures = new ArrayList<Texture>();
         positions = new ArrayList<Position>();
 
         stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("Skin/skin/rainbow-ui.json"));
+        bgBoard = new Texture("Graphics/GUI/ChessBoard.png");
 
         if (!(player1 instanceof Player)) {
             throw new IllegalArgumentException("player1 should always be of class Player");
@@ -107,6 +164,11 @@ public class PlayState extends State {
         player1Name = ((Player) player1).name;
         if (player2 instanceof Player) {
             player2Name = ((Player) player2).name;
+        } else if (onlineGame) {
+            if(multiPlayer.isWhite()) {
+                player1Name = multiPlayer.getOpponent(player1Name);
+                player2Name = ((Player) player1).name;
+            }
         } else {
             player2Name = "Datamaskin";
         }
@@ -122,18 +184,45 @@ public class PlayState extends State {
         fontCounter.setColor(Color.WHITE);
 
         potentialTex = new Texture("Graphics/ChessPieces/Potential.png");
+        hintTex = new Texture("Graphics/ChessPieces/Hint.png");
         captureTex = new Texture("Graphics/ChessPieces/Capture.png");
         activegame = true;
 
+        //exit game early button
         resignBtn = new TextButton("Avslutt", skin);
         resignBtn.setSize(resignBtn.getWidth(), 60);
         resignBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-15, resignBtn.getY()+7);
         stage.addActor(resignBtn);
 
-        helpBtn = new TextButton("Hjelp", skin);
+        //help button
+        helpBtn = new TextButton("Tips", skin);
         helpBtn.setSize(helpBtn.getWidth(),60);
         helpBtn.setPosition(Gdx.graphics.getWidth()-resignBtn.getWidth()-helpBtn.getWidth()+10,(resignBtn.getY()));
         stage.addActor(helpBtn);
+
+        //victory message
+        victoryTex = new Texture("Graphics/Menu/victory.png");
+        victoryLabel = new Label("", skin);
+        victoryLabel.setPosition(bgBoard.getWidth()/2-150, Gdx.graphics.getHeight()/2-victoryLabel.getHeight());
+        BitmapFont buttonFont = new BitmapFont( Gdx.files.internal("Skin/raw/font-button-export.fnt"), Gdx.files.internal("Skin/raw/font-button-export.png"), false );
+        Label.LabelStyle labelStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
+        victoryLabel.setStyle(labelStyle);
+        stage.addActor(victoryLabel);
+
+        //animate confetti
+        frameCounter = 0f;
+        confettiX = 50;
+        confettiY = 50;
+        confettiSheet = new Texture(Gdx.files.internal("Graphics/Menu/Animations/confetti.png"));
+        // Initialize the Animation with the frame interval and array of frames
+        confettiAnimation = createAnimation(confettiSheet, 5, 5, 0.025f);
+        // finalConfettiImg is used to determine when the animation is complete
+        finalConfettiImg = confettiAnimation.getKeyFrames()[confettiAnimation.getKeyFrames().length-1];
+
+        //textures
+        if (gameMode.equals("crazyhouse")) {
+            initiateCrazyHouseActors();
+        } else bg = new Texture("Graphics/GUI/GUI.png");
 
         for (int y = 40, yi = 0; y < 560; y += 65, yi++) {
             for (int x = 40, xi = 0; x < 560; x += 65, xi++) {
@@ -145,6 +234,25 @@ public class PlayState extends State {
             }
         }
     }
+
+    private void initiateCrazyHouseActors() {
+        playingCH = true;
+        displayCHRules = true;
+        bg = new Texture("Graphics/GUI/GUICrazyhouse.png");
+        helpCHBtn = new TextButton("?", skin);
+        helpCHBtn.setSize(helpCHBtn.getWidth()-24, helpCHBtn.getHeight()-30);
+        helpCHBtn.getLabel().setFontScale(0.5f);
+        BitmapFont helpChFont = new BitmapFont( Gdx.files.internal("Skin/raw/font-button-export.fnt"), Gdx.files.internal("Skin/raw/font-button-export.png"), false );
+        whiteLabelStyle = new Label.LabelStyle(helpChFont, Color.WHITE);
+        helpCHBtn.getLabel().setStyle(whiteLabelStyle);
+        helpCHBtn.setPosition(bgBoard.getWidth()-34, 8);
+        helpCHTex = new Texture("Graphics/Menu/victory.png");
+        helpCHlabel = new Label("", skin);
+        helpCHlabel.setPosition(bgBoard.getWidth()/2-150, Gdx.graphics.getHeight()/2-victoryLabel.getHeight());
+        stage.addActor(helpCHlabel);
+        stage.addActor(helpCHBtn);
+    }
+
 
     @Override
     public void update(float dt) {
@@ -161,9 +269,14 @@ public class PlayState extends State {
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        frameCounter += Gdx.graphics.getDeltaTime();
+
         batch.begin();
         batch.draw(bg, 0, 0);
         batch.draw(bgBoard, 0, 0);
+
+        if(game.getText().contains("Uff"))
+            text = game.getText();
 
         if (removedPieces[5] == 1) {
             text = "Du vant " + player1Name + ", gratulerer!";
@@ -182,9 +295,7 @@ public class PlayState extends State {
             }
             fontCounter.draw(batch, "" + removedPieces[i], j, 418);
             fontCounter.draw(batch, "" + removedPieces[6 + i], j, 105);
-
         }
-
         // Player names
         fontCounter.draw(batch, "" + player1Name, 726, 241);
         fontCounter.draw(batch, "Score: " + player1.rating , 726, 221);
@@ -226,15 +337,26 @@ public class PlayState extends State {
                 batch.draw(captureTex, pos[0], pos[1]);
             }
         }
+
         if (helpingMove!=null){
             Position fromPos = helpingMove.getFromPos();
             Position toPos = helpingMove.getToPos();
-            int[] frompos = translator.toPixels(fromPos.getX(),fromPos.getY());
-            int[] topos = translator.toPixels(toPos.getX(),toPos.getY());
-            batch.draw(potentialTex,frompos[0],frompos[1]);
-            batch.draw(potentialTex,topos[0],topos[1]);
+            int[] drawFrom = translator.toPixels(fromPos.getX(),fromPos.getY());
+            int[] drawTo = translator.toPixels(toPos.getX(),toPos.getY());
+            batch.draw(hintTex,drawFrom[0],drawFrom[1]);
+            batch.draw(hintTex,drawTo[0],drawTo[1]);
+
         }
-        batch.end();
+
+        if (!activegame) { // spawn that beautiful confetti <3
+            endGameAction(batch);
+        }
+
+        if (displayCHRules) {
+            batch.draw(helpCHTex, bgBoard.getWidth() / 2 - victoryTex.getWidth() / 2, Gdx.graphics.getHeight() / 2 - victoryTex.getHeight() / 2);
+            helpCHlabel.setText("I dette spillet kan du\nsette ut brikker du har tatt\n men kun når det er din tur");
+        }
+
         if (!pieceTexures.isEmpty()) {
             for (Texture oldTexture : pieceTexures) {
                 if (oldTexture.isManaged()) {
@@ -242,9 +364,138 @@ public class PlayState extends State {
                 }
             }
         }
+
+        if(multiPlayer != null && multiPlayer.isWhite() != game.getTurn() && !pieceIsMoving) {
+            Move mpMove = multiPlayer.nextMove();
+            if(mpMove != null) {
+                AbstractChessPiece movingPiece = board.getPieceAt(mpMove.getFromPos());
+                game.selectFirstPiece(mpMove.getFromPos());
+                game.moveFirstSelectedPieceTo(mpMove.getToPos());
+                prevMove = mpMove.getToPos();
+            }
+        }
+        batch.end();
         stage.draw();
     }
 
+    public void handleInput() {
+        int x = Math.abs(Gdx.input.getX());
+        int y = Math.abs(Gdx.input.getY());
+        Boolean notSelected = game.pieceHasNotBeenSelected();
+        if (resignBtn.isPressed() && activegame) {
+            if(playingCH || player2Name.equals("Datamaskin")) {
+                gsm.set(new StartGameState(gsm,player1,playerData));
+            }else {
+                game.endGame(Result.DRAW, Result.DRAW, playerData);
+                if (multiPlayer != null) multiPlayer.endGame();
+                gsm.set(new ShowStatsState(gsm, player1, playerData));
+            }
+        }
+        if (helpBtn.isPressed() && activegame) {
+            helpingMove = game.getHelpingMove();
+        } else if (helpCHBtn != null && helpCHBtn.isPressed() && activegame) { //display CrazyHouse instructions
+            displayCHRules = true;
+        } else if (displayCHRules && Gdx.input.justTouched()) { //remove CH instructions
+            displayCHRules = false;
+            helpCHlabel.setText("");
+        } else if (activegame && !pieceIsMoving ) {
+            if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving &&
+                    (multiPlayer == null || game.getTurn() == multiPlayer.isWhite())) {
+
+                //AI
+                if (!game.getTurn() && game.isAi()) {
+                    prevAImove = game.aiMove();
+                    return;
+                }
+
+                //first selected piece
+                Position selected = null;
+                if (Gdx.input.justTouched() && notSelected) {
+                    game.playSound("selectPiece.wav");
+                    selected = translator.toCellPos(x, y);
+                    game.selectFirstPiece(selected);
+                }
+                //second selected piece
+                else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
+                    Position potentialPos = translator.toCellPos(x, y);
+
+                    //send move to database
+                    if(multiPlayer != null && game.getTurn() == multiPlayer.isWhite()) {
+                        multiPlayer.makeMove(new Move(game.getSelectedPosition(), potentialPos));
+                    }
+                    activegame = game.moveFirstSelectedPieceTo(potentialPos);
+                    prevMove = potentialPos;
+                    helpingMove = null;
+                }
+                else if (Gdx.input.justTouched() && !game.selectedFromPocket.isEmpty()){
+
+                }
+            } else if (Gdx.input.justTouched() && playingCH){ //From pocket
+                String pieceFromPocket = getPieceFromPocket(x, y, game.getTurn());
+                if (!pieceFromPocket.isEmpty()) {
+                    int index = game.getIndexOfPiece(pieceFromPocket);
+                    if (!pieceFromPocket.isEmpty() && index != -1 && removedPieces[index] > 0) {
+                        game.playSound("selectPiece.wav");
+                        game.selectFirstPieceFromPocket(pieceFromPocket);
+                    }
+                } else {
+                    game.reset();
+                }
+            }
+        }
+    }
+
+    private void endGameAction(SpriteBatch batch) {
+        Result result1;
+        Result result2;
+        if(game.getTurn()) {
+            result1 = Result.LOSS;
+            result2 = Result.WIN;
+        } else {
+            result1 = Result.WIN;
+            result2 = Result.LOSS;
+        }
+        String victoryMsg = "";
+        if (result1 == Result.WIN) { //TODO NEEDS TESTING WITH AI
+            victoryMsg = "Gratulerer\n" + appendSpaces(game.getPlayer1().name) + "\n  du vant!";
+        } else if (result1 == Result.LOSS && game.isAi() && !game.getAiPlayer().isWhite()) {
+            victoryMsg = "    Gratulerer\n"+ appendSpaces(game.getPlayer1().name) + "\n  du vant!";
+        } else if (result1 == Result.WIN && game.isAi() && game.getAiPlayer().isWhite()) {
+            victoryMsg = "    Oida\n"+ appendSpaces(game.getPlayer2().name) + "\n  AI vant!";
+        } else if(result1 == Result.LOSS) {
+            victoryMsg = "Gratulerer\n" + appendSpaces(game.getPlayer2().name) + "\n  du vant!";
+        } else if(result1 == Result.DRAW) {
+            victoryMsg = "Uavgjort!";
+        }
+        batch.draw(victoryTex, bgBoard.getWidth() / 2 - victoryTex.getWidth() / 2, Gdx.graphics.getHeight() / 2 - victoryTex.getHeight() / 2);
+        victoryLabel.setText(victoryMsg);
+
+        if (Gdx.input.justTouched() && isOkToSwitchState) {
+            game.endGame(result1, result2, playerData);
+            gsm.set(new ShowStatsState(gsm, game.getPlayer1(), playerData));
+        }
+
+        if (!game.isAi() || result1 == Result.WIN && !game.getAiPlayer().isWhite()
+                || result1 == Result.LOSS && game.getAiPlayer().isWhite()) { // won against player? spawn confetti
+            TextureRegion currentFrame = confettiAnimation.getKeyFrame(frameCounter, true);
+            batch.draw(currentFrame, confettiX, confettiY);
+            if (currentFrame.equals(finalConfettiImg)) {
+                isOkToSwitchState = true;
+                Random r = new Random();
+                confettiX = r.nextInt(Gdx.graphics.getWidth() - confettiSheet.getWidth() / 5);
+                confettiY = r.nextInt(Gdx.graphics.getHeight() - confettiSheet.getHeight() / 5);
+            }
+        }
+    }
+
+    private String appendSpaces(String name) {
+        if (name.length() > 9) return name;
+        String s = "";
+        for (int i = 0; i < 8-name.length(); i++) {
+            s += " ";
+        }
+        return s+name;
+    }
 
     private void animatePiece(AbstractChessPiece piece, Position piecePos, int[] pos, boolean ai) {
         if (pieceIsMoving && piece.isMoving()) {
@@ -252,15 +503,28 @@ public class PlayState extends State {
                 piece.stopMoving();
                 pieceIsMoving = false;
                 //THIS IS WHERE THE ACTUAL MOVING HAPPENS
-                if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)){
-                    board.movePiece(piecePos, prevMove);
 
-                    Position[] castingPos = game.handlingCasting(piece);
-                    AbstractChessPiece p = board.getPieceAt(castingPos[0]);
-                    prevMove = castingPos[1];
-                    p.startMoving();
+                if (ai) {
+                    if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevAImove.getToPos())) {
+                        board.movePiece(piecePos, prevAImove.getToPos());
+                        Position[] castingPos = game.handlingCasting(piece);
+                        AbstractChessPiece p = board.getPieceAt(castingPos[0]);
+                        prevMove = castingPos[1];
+                        p.startMoving();
+                    } else {
+                        board.movePiece(piecePos, prevAImove.getToPos());
+                    }
                 } else {
-                    board.movePiece(piecePos, prevMove);
+                    if(piece instanceof King && ((King) piece).getCastlingMoves(board, piecePos).contains(prevMove)) {
+                        board.movePiece(piecePos, prevMove);
+                        Position[] castingPos = game.handlingCasting(piece);
+                        AbstractChessPiece p = board.getPieceAt(castingPos[0]);
+                        prevMove = castingPos[1];
+                        p.startMoving();
+                    } else {
+                        board.movePiece(piecePos, prevMove);
+                    }
+
                 }
                 pos[0] = animationPath.get(animationIndex-1).getX();
                 pos[1] = animationPath.get(animationIndex-1).getY();
@@ -301,8 +565,8 @@ public class PlayState extends State {
             animationPath.add(new Position(startPixelPos[0], startPixelPos[1]));
         }
     }
-
     //is it shorter distance? 1=yes -1=no 0=same
+
     private int shorterDistTo(boolean changeInXaxis, int[] startPixelPo, int variance, int[] endPixelPo) {
         double startVal = Math.sqrt((Math.pow(Math.abs(startPixelPo[0] - endPixelPo[0]), 2)) + (Math.pow(startPixelPo[1] - endPixelPo[1], 2)));
         double nextVal;
@@ -325,59 +589,72 @@ public class PlayState extends State {
     }
 
 
-    public void handleInput() {
-        int x = Math.abs(Gdx.input.getX());
-        int y = Math.abs(Gdx.input.getY());
-        Boolean notSelected = game.pieceHasNotBeenSelected();
-        if (resignBtn.isPressed() && activegame) {
-                game.endGame(Result.DRAW, Result.DRAW,playerData);
-                gsm.set(new ShowStatsState(gsm, player1, playerData));
-        }
-        if(helpBtn.isPressed() && activegame){
-            helpingMove = game.getHelpingMove();
-            System.out.println(helpingMove);
-        }
-        if (x > 40 && x < 560 && y > 40 && y < 560 && activegame && !pieceIsMoving) {
 
-            //AI
-            if (!game.getTurn() && game.isAi()) {
-                prevAImove = game.aiMove();
-                return;
-            }
-
-            //first selected piece
-            Position selected = null;
-            if (Gdx.input.justTouched() && notSelected) {
-                game.playSound("selectPiece.wav");
-                selected = translator.toCellPos(x, y);
-                game.selectFirstPiece(selected);
-            }
-            //second selected piece
-            else if (Gdx.input.justTouched() && !game.pieceHasNotBeenSelected()) {
-                Position potentialPos = translator.toCellPos(x, y);
-                activegame = game.moveFirstSelectedPieceTo(potentialPos);
-                prevMove = potentialPos;
-                helpingMove = null;
-            }
-        } else if (!activegame) { // TODO: Actual result
-            Result result1 = Result.DRAW;
-            Result result2 = Result.DRAW;
-
-            game.endGame(result1, result2,playerData);
-            gsm.set(new ShowStatsState(gsm,player1,playerData));
+    private String getPieceFromPocket(int x, int y, boolean turn){
+        String piece ="";
+        if (y<489 && y>415){
+            if (turn) return piece;
+            if (x>660 && x<695)
+                piece = "P";
+            if (x>722 && x<765)
+                piece = "B";
+            if (x>786 && x<837)
+                piece = "H";
+            if (x>869 && x<904)
+                piece = "R";
+            if (x>943 && x<982)
+                piece = "Q";
+            if (x>1016 && x<1060)
+                piece = "K";
         }
+        else if (y>100 && y<175){
+            if (!turn) return piece;
+            if (x>660 && x<695)
+                piece = "p";
+            if (x>722 && x<765)
+                piece = "b";
+            if (x>786 && x<837)
+                piece = "h";
+            if (x>869 && x<904)
+                piece = "r";
+            if (x>943 && x<982)
+                piece = "q";
+            if (x>1016 && x<1060)
+                piece = "k";
+        }
+
+        return piece;
     }
+
+
+    private Animation<TextureRegion> createAnimation(Texture textureSheet, int frameColums, int frameRows, float duration) {
+        // 2D array of TextureRegions
+        TextureRegion[][] tmp = TextureRegion.split(textureSheet,
+                textureSheet.getWidth() / frameColums,
+                textureSheet.getHeight() / frameRows);
+        // 1D array in the correct order
+        TextureRegion[] animationFrames = new TextureRegion[frameColums * frameRows];
+        int index = 0;
+        for (int i = 0; i < frameRows; i++) {
+            for (int j = 0; j < frameColums; j++) {
+                animationFrames[index++] = tmp[i][j];
+            }
+        }
+        return new Animation<TextureRegion>(duration, animationFrames);
+    }
+
 
     @Override
     public void dispose() {
+        if(multiPlayer!=null)multiPlayer.endGame();
         bg.dispose();
         bgBoard.dispose();
         for (Texture tex : pieceTexures) {
             tex.dispose();
         }
+        confettiSheet.dispose();
         potentialTex.dispose();
         captureTex.dispose();
         stage.dispose();
-        System.out.println("PlayState Disposed");
     }
 }

@@ -18,16 +18,21 @@ public class Queen extends AbstractChessPiece{
 		return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
 	}
 
-
 	public ArrayList<Position> getValidMoves(Board board) {
 		return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
 	}
 
+	
+	/**
+	 * Finds all legal moves for the queen, ignoring checks
+	 * @param board
+	 * @return List of legal moves
+	 */
 	public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 
 		Position queenPos = getPosition(board);
-		System.out.println(queenPos.getX() + "," + queenPos.getY() + " " + this.isWhite);
+
 		validMoves.addAll(getValidVerticalAndHorizontalMoves(board, queenPos));
 		validMoves.addAll(getValidDiagonalMoves(board, queenPos));
 
@@ -105,10 +110,12 @@ public class Queen extends AbstractChessPiece{
 
 		return validMoves;//(ArrayList<Position>) Arrays.asList(board.getPosition(this));
 	}
-
-
-
-		public int getValue() {
+	
+	/**
+	 * Get value for the queen
+	 * @return Queen value
+	 */
+	public int getValue() {
 		return value;
 	}
 }

@@ -15,8 +15,10 @@ public class Pawn extends AbstractChessPiece {
      * Consturtur of pawn, will set image to "Pawn"
      * @param isWhite
      */
-	public Pawn(boolean isWhite) {
+	public Pawn(boolean isWhite, boolean hasMoved) {
 		super(isWhite);
+		this.hasMoved = hasMoved;
+
 		setImage("Pawn");
 	}
 
@@ -24,15 +26,17 @@ public class Pawn extends AbstractChessPiece {
 		return isWhite ? letterRepresentation.toUpperCase() : letterRepresentation;
 	}
 
+	
 	@Override
 	public ArrayList<Position> getValidMoves(Board board) {
 		return board.removeMovesThatWillPutOwnKingInCheck(this, getPossibleMovesIgnoringCheck(board));
 	}
-
+	
 	public ArrayList<Position> getPossibleMovesIgnoringCheck(Board board){
+		Position pawnPos = getPosition(board);
+	//public ArrayList<Position> getValidMoves(Board board){
 		ArrayList<Position> validMoves = new ArrayList<Position>();
 		//Get the position of the pawn
-		Position pawnPos = getPosition(board);
 		if(isWhite){
 			if(board.getPieceAt(pawnPos.north())==null) {
 				if (!hasMoved && board.getPieceAt(pawnPos.north(2)) == null) {
