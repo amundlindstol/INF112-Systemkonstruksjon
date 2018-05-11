@@ -491,8 +491,8 @@ public class    Game {
             File f = new File("Sound/"+url);
             Clip clip = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream( f );
-//            clip.open(ais);
-  //          clip.start(); // TODO: Uncomment code.
+            clip.open(ais);
+            clip.start(); // TODO: Uncomment code.
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (IOException e) {

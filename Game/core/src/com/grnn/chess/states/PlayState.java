@@ -426,8 +426,7 @@ public class PlayState extends State {
             Result result1 = Result.DRAW;
             Result result2 = Result.DRAW;
 
-            game.endGame(result1, result2,playerData);
-            gsm.set(new ShowStatsState(gsm,player1,playerData));
+            //game.endGame(result1, result2,playerData);
         }
     }
 
