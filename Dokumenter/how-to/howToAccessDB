@@ -1,0 +1,32 @@
+The db is hosted by amazon. 
+
+Follow these steps to access the db:
+1.Make sure mysql is installed at your computer.
+2.Open your terminal and write this:
+    > mysql -h grnn.cj7trxamf8oy.us-east-2.rds.amazonaws.com -P 3306 -u grnn -p
+    password is: grnnsjakk
+3.When the connection is established:
+    > USE Sjakk
+4.Now you can alter and view the two tables Users and GameManager
+
+The table are aranged like this:
+
+CREATE TABLE Users (
+	Name varchar(255),
+	Password varchar(255),
+	Wins int,
+	Losses int, 
+	Draws int,
+	Rating int
+);
+
+CREATE TABLE GameManager (
+	GameID INT NOT NULL AUTO_INCREMENT,
+	Player1ID VARCHAR(255),
+	Player2ID VARCHAR(255),
+	GameActive BOOLEAN,
+	Turn BOOLEAN,
+	FromMove VARCHAR(255),
+	ToMove VARCHAR(255),
+	PRIMARY KEY (GameID)
+);
