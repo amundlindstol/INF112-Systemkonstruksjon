@@ -226,6 +226,22 @@ public class MultiPlayer implements IActor, Runnable {
         }
     }
 
+    public boolean gameIsActive() {
+        try {
+            String query = "SELECT GameActive FROM GameManager WHERE GameId = '" + gameId + "';";
+            Statement stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while(res.next()) {
+                String gameActive = res.getString("GameActive");
+                return gameActive.equals("1");
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /**
      * Get the name of the opponent of the game
      */

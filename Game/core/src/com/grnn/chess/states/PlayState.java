@@ -276,6 +276,7 @@ public class PlayState extends State {
         }
 
         if(multiPlayer != null && multiPlayer.isWhite() != game.getTurn() && !pieceIsMoving) {
+
             Move mpMove = multiPlayer.nextMove();
             if(mpMove != null) {
 
