@@ -78,7 +78,6 @@ public class PlayerData {
 				}
 			}
 		}catch (SQLException e){
-			System.out.println("Did not Connect");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -86,7 +85,6 @@ public class PlayerData {
 					stmt.close();
 				}
 			}catch(SQLException e){
-				System.out.println("Kunne ikke koble fra databasen");
 			}
 		}
 
@@ -104,8 +102,6 @@ public class PlayerData {
 			offline = false;
 			return true;
 		}catch(Exception e){
-			System.out.println("not connected");
-			System.out.println(e);
 			offline = true;
 			return false;
 		}

@@ -299,7 +299,6 @@ public class    Game {
             return;
         Player player = ((Player) player1);
         Player opponent = ((Player) player2);
-        System.out.println("old: " + player.getRating() + "  " + opponent.getRating());
 
         EloRatingSystem elo = new EloRatingSystem(player);
         EloRatingSystem elo2 = new EloRatingSystem(opponent);
@@ -311,8 +310,6 @@ public class    Game {
         opponent.registrerResult(res2);
         player.setRating(newElo);
         opponent.setRating(newElo2);
-
-        System.out.println("new:  " + player.getRating() + "  " + opponent.getRating());
 
         //Saving to database
         if(!playerData.isOffline()) {
@@ -345,14 +342,11 @@ public class    Game {
                 }else{
                     whitePutInCheck = true;
                 }
-                System.out.println("SJAKK");
                 if (otherPlayerHasNoValidMoves) {
-                    System.out.println("Sjakk matt");
                     return false;
                 }
             }
             else if (otherPlayerHasNoValidMoves){
-                System.out.println("Patt");
                 return false;
             }
         }

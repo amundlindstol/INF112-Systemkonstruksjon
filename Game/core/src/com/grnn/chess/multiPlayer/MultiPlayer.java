@@ -68,12 +68,9 @@ public class MultiPlayer implements IActor, Runnable {
             ResultSet res = stmt.executeQuery(query);
             while(res.next()) {
                 gameId = res.getInt("GameID");
-                System.out.println(gameId);
             }
             return gameId;
         }catch(SQLException e){
-            System.out.println("Error in getGameID");
-            System.out.println(e.getErrorCode());
         }
         return -1;
     }
@@ -87,12 +84,10 @@ public class MultiPlayer implements IActor, Runnable {
             String query = "INSERT INTO GameManager (Player1ID, GameActive, Turn) VALUES ('"+player1.name+"', true, true);";
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
-            System.out.println("Created new game with "+player1.name+" as host");
             gameId = getGameID(player1);
             thisIsThePlayerAtThisComputer = player1;
             thisIsTheColorOfThePlayerAtThisComputer = true;
         }catch(SQLException e){
-            System.out.println(e);
             return false;
         }
         return true;
@@ -158,7 +153,6 @@ public class MultiPlayer implements IActor, Runnable {
                    // e.printStackTrace();
                     return;
                 }
-                System.out.println("waiting for player");
             }
         }catch(SQLException e){
            return;
@@ -220,9 +214,7 @@ public class MultiPlayer implements IActor, Runnable {
             String query = "UPDATE GameManager SET GameActive=false WHERE GameId='"+gameId+"';";
             Statement stmt = conn.createStatement();
             int res = stmt.executeUpdate(query);
-            System.out.println("Ended game "+gameId);
         }catch(SQLException e){
-            System.out.println(e);
         }
     }
 
@@ -237,7 +229,6 @@ public class MultiPlayer implements IActor, Runnable {
             ResultSet res = stmt.executeQuery(query);
             while(res.next()) {
                 String name = res.getString(opponent);
-                System.out.println(name);
                 return name;
             }
         }catch(SQLException e){

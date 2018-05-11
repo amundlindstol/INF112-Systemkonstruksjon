@@ -192,7 +192,6 @@ public class Board {
         
         if (piece instanceof Pawn) {
             if(y == 7)
-                System.out.println("debug");
             if ((piece.isWhite() && y == size() - 1)
                     || (!piece.isWhite() && y == 0)) {
                 return true;

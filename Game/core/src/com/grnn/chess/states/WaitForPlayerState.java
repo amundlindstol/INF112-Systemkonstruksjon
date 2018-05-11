@@ -77,7 +77,6 @@ public class WaitForPlayerState extends State{
         // Register anonymous listener class
          multiPlayer.registerWorkerListener(new ConnectionListener() {
             public void workDone(MultiPlayer multi) {
-                System.out.println("Found player");
                 player2Name = multi.getP2Name();
                 foundPlayer = true;
             }
@@ -149,6 +148,5 @@ public class WaitForPlayerState extends State{
         fontText.dispose();
         skin.dispose();
         gearSheet.dispose();
-        System.out.println("WaitForPlayer State Disposed");
     }
 }

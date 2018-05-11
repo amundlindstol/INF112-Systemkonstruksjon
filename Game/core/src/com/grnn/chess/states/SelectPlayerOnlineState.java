@@ -122,7 +122,6 @@ public class SelectPlayerOnlineState extends State {
                 }
                 if (playerRating.size() > 0) {
                     fontText.draw(sb, playerRating.get(i).toString(), 520, k);
-                    System.out.println(playerRating.get(0));
                 }
             }
         } else if (playerData.isOffline()) {
@@ -149,6 +148,5 @@ public class SelectPlayerOnlineState extends State {
         background.dispose();
         fontText.dispose();
         skin.dispose();
-        System.out.println("SelectPlayerOnlineState Disposed");
     }
 }
