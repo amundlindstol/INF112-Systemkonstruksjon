@@ -357,6 +357,7 @@ public class PlayState extends State {
             helpCHlabel.setText("I dette spillet kan du\nsette ut brikker du har tatt\n men kun når det er din tur");
         }
 
+        batch.end();
         if (!pieceTexures.isEmpty()) {
             for (Texture oldTexture : pieceTexures) {
                 if (oldTexture.isManaged()) {
@@ -374,7 +375,6 @@ public class PlayState extends State {
                 prevMove = mpMove.getToPos();
             }
         }
-        batch.end();
         stage.draw();
     }
 
