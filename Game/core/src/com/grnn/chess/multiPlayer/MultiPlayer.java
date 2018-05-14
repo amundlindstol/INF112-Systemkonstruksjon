@@ -40,7 +40,7 @@ public class MultiPlayer implements IActor, Runnable {
     public ArrayList<ArrayList<String>> getGames() {
         ArrayList<ArrayList<String>> availableGames = new ArrayList<ArrayList<String>>();
         try{
-            String query = "SELECT * FROM GameManager WHERE Player2ID IS NULL AND GameActive= true;";
+            String query = "SELECT * FROM GameManager WHERE Player2ID IS NULL AND GameActive= 1;";
             Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery(query);
             while(res.next()){
@@ -53,6 +53,7 @@ public class MultiPlayer implements IActor, Runnable {
             }
             return availableGames;
         }catch(SQLException e){
+            e.printStackTrace();
             return null;
         }
     }
@@ -81,7 +82,7 @@ public class MultiPlayer implements IActor, Runnable {
      */
     public boolean createGame(Player player1){
         try {
-            String query = "INSERT INTO GameManager (Player1ID, GameActive, Turn) VALUES ('"+player1.name+"', true, true);";
+            String query = "INSERT INTO GameManager (Player1ID, GameActive, Turn) VALUES ('"+player1.name+"', 1, 1);";
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
             gameId = getGameID(player1);
@@ -168,7 +169,7 @@ public class MultiPlayer implements IActor, Runnable {
         String from = "";
         String to = "";
         try {
-            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = true;";
+            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = 1;";
             Statement stmt = conn.createStatement();
             while(true) {
                 ResultSet res = stmt.executeQuery(query);
@@ -187,7 +188,7 @@ public class MultiPlayer implements IActor, Runnable {
         String from = "";
         String to = "";
         try {
-            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = true AND FromMove IS NOT NULL AND ToMove IS NOT NULL;";
+            String query = "SELECT FromMove, ToMove FROM GameManager WHERE GameId='"+gameId+"' AND GameActive = 1 AND FromMove IS NOT NULL AND ToMove IS NOT NULL;";
             Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery(query);
             if(res.next()){
@@ -211,7 +212,7 @@ public class MultiPlayer implements IActor, Runnable {
      */
     public void endGame(){
         try {
-            String query = "UPDATE GameManager SET GameActive=false WHERE GameId='"+gameId+"';";
+            String query = "UPDATE GameManager SET GameActive=0 WHERE GameId='"+gameId+"';";
             Statement stmt = conn.createStatement();
             int res = stmt.executeUpdate(query);
         }catch(SQLException e){

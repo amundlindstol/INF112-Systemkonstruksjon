@@ -81,7 +81,7 @@ public class ShowStatsState extends State {
             fontText.draw(sb, "Score", 600, 420);
             fontText.draw(sb, "Vunnet", 700, 420);
 
-            for (int i = 0, j = 390; i < 10; i++, j -= 30) {
+            for (int i = 0, j = 390; i < topTenPlayers.size(); i++, j -= 30) {
                 fontText.draw(sb, topTenPlayers.get(i).getName(), 365, j);
                 fontText.draw(sb, "" + topTenPlayers.get(i).rating, 600, j);
                 fontText.draw(sb, "" + topTenPlayers.get(i).getNoOfWins(), 700, j);

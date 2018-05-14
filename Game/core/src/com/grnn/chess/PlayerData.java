@@ -98,10 +98,11 @@ public class PlayerData {
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			DriverManager.setLoginTimeout(1);
-			conn = DriverManager.getConnection("jdbc:mysql://grnn.cj7trxamf8oy.us-east-2.rds.amazonaws.com:3306/Sjakk", "grnn", "grnnsjakk");
+			conn = DriverManager.getConnection("jdbc:sqlserver://grnn.database.windows.net:1433;database=grnn;user=grnn@grnn;password=sj@kk123;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;");
 			offline = false;
 			return true;
 		}catch(Exception e){
+			e.printStackTrace();
 			offline = true;
 			return false;
 		}
@@ -200,7 +201,7 @@ public class PlayerData {
 	public ArrayList<Player> getTopTenPlayers(){
         ArrayList<Player> topTenPlayers = new ArrayList<Player>();
 	    try{
-            String query = "SELECT * FROM Users ORDER BY Rating DESC LIMIT 10";
+            String query = "SELECT TOP 10 * FROM Users ORDER BY Rating DESC";
             Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery(query);
             while(res.next()) {
@@ -208,6 +209,7 @@ public class PlayerData {
             }
             return topTenPlayers;
 	    }catch (SQLException e){
+	    	e.printStackTrace();
 	        return null;
         }
     }
