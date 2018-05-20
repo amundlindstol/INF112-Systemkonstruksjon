@@ -27,8 +27,6 @@ Product manual
 Retrospective
 - Pretty good but could probably have been a bit longer and more detailed. 
 You will most likely be asked to write a retrospective on the exam so I recommend that you all think more about what went well, what went bad and how you could fix the problems during your exam prep.
- 
-Retrospective: Good
 
 Overall you have done a great job this iteration. 
 We hope you enjoyed the assignment, had fun and got valuable experience.
@@ -36,4 +34,4 @@ We hope you enjoyed the assignment, had fun and got valuable experience.
 Score: 91.8 (of 100)
 Evaluation: PASS
 
-Graded by Øyvind Skeie Liland and Dan Zhang, Bergen 20.05.2018
+Graded by Ã˜yvind Skeie Liland and Dan Zhang, Bergen 20.05.2018
